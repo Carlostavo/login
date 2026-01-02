@@ -109,7 +109,7 @@
             background-color: white;
             box-shadow: var(--shadow);
             border-radius: 0.5rem;
-            min-width: 220px;
+            min-width: 200px;
             padding: 0.5rem 0;
             margin-top: 0.5rem;
             display: none;
@@ -120,37 +120,16 @@
             display: block;
         }
         
-        .profile-menu a, .profile-menu button {
+        .profile-menu a {
             display: block;
-            width: 100%;
-            text-align: left;
             padding: 0.75rem 1rem;
             text-decoration: none;
             color: var(--dark-color);
             transition: background-color 0.3s;
-            border: none;
-            background: none;
-            font-size: 1rem;
-            cursor: pointer;
-            font-family: inherit;
         }
         
-        .profile-menu a:hover, .profile-menu button:hover {
+        .profile-menu a:hover {
             background-color: #f1f5f9;
-        }
-        
-        .profile-menu hr {
-            border: none;
-            border-top: 1px solid var(--border-color);
-            margin: 0.5rem 0;
-        }
-        
-        .profile-menu .menu-item-danger {
-            color: var(--danger-color);
-        }
-        
-        .profile-menu .menu-item-danger:hover {
-            background-color: #fee2e2;
         }
         
         .login-btn {
@@ -407,23 +386,16 @@
             background-color: #d97706;
         }
         
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
-        
         .table-container {
             background-color: white;
             border-radius: 0.75rem;
             box-shadow: var(--shadow);
             overflow: hidden;
-            overflow-x: auto;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
         }
         
         thead {
@@ -436,13 +408,11 @@
             font-weight: 600;
             color: var(--dark-color);
             border-bottom: 1px solid var(--border-color);
-            white-space: nowrap;
         }
         
         td {
             padding: 1rem;
             border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
         }
         
         tbody tr:hover {
@@ -459,7 +429,6 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            flex-shrink: 0;
         }
         
         .user-info {
@@ -474,7 +443,6 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            display: inline-block;
         }
         
         .role-admin {
@@ -490,7 +458,6 @@
         .actions {
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
         
         .action-btn {
@@ -500,11 +467,6 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
         }
         
         .action-btn:hover {
@@ -630,6 +592,27 @@
             margin-bottom: 1rem;
         }
         
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+        
         /* Spinner */
         .spinner {
             display: inline-block;
@@ -660,79 +643,6 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            
-            .profile-menu {
-                min-width: 200px;
-            }
-            
-            .header {
-                padding: 1rem;
-            }
-        }
-        
-        /* Estado de usuario */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .status-active {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-inactive {
-            background-color: #f3f4f6;
-            color: #6b7280;
-        }
-        
-        .status-pending {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-        
-        .status-active .status-dot {
-            background-color: #10b981;
-        }
-        
-        .status-inactive .status-dot {
-            background-color: #9ca3af;
-        }
-        
-        .status-pending .status-dot {
-            background-color: #f59e0b;
-        }
     </style>
 </head>
 <body>
@@ -760,23 +670,14 @@
                 <i class="fas fa-chevron-down"></i>
             </button>
             <div class="profile-menu" id="profileMenu">
-                <div style="padding: 0.75rem 1rem; font-weight: 600; color: var(--primary-color); border-bottom: 1px solid var(--border-color);">
-                    <i class="fas fa-user" style="margin-right: 0.5rem;"></i>
-                    <span id="menuUserName">Perfil</span>
-                </div>
-                <a href="#" id="viewProfile">
-                    <i class="fas fa-eye" style="margin-right: 0.5rem;"></i>
-                    Ver Perfil
-                </a>
                 <a href="#" id="accountManagement">
-                    <i class="fas fa-users-cog" style="margin-right: 0.5rem;"></i>
-                    Gestión de Usuarios
+                    <i class="fas fa-users-cog" style="margin-right: 8px;"></i>
+                    Gestión de Cuentas
                 </a>
-                <hr>
-                <button class="menu-item-danger" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt" style="margin-right: 0.5rem;"></i>
+                <a href="#" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
                     Cerrar Sesión
-                </button>
+                </a>
             </div>
         </div>
     </header>
@@ -862,11 +763,11 @@
                     <input type="hidden" id="userId" name="userId">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="userName">Nombre completo *</label>
+                            <label for="userName">Nombre completo</label>
                             <input type="text" id="userName" name="userName" required>
                         </div>
                         <div class="form-group">
-                            <label for="userEmail">Correo electrónico *</label>
+                            <label for="userEmail">Correo electrónico</label>
                             <input type="email" id="userEmail" name="userEmail" required>
                         </div>
                     </div>
@@ -876,54 +777,30 @@
                             <input type="tel" id="userPhone" name="userPhone">
                         </div>
                         <div class="form-group">
-                            <label for="userRole">Rol *</label>
+                            <label for="userRole">Rol</label>
                             <select id="userRole" name="userRole" required>
                                 <option value="admin">Administrador</option>
-                                <option value="technician" selected>Técnico</option>
+                                <option value="technician">Técnico</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group" id="passwordField">
                         <label for="userPassword">Contraseña</label>
                         <div class="input-with-icon">
-                            <input type="password" id="userPassword" name="userPassword" placeholder="Deja en blanco para generar automática">
+                            <input type="password" id="userPassword" name="userPassword">
                             <button type="button" class="input-icon" id="toggleUserPassword">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
                         <p style="font-size: 0.875rem; color: var(--gray-color); margin-top: 0.5rem;">
-                            * La contraseña debe tener al menos 8 caracteres
+                            Deja en blanco para generar una contraseña aleatoria
                         </p>
-                    </div>
-                    <div class="form-group" id="statusField" style="display: none;">
-                        <label for="userStatus">Estado</label>
-                        <select id="userStatus" name="userStatus">
-                            <option value="active">Activo</option>
-                            <option value="inactive">Inactivo</option>
-                        </select>
                     </div>
                     <button type="submit" class="submit-btn" id="userSubmit">
                         <span id="userSubmitText">Crear Usuario</span>
                         <div class="spinner" id="userSpinner" style="display: none;"></div>
                     </button>
                 </form>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal de Confirmación -->
-    <div class="modal-overlay" id="confirmModal">
-        <div class="modal" style="max-width: 400px;">
-            <div class="modal-header">
-                <h2 id="confirmTitle">Confirmar acción</h2>
-                <button class="close-modal" id="closeConfirm">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="confirmMessage">¿Estás seguro de que quieres realizar esta acción?</p>
-                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button class="btn btn-primary" id="confirmYes" style="flex: 1;">Sí</button>
-                    <button class="btn" id="confirmNo" style="flex: 1; background-color: #e5e7eb; color: var(--dark-color);">No</button>
-                </div>
             </div>
         </div>
     </div>
@@ -975,16 +852,16 @@
         <!-- Página de Gestión de Cuentas (solo visible para administradores) -->
         <section class="page" id="gestion-cuentas">
             <div class="page-header">
-                <h1>Gestión de Usuarios</h1>
-                <p>Administra los usuarios del sistema (solo para administradores)</p>
+                <h1>Gestión de Cuentas</h1>
+                <p>Administra los usuarios del sistema (solo visible para administradores)</p>
             </div>
             
             <div id="accountAlert" class="alert"></div>
             
             <div class="section-header">
-                <h2 class="section-title">Lista de Usuarios</h2>
+                <h2 class="section-title">Usuarios del Sistema</h2>
                 <button class="btn btn-primary" id="createUserBtn">
-                    <i class="fas fa-plus"></i> Nuevo Usuario
+                    <i class="fas fa-plus"></i> Crear Nuevo Usuario
                 </button>
             </div>
             
@@ -1003,10 +880,9 @@
                     <tbody id="usersTableBody">
                         <!-- Los usuarios se cargarán aquí dinámicamente -->
                         <tr>
-                            <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-color);">
-                                <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-                                <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">No hay usuarios registrados</p>
-                                <p style="font-size: 0.875rem;">Inicia sesión como administrador para gestionar usuarios</p>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
+                                <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                <p>Inicia sesión como administrador para gestionar usuarios</p>
                             </td>
                         </tr>
                     </tbody>
@@ -1014,15 +890,8 @@
             </div>
             
             <div class="info-box" style="margin-top: 2rem; padding: 1.5rem; background-color: #f0f9ff; border-radius: 0.75rem; border-left: 4px solid var(--primary-color);">
-                <h3 style="margin-bottom: 0.75rem; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-info-circle"></i>
-                    Información de Usuarios
-                </h3>
-                <p style="color: var(--gray-color); margin-bottom: 0.75rem;">Como administrador, puedes crear, editar y eliminar usuarios del sistema.</p>
-                <ul style="color: var(--gray-color); padding-left: 1.5rem;">
-                    <li><strong>Administradores:</strong> Acceso completo al sistema</li>
-                    <li><strong>Técnicos:</strong> Acceso limitado según permisos asignados</li>
-                </ul>
+                <h3 style="margin-bottom: 0.75rem; color: var(--primary-color);">Información de Usuarios</h3>
+                <p style="color: var(--gray-color);">Como administrador, puedes crear, editar y eliminar usuarios del sistema. Los técnicos tienen acceso limitado a las funcionalidades del sistema según los permisos asignados.</p>
             </div>
         </section>
         
@@ -1105,7 +974,6 @@
         let currentUser = null;
         let isAdmin = false;
         let editingUserId = null;
-        let pendingDeleteUserId = null;
         
         // Elementos del DOM
         const loginBtn = document.getElementById('loginBtn');
@@ -1131,8 +999,6 @@
         const profileMenu = document.getElementById('profileMenu');
         const logoutBtn = document.getElementById('logoutBtn');
         const accountManagement = document.getElementById('accountManagement');
-        const viewProfile = document.getElementById('viewProfile');
-        const menuUserName = document.getElementById('menuUserName');
         const userModal = document.getElementById('userModal');
         const closeUserModal = document.getElementById('closeUserModal');
         const userForm = document.getElementById('userForm');
@@ -1146,16 +1012,9 @@
         const heroLogin = document.getElementById('heroLogin');
         const userModalTitle = document.getElementById('userModalTitle');
         const passwordField = document.getElementById('passwordField');
-        const statusField = document.getElementById('statusField');
         const toggleUserPassword = document.getElementById('toggleUserPassword');
         const userPasswordInput = document.getElementById('userPassword');
         const profileName = document.getElementById('profileName');
-        const confirmModal = document.getElementById('confirmModal');
-        const closeConfirm = document.getElementById('closeConfirm');
-        const confirmYes = document.getElementById('confirmYes');
-        const confirmNo = document.getElementById('confirmNo');
-        const confirmTitle = document.getElementById('confirmTitle');
-        const confirmMessage = document.getElementById('confirmMessage');
         
         // Navegación entre páginas
         const navLinks = document.querySelectorAll('.nav-links a');
@@ -1287,48 +1146,25 @@
                 }
             });
             
-            // Ver perfil
-            viewProfile.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Ver perfil clicked');
-                profileMenu.classList.remove('active');
-                showAlert(accountAlert, 'Función de ver perfil en desarrollo', 'warning');
-            });
-            
-            // Gestión de usuarios desde el menú
-            accountManagement.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Gestión de usuarios clicked desde menú');
-                
-                if (!currentUser) {
-                    showAlert(accountAlert, 'Debes iniciar sesión primero', 'error');
-                    return;
-                }
-                
-                if (!isAdmin) {
-                    showAlert(accountAlert, 'No tienes permisos de administrador para acceder a esta página', 'error');
-                    return;
-                }
-                
-                profileMenu.classList.remove('active');
-                showPage('gestion-cuentas');
-                
-                // Actualizar navegación
-                navLinks.forEach(link => {
-                    if (link.getAttribute('data-page') === 'gestion-cuentas') {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-            });
-            
             // Logout
             logoutBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 console.log('Logout clicked');
-                profileMenu.classList.remove('active');
                 await handleLogout();
+            });
+            
+            // Account management (solo para administradores)
+            accountManagement.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Account management clicked');
+                if (isAdmin) {
+                    showPage('gestion-cuentas');
+                    profileMenu.classList.remove('active');
+                    // Cargar usuarios cuando se accede a esta página
+                    loadUsers();
+                } else {
+                    showAlert(accountAlert, 'No tienes permisos de administrador para acceder a esta página', 'error');
+                }
             });
             
             // User modal
@@ -1356,7 +1192,6 @@
                 userModalTitle.textContent = 'Crear Nuevo Usuario';
                 userSubmitText.textContent = 'Crear Usuario';
                 passwordField.style.display = 'block';
-                statusField.style.display = 'none';
                 showModal(userModal);
             });
             
@@ -1365,30 +1200,6 @@
                 e.preventDefault();
                 console.log('User form submitted');
                 await handleUserSubmit();
-            });
-            
-            // Confirm modal
-            closeConfirm.addEventListener('click', () => {
-                hideModal(confirmModal);
-            });
-            
-            confirmModal.addEventListener('click', (e) => {
-                if (e.target === confirmModal) {
-                    hideModal(confirmModal);
-                }
-            });
-            
-            confirmYes.addEventListener('click', async () => {
-                if (pendingDeleteUserId) {
-                    await deleteUserConfirmed(pendingDeleteUserId);
-                    pendingDeleteUserId = null;
-                }
-                hideModal(confirmModal);
-            });
-            
-            confirmNo.addEventListener('click', () => {
-                pendingDeleteUserId = null;
-                hideModal(confirmModal);
             });
         }
         
@@ -1463,8 +1274,8 @@
         async function updateUIForLoggedInUser() {
             console.log('Actualizando UI para usuario logueado');
             
+            // Obtener información adicional del usuario
             try {
-                // Obtener información adicional del usuario
                 const { data: userData, error } = await supabase
                     .from('users')
                     .select('*')
@@ -1473,17 +1284,14 @@
                 
                 if (error) {
                     console.error('Error al obtener datos del usuario:', error);
-                    // Si no existe en la tabla users, usar datos de auth
+                    // Si no existe en la tabla users, crear registro
+                    await createUserInDatabase();
                     isAdmin = false;
-                    const displayName = currentUser.email ? currentUser.email.split('@')[0] : 'Usuario';
-                    profileName.textContent = displayName;
-                    menuUserName.textContent = displayName;
+                    profileName.textContent = currentUser.email.split('@')[0];
                 } else {
                     // Verificar si es administrador
                     isAdmin = userData.role === 'admin';
-                    const displayName = userData.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Usuario');
-                    profileName.textContent = displayName;
-                    menuUserName.textContent = displayName;
+                    profileName.textContent = userData.name || currentUser.email.split('@')[0];
                 }
                 
                 // Actualizar botón de login por perfil
@@ -1493,14 +1301,38 @@
                 // Mostrar gestión de cuentas solo para administradores
                 accountManagement.style.display = isAdmin ? 'block' : 'none';
                 
-                // Cargar usuarios si es administrador
-                if (isAdmin) {
+                // Si estamos en la página de gestión de cuentas, cargar usuarios
+                if (isAdmin && document.getElementById('gestion-cuentas').classList.contains('active')) {
                     await loadUsers();
                 }
                 
                 console.log('Usuario es admin:', isAdmin);
             } catch (error) {
                 console.error('Error en updateUIForLoggedInUser:', error);
+            }
+        }
+        
+        // Crear usuario en la base de datos si no existe
+        async function createUserInDatabase() {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .insert({
+                        id: currentUser.id,
+                        email: currentUser.email,
+                        name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
+                        role: 'technician',
+                        active: true,
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (error) {
+                    console.error('Error al crear usuario en BD:', error);
+                } else {
+                    console.log('Usuario creado en BD');
+                }
+            } catch (error) {
+                console.error('Error al crear usuario en BD:', error);
             }
         }
         
@@ -1512,8 +1344,6 @@
             profileMenu.classList.remove('active');
             isAdmin = false;
             currentUser = null;
-            profileName.textContent = 'Usuario';
-            menuUserName.textContent = 'Perfil';
             
             // Ocultar página de gestión de cuentas si está visible
             if (document.getElementById('gestion-cuentas').classList.contains('active')) {
@@ -1526,17 +1356,6 @@
                     }
                 });
             }
-            
-            // Limpiar tabla de usuarios
-            usersTableBody.innerHTML = `
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-color);">
-                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-                        <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">No hay usuarios registrados</p>
-                        <p style="font-size: 0.875rem;">Inicia sesión como administrador para gestionar usuarios</p>
-                    </td>
-                </tr>
-            `;
         }
         
         // Manejar login
@@ -1689,6 +1508,14 @@
             
             if (!isAdmin) {
                 console.log('No es admin, no se cargan usuarios');
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
+                            <i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>No tienes permisos para ver los usuarios</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
@@ -1722,45 +1549,20 @@
             if (!users || users.length === 0) {
                 usersTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-color);">
-                            <i class="fas fa-user-slash" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-                            <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">No hay usuarios registrados</p>
-                            <button class="btn btn-primary btn-sm" id="createFirstUser">
-                                <i class="fas fa-plus"></i> Crear Primer Usuario
-                            </button>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
+                            <i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>No hay usuarios registrados</p>
                         </td>
                     </tr>
                 `;
-                
-                // Agregar event listener al botón de crear primer usuario
-                const createFirstUserBtn = document.getElementById('createFirstUser');
-                if (createFirstUserBtn) {
-                    createFirstUserBtn.addEventListener('click', () => {
-                        document.getElementById('createUserBtn').click();
-                    });
-                }
-                
                 return;
             }
             
             usersTableBody.innerHTML = users.map(user => {
                 // Obtener iniciales para el avatar
-                const nameParts = user.name ? user.name.split(' ') : ['U', 'S'];
-                const initials = nameParts.length >= 2 
-                    ? (nameParts[0][0] + nameParts[1][0]).toUpperCase()
-                    : (user.name ? user.name.substring(0, 2).toUpperCase() : 'US');
-                
-                // Determinar estado
-                let statusClass = 'status-active';
-                let statusText = 'Activo';
-                
-                if (user.active === false) {
-                    statusClass = 'status-inactive';
-                    statusText = 'Inactivo';
-                } else if (user.status === 'pending') {
-                    statusClass = 'status-pending';
-                    statusText = 'Pendiente';
-                }
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 
+                    user.email.substring(0, 2).toUpperCase();
                 
                 return `
                     <tr>
@@ -1769,32 +1571,27 @@
                                 <div class="user-avatar">${initials}</div>
                                 <div>
                                     <div style="font-weight: 600;">${user.name || 'Sin nombre'}</div>
-                                    <div style="font-size: 0.75rem; color: var(--gray-color);">Creado: ${new Date(user.created_at).toLocaleDateString()}</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray-color);">ID: ${user.id.substring(0, 8)}...</div>
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            <div style="font-weight: 500;">${user.email}</div>
-                            ${user.id === currentUser?.id ? '<span style="font-size: 0.75rem; color: var(--primary-color); font-weight: 500;">(Tú)</span>' : ''}
-                        </td>
-                        <td>${user.phone || '<span style="color: var(--gray-color); font-style: italic;">No registrado</span>'}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone || 'No registrado'}</td>
                         <td>
                             <span class="role-badge ${user.role === 'admin' ? 'role-admin' : 'role-technician'}">
                                 ${user.role === 'admin' ? 'Administrador' : 'Técnico'}
                             </span>
                         </td>
                         <td>
-                            <span class="status-badge ${statusClass}">
-                                <span class="status-dot"></span>
-                                ${statusText}
-                            </span>
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${user.active !== false ? '#10b981' : '#ef4444'}; margin-right: 0.5rem;"></span>
+                            ${user.active !== false ? 'Activo' : 'Inactivo'}
                         </td>
                         <td>
                             <div class="actions">
-                                <button class="action-btn edit" data-id="${user.id}" title="Editar usuario" ${user.id === currentUser?.id ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                <button class="action-btn edit" data-id="${user.id}" title="Editar usuario">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn delete" data-id="${user.id}" title="Eliminar usuario" ${user.id === currentUser?.id ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                <button class="action-btn delete" data-id="${user.id}" title="Eliminar usuario">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -1805,15 +1602,11 @@
             
             // Agregar event listeners a los botones de acción
             document.querySelectorAll('.action-btn.edit').forEach(btn => {
-                if (!btn.disabled) {
-                    btn.addEventListener('click', () => editUser(btn.getAttribute('data-id')));
-                }
+                btn.addEventListener('click', () => editUser(btn.getAttribute('data-id')));
             });
             
             document.querySelectorAll('.action-btn.delete').forEach(btn => {
-                if (!btn.disabled) {
-                    btn.addEventListener('click', () => confirmDeleteUser(btn.getAttribute('data-id')));
-                }
+                btn.addEventListener('click', () => deleteUser(btn.getAttribute('data-id')));
             });
         }
         
@@ -1848,14 +1641,12 @@
                 document.getElementById('userEmail').value = user.email;
                 document.getElementById('userPhone').value = user.phone || '';
                 document.getElementById('userRole').value = user.role || 'technician';
-                document.getElementById('userStatus').value = user.active === false ? 'inactive' : 'active';
                 document.getElementById('userPassword').value = '';
                 
                 // Actualizar modal
                 userModalTitle.textContent = 'Editar Usuario';
                 userSubmitText.textContent = 'Actualizar Usuario';
                 passwordField.style.display = 'none';
-                statusField.style.display = 'block';
                 
                 // Mostrar modal
                 showModal(userModal);
@@ -1865,30 +1656,18 @@
             }
         }
         
-        // Confirmar eliminación de usuario
-        function confirmDeleteUser(userId) {
-            console.log('Confirmando eliminación de usuario:', userId);
+        // Eliminar usuario
+        async function deleteUser(userId) {
+            console.log('Eliminando usuario:', userId);
             
             if (!isAdmin) {
                 showAlert(accountAlert, 'No tienes permisos para eliminar usuarios', 'error');
                 return;
             }
             
-            pendingDeleteUserId = userId;
-            
-            // Obtener nombre del usuario para el mensaje
-            const userRow = document.querySelector(`.action-btn.delete[data-id="${userId}"]`).closest('tr');
-            const userName = userRow.querySelector('.user-info div:first-child').textContent.trim();
-            
-            confirmTitle.textContent = 'Eliminar Usuario';
-            confirmMessage.textContent = `¿Estás seguro de que quieres eliminar al usuario "${userName}"? Esta acción no se puede deshacer.`;
-            
-            showModal(confirmModal);
-        }
-        
-        // Eliminar usuario confirmado
-        async function deleteUserConfirmed(userId) {
-            console.log('Eliminando usuario confirmado:', userId);
+            if (!confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.')) {
+                return;
+            }
             
             try {
                 // Eliminar usuario de la tabla 'users'
@@ -1923,11 +1702,10 @@
             }
             
             const userId = document.getElementById('userId').value;
-            const name = document.getElementById('userName').value.trim();
-            const email = document.getElementById('userEmail').value.trim();
-            const phone = document.getElementById('userPhone').value.trim();
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const phone = document.getElementById('userPhone').value;
             const role = document.getElementById('userRole').value;
-            const status = document.getElementById('userStatus') ? document.getElementById('userStatus').value : 'active';
             const password = document.getElementById('userPassword').value;
             
             // Validar email
@@ -1937,14 +1715,8 @@
             }
             
             // Validar nombre
-            if (!name || name.length < 2) {
+            if (!name || name.trim().length < 2) {
                 showAlert(userAlert, 'Por favor ingresa un nombre válido (mínimo 2 caracteres)', 'error');
-                return;
-            }
-            
-            // Validar contraseña si se está creando un nuevo usuario
-            if (!editingUserId && password && password.length < 8) {
-                showAlert(userAlert, 'La contraseña debe tener al menos 8 caracteres', 'error');
                 return;
             }
             
@@ -1961,11 +1733,10 @@
                     const { data, error } = await supabase
                         .from('users')
                         .update({
-                            name,
-                            email,
-                            phone: phone || null,
+                            name: name.trim(),
+                            email: email.trim(),
+                            phone: phone ? phone.trim() : null,
                             role,
-                            active: status === 'active',
                             updated_at: new Date().toISOString()
                         })
                         .eq('id', editingUserId);
@@ -1984,18 +1755,19 @@
                     // Crear nuevo usuario
                     let userPassword = password;
                     if (!userPassword) {
-                        // Generar contraseña aleatoria segura
-                        userPassword = generateRandomPassword(12);
-                        console.log('Contraseña generada automáticamente');
+                        // Generar contraseña aleatoria
+                        userPassword = Math.random().toString(36).slice(-10) + 
+                                      Math.random().toString(36).slice(-10).toUpperCase();
+                        console.log('Contraseña generada:', userPassword);
                     }
                     
                     // Primero, crear usuario en Auth
                     const { data: authData, error: authError } = await supabase.auth.signUp({
-                        email,
+                        email: email.trim(),
                         password: userPassword,
                         options: {
                             data: {
-                                name,
+                                name: name.trim(),
                                 role
                             }
                         }
@@ -2014,9 +1786,9 @@
                         .from('users')
                         .insert({
                             id: authData.user.id,
-                            name,
-                            email,
-                            phone: phone || null,
+                            name: name.trim(),
+                            email: email.trim(),
+                            phone: phone ? phone.trim() : null,
                             role,
                             active: true,
                             created_at: new Date().toISOString()
@@ -2024,9 +1796,6 @@
                     
                     if (dbError) {
                         console.error('Error al guardar usuario en la base de datos:', dbError);
-                        
-                        // Intentar revertir el usuario de Auth si falla en users
-                        // Nota: Supabase no permite eliminar usuarios fácilmente desde el cliente
                         showAlert(userAlert, 'Error al guardar usuario en la base de datos: ' + dbError.message, 'error');
                         return;
                     }
@@ -2053,17 +1822,6 @@
             }
         }
         
-        // Generar contraseña aleatoria
-        function generateRandomPassword(length) {
-            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-            let password = "";
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * charset.length);
-                password += charset[randomIndex];
-            }
-            return password;
-        }
-        
         // Mostrar alerta
         function showAlert(alertElement, message, type) {
             console.log(`Mostrando alerta: ${type} - ${message}`);
@@ -2086,7 +1844,7 @@
             alertElement.appendChild(closeBtn);
             
             // Auto-ocultar después de 5 segundos para alertas de éxito
-            if (type === 'success' || type === 'warning') {
+            if (type === 'success') {
                 setTimeout(() => {
                     alertElement.style.display = 'none';
                 }, 5000);
