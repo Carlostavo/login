@@ -109,27 +109,50 @@
             background-color: white;
             box-shadow: var(--shadow);
             border-radius: 0.5rem;
-            min-width: 200px;
+            min-width: 220px;
             padding: 0.5rem 0;
             margin-top: 0.5rem;
             display: none;
             z-index: 10;
+            border: 1px solid var(--border-color);
         }
         
         .profile-menu.active {
             display: block;
         }
         
-        .profile-menu a {
+        .profile-menu a, .profile-menu button {
             display: block;
+            width: 100%;
             padding: 0.75rem 1rem;
             text-decoration: none;
             color: var(--dark-color);
             transition: background-color 0.3s;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
         }
         
-        .profile-menu a:hover {
+        .profile-menu a:hover, .profile-menu button:hover {
             background-color: #f1f5f9;
+        }
+        
+        .profile-menu .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 0.5rem 0;
+        }
+        
+        .profile-menu .menu-header {
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.5rem;
+            background-color: #f8fafc;
         }
         
         .login-btn {
@@ -391,13 +414,11 @@
             border-radius: 0.75rem;
             box-shadow: var(--shadow);
             overflow: hidden;
-            overflow-x: auto;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
         }
         
         thead {
@@ -457,26 +478,6 @@
             color: var(--success-color);
         }
         
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-        
-        .status-active {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-inactive {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-        
         .actions {
             display: flex;
             gap: 0.5rem;
@@ -489,11 +490,6 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
         }
         
         .action-btn:hover {
@@ -506,10 +502,6 @@
         
         .action-btn.delete {
             color: var(--danger-color);
-        }
-        
-        .action-btn.toggle {
-            color: var(--warning-color);
         }
         
         /* Modal de creación/edición de usuarios */
@@ -623,68 +615,6 @@
             margin-bottom: 1rem;
         }
         
-        /* Spinner */
-        .spinner {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        select, input[type="text"], input[type="email"], input[type="tel"], input[type="password"] {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            background-color: white;
-            cursor: pointer;
-        }
-        
-        select:focus, input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        
-        /* Filtros de usuarios */
-        .filters {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-        
-        .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .filter-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark-color);
-            font-size: 0.875rem;
-        }
-        
-        .filter-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -704,14 +634,37 @@
                 align-items: flex-start;
                 gap: 1rem;
             }
-            
-            .filters {
-                flex-direction: column;
-            }
-            
-            .filter-group {
-                min-width: 100%;
-            }
+        }
+        
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
     </style>
 </head>
@@ -740,8 +693,26 @@
                 <i class="fas fa-chevron-down"></i>
             </button>
             <div class="profile-menu" id="profileMenu">
-                <a href="#" id="accountManagement">Gestión de Cuentas</a>
-                <a href="#" id="logoutBtn">Cerrar Sesión</a>
+                <div class="menu-header">Mi Cuenta</div>
+                <a href="#" id="viewProfile">
+                    <i class="fas fa-user" style="margin-right: 0.5rem;"></i>
+                    Ver Perfil
+                </a>
+                <a href="#" id="accountSettings">
+                    <i class="fas fa-cog" style="margin-right: 0.5rem;"></i>
+                    Configuración
+                </a>
+                <div class="divider"></div>
+                <div class="menu-header" style="color: var(--primary-color);">Administración</div>
+                <a href="#" id="accountManagement">
+                    <i class="fas fa-users-cog" style="margin-right: 0.5rem;"></i>
+                    Gestión de Usuarios
+                </a>
+                <div class="divider"></div>
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 0.5rem;"></i>
+                    Cerrar Sesión
+                </button>
             </div>
         </div>
     </header>
@@ -827,11 +798,11 @@
                     <input type="hidden" id="userId" name="userId">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="userName">Nombre completo *</label>
+                            <label for="userName">Nombre completo</label>
                             <input type="text" id="userName" name="userName" required>
                         </div>
                         <div class="form-group">
-                            <label for="userEmail">Correo electrónico *</label>
+                            <label for="userEmail">Correo electrónico</label>
                             <input type="email" id="userEmail" name="userEmail" required>
                         </div>
                     </div>
@@ -841,10 +812,10 @@
                             <input type="tel" id="userPhone" name="userPhone">
                         </div>
                         <div class="form-group">
-                            <label for="userRole">Rol *</label>
+                            <label for="userRole">Rol</label>
                             <select id="userRole" name="userRole" required>
                                 <option value="admin">Administrador</option>
-                                <option value="technician" selected>Técnico</option>
+                                <option value="technician">Técnico</option>
                             </select>
                         </div>
                     </div>
@@ -922,37 +893,6 @@
             
             <div id="accountAlert" class="alert"></div>
             
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="filterRole">Filtrar por rol</label>
-                    <select id="filterRole">
-                        <option value="">Todos los roles</option>
-                        <option value="admin">Administrador</option>
-                        <option value="technician">Técnico</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterStatus">Filtrar por estado</label>
-                    <select id="filterStatus">
-                        <option value="">Todos los estados</option>
-                        <option value="active">Activos</option>
-                        <option value="inactive">Inactivos</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterSearch">Buscar por nombre o email</label>
-                    <input type="text" id="filterSearch" placeholder="Buscar usuarios...">
-                </div>
-                <div class="filter-actions">
-                    <button class="btn btn-primary" id="applyFilters">
-                        <i class="fas fa-filter"></i> Aplicar filtros
-                    </button>
-                    <button class="btn" id="clearFilters" style="background-color: var(--border-color);">
-                        <i class="fas fa-times"></i> Limpiar
-                    </button>
-                </div>
-            </div>
-            
             <div class="section-header">
                 <h2 class="section-title">Usuarios del Sistema</h2>
                 <button class="btn btn-primary" id="createUserBtn">
@@ -974,27 +914,73 @@
                     </thead>
                     <tbody id="usersTableBody">
                         <!-- Los usuarios se cargarán aquí dinámicamente -->
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
+                                <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                <p>Inicia sesión como administrador para gestionar usuarios</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             
-            <div class="pagination" id="pagination" style="display: none; margin-top: 1.5rem; text-align: center;">
-                <button class="btn" id="prevPage" style="margin-right: 0.5rem;">
-                    <i class="fas fa-chevron-left"></i> Anterior
-                </button>
-                <span id="pageInfo" style="margin: 0 1rem; color: var(--gray-color);"></span>
-                <button class="btn" id="nextPage" style="margin-left: 0.5rem;">
-                    Siguiente <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-            
             <div class="info-box" style="margin-top: 2rem; padding: 1.5rem; background-color: #f0f9ff; border-radius: 0.75rem; border-left: 4px solid var(--primary-color);">
                 <h3 style="margin-bottom: 0.75rem; color: var(--primary-color);">Información de Usuarios</h3>
-                <p style="color: var(--gray-color); margin-bottom: 0.75rem;">Como administrador, puedes crear, editar y eliminar usuarios del sistema. Los técnicos tienen acceso limitado a las funcionalidades del sistema según los permisos asignados.</p>
-                <ul style="color: var(--gray-color); padding-left: 1.5rem;">
-                    <li><strong>Administradores:</strong> Acceso completo a todas las funciones del sistema, incluyendo la gestión de usuarios.</li>
-                    <li><strong>Técnicos:</strong> Acceso limitado a funciones específicas según su asignación.</li>
-                </ul>
+                <p style="color: var(--gray-color);">Como administrador, puedes crear, editar y eliminar usuarios del sistema. Los técnicos tienen acceso limitado a las funcionalidades del sistema según los permisos asignados.</p>
+            </div>
+        </section>
+        
+        <!-- Página de Perfil -->
+        <section class="page" id="perfil">
+            <div class="page-header">
+                <h1>Mi Perfil</h1>
+                <p>Gestiona tu información personal y configuración de cuenta</p>
+            </div>
+            
+            <div id="profileAlert" class="alert"></div>
+            
+            <div class="table-container" style="padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="user-avatar" style="width: 80px; height: 80px; font-size: 1.5rem;">
+                        <span id="profileAvatar">US</span>
+                    </div>
+                    <div>
+                        <h2 id="profileFullName" style="margin-bottom: 0.5rem;">Nombre del Usuario</h2>
+                        <p id="profileEmail" style="color: var(--gray-color);">usuario@ejemplo.com</p>
+                        <span class="role-badge" id="profileRoleBadge" style="margin-top: 0.5rem;">Rol</span>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="profileNameInput">Nombre completo</label>
+                        <input type="text" id="profileNameInput" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.5rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmailInput">Correo electrónico</label>
+                        <input type="email" id="profileEmailInput" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.5rem;" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="profilePhoneInput">Teléfono</label>
+                        <input type="tel" id="profilePhoneInput" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.5rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileRoleInput">Rol</label>
+                        <input type="text" id="profileRoleInput" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.5rem;" readonly>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" id="saveProfileBtn">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    <button class="btn" id="changePasswordBtn" style="background-color: var(--border-color);">
+                        <i class="fas fa-key"></i> Cambiar Contraseña
+                    </button>
+                </div>
             </div>
         </section>
         
@@ -1077,13 +1063,6 @@
         let currentUser = null;
         let isAdmin = false;
         let editingUserId = null;
-        let currentPage = 1;
-        let totalPages = 1;
-        let currentFilters = {
-            role: '',
-            status: '',
-            search: ''
-        };
         
         // Elementos del DOM
         const loginBtn = document.getElementById('loginBtn');
@@ -1109,6 +1088,8 @@
         const profileMenu = document.getElementById('profileMenu');
         const logoutBtn = document.getElementById('logoutBtn');
         const accountManagement = document.getElementById('accountManagement');
+        const viewProfile = document.getElementById('viewProfile');
+        const accountSettings = document.getElementById('accountSettings');
         const userModal = document.getElementById('userModal');
         const closeUserModal = document.getElementById('closeUserModal');
         const userForm = document.getElementById('userForm');
@@ -1125,15 +1106,19 @@
         const toggleUserPassword = document.getElementById('toggleUserPassword');
         const userPasswordInput = document.getElementById('userPassword');
         const profileName = document.getElementById('profileName');
-        const filterRole = document.getElementById('filterRole');
-        const filterStatus = document.getElementById('filterStatus');
-        const filterSearch = document.getElementById('filterSearch');
-        const applyFilters = document.getElementById('applyFilters');
-        const clearFilters = document.getElementById('clearFilters');
-        const pagination = document.getElementById('pagination');
-        const prevPage = document.getElementById('prevPage');
-        const nextPage = document.getElementById('nextPage');
-        const pageInfo = document.getElementById('pageInfo');
+        
+        // Elementos del perfil
+        const profileAlert = document.getElementById('profileAlert');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileFullName = document.getElementById('profileFullName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileRoleBadge = document.getElementById('profileRoleBadge');
+        const profileNameInput = document.getElementById('profileNameInput');
+        const profileEmailInput = document.getElementById('profileEmailInput');
+        const profilePhoneInput = document.getElementById('profilePhoneInput');
+        const profileRoleInput = document.getElementById('profileRoleInput');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
         
         // Navegación entre páginas
         const navLinks = document.querySelectorAll('.nav-links a');
@@ -1265,23 +1250,43 @@
                 }
             });
             
+            // Ver perfil desde menú
+            viewProfile.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Ver perfil clicked');
+                profileMenu.classList.remove('active');
+                showPage('perfil');
+                loadProfileData();
+            });
+            
+            // Configuración de cuenta
+            accountSettings.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Configuración clicked');
+                profileMenu.classList.remove('active');
+                showAlert(accountAlert, 'Página de configuración en desarrollo', 'warning');
+            });
+            
+            // Gestión de usuarios desde menú
+            accountManagement.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Gestión de usuarios clicked');
+                
+                if (!isAdmin) {
+                    showAlert(accountAlert, 'No tienes permisos de administrador para acceder a esta página', 'error');
+                    profileMenu.classList.remove('active');
+                    return;
+                }
+                
+                profileMenu.classList.remove('active');
+                showPage('gestion-cuentas');
+            });
+            
             // Logout
             logoutBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 console.log('Logout clicked');
                 await handleLogout();
-            });
-            
-            // Account management (solo para administradores)
-            accountManagement.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Account management clicked');
-                if (isAdmin) {
-                    showPage('gestion-cuentas');
-                    profileMenu.classList.remove('active');
-                } else {
-                    showAlert(accountAlert, 'No tienes permisos de administrador para acceder a esta página', 'error');
-                }
             });
             
             // User modal
@@ -1306,7 +1311,6 @@
                 
                 editingUserId = null;
                 userForm.reset();
-                document.getElementById('userRole').value = 'technician';
                 userModalTitle.textContent = 'Crear Nuevo Usuario';
                 userSubmitText.textContent = 'Crear Usuario';
                 passwordField.style.display = 'block';
@@ -1320,50 +1324,18 @@
                 await handleUserSubmit();
             });
             
-            // Filtros
-            applyFilters.addEventListener('click', () => {
-                console.log('Aplicar filtros clicked');
-                currentFilters.role = filterRole.value;
-                currentFilters.status = filterStatus.value;
-                currentFilters.search = filterSearch.value.trim();
-                currentPage = 1;
-                loadUsers();
+            // Guardar perfil
+            saveProfileBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                console.log('Guardar perfil clicked');
+                await saveProfile();
             });
             
-            clearFilters.addEventListener('click', () => {
-                console.log('Limpiar filtros clicked');
-                filterRole.value = '';
-                filterStatus.value = '';
-                filterSearch.value = '';
-                currentFilters = {
-                    role: '',
-                    status: '',
-                    search: ''
-                };
-                currentPage = 1;
-                loadUsers();
-            });
-            
-            // Paginación
-            prevPage.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    loadUsers();
-                }
-            });
-            
-            nextPage.addEventListener('click', () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    loadUsers();
-                }
-            });
-            
-            // Buscar al presionar Enter en el campo de búsqueda
-            filterSearch.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    applyFilters.click();
-                }
+            // Cambiar contraseña
+            changePasswordBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Cambiar contraseña clicked');
+                showAlert(profileAlert, 'Funcionalidad de cambio de contraseña en desarrollo', 'warning');
             });
         }
         
@@ -1377,12 +1349,16 @@
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
-                
-                // Si es la página de gestión de cuentas y es admin, cargar usuarios
-                if (pageId === 'gestion-cuentas' && isAdmin) {
-                    loadUsers();
-                }
             }
+            
+            // Actualizar navegación
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
         }
         
         // Mostrar modal
@@ -1443,8 +1419,8 @@
         async function updateUIForLoggedInUser() {
             console.log('Actualizando UI para usuario logueado');
             
+            // Obtener información adicional del usuario
             try {
-                // Obtener información adicional del usuario
                 const { data: userData, error } = await supabase
                     .from('users')
                     .select('*')
@@ -1453,81 +1429,33 @@
                 
                 if (error) {
                     console.error('Error al obtener datos del usuario:', error);
-                    // Si no existe en la tabla users, crear registro
-                    await createUserInDatabase();
-                    
-                    // Intentar obtener datos nuevamente
-                    const { data: newUserData, error: newError } = await supabase
-                        .from('users')
-                        .select('*')
-                        .eq('id', currentUser.id)
-                        .single();
-                    
-                    if (newError) {
-                        throw newError;
-                    }
-                    
-                    userData = newUserData;
+                    // Si no existe en la tabla users, usar datos de auth
+                    isAdmin = false;
+                    const displayName = currentUser.email.split('@')[0];
+                    profileName.textContent = displayName;
+                    profileName.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+                } else {
+                    // Verificar si es administrador
+                    isAdmin = userData.role === 'admin';
+                    const displayName = userData.name || currentUser.email.split('@')[0];
+                    profileName.textContent = displayName;
                 }
-                
-                // Verificar si es administrador
-                isAdmin = userData.role === 'admin';
-                profileName.textContent = userData.name || currentUser.email.split('@')[0];
                 
                 // Actualizar botón de login por perfil
                 loginBtn.style.display = 'none';
                 profileBtn.style.display = 'flex';
                 
-                // Mostrar gestión de cuentas solo para administradores
+                // Mostrar/ocultar opciones del menú según permisos
                 accountManagement.style.display = isAdmin ? 'block' : 'none';
                 
-                console.log('Usuario es admin:', isAdmin);
+                // Cargar usuarios si es administrador
+                if (isAdmin) {
+                    await loadUsers();
+                }
                 
+                console.log('Usuario es admin:', isAdmin);
             } catch (error) {
                 console.error('Error en updateUIForLoggedInUser:', error);
-                // Si hay error, mostrar como usuario no admin
-                isAdmin = false;
-                profileName.textContent = currentUser.email.split('@')[0];
-                loginBtn.style.display = 'none';
-                profileBtn.style.display = 'flex';
-                accountManagement.style.display = 'none';
-            }
-        }
-        
-        // Crear usuario en la base de datos si no existe
-        async function createUserInDatabase() {
-            console.log('Creando usuario en la base de datos...');
-            
-            try {
-                // Obtener metadata del usuario de auth
-                const { data: { user }, error: userError } = await supabase.auth.getUser();
-                
-                if (userError) {
-                    throw userError;
-                }
-                
-                // Insertar usuario en la tabla users
-                const { error: insertError } = await supabase
-                    .from('users')
-                    .insert({
-                        id: user.id,
-                        name: user.user_metadata?.name || user.email.split('@')[0],
-                        email: user.email,
-                        role: 'technician', // Por defecto es técnico
-                        active: true,
-                        created_at: new Date().toISOString()
-                    });
-                
-                if (insertError) {
-                    console.error('Error al crear usuario en la base de datos:', insertError);
-                    throw insertError;
-                }
-                
-                console.log('Usuario creado en la base de datos');
-                
-            } catch (error) {
-                console.error('Error en createUserInDatabase:', error);
-                throw error;
             }
         }
         
@@ -1550,6 +1478,98 @@
                         link.classList.remove('active');
                     }
                 });
+            }
+        }
+        
+        // Cargar datos del perfil
+        async function loadProfileData() {
+            console.log('Cargando datos del perfil...');
+            
+            if (!currentUser) {
+                showAlert(profileAlert, 'Debes iniciar sesión para ver tu perfil', 'error');
+                return;
+            }
+            
+            try {
+                // Obtener información del usuario
+                const { data: userData, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (error) {
+                    console.error('Error al cargar perfil:', error);
+                    showAlert(profileAlert, 'Error al cargar información del perfil', 'error');
+                    return;
+                }
+                
+                // Actualizar interfaz de perfil
+                const displayName = userData.name || currentUser.email.split('@')[0];
+                const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                
+                profileAvatar.textContent = initials;
+                profileFullName.textContent = userData.name || 'Sin nombre';
+                profileEmail.textContent = userData.email;
+                profileNameInput.value = userData.name || '';
+                profileEmailInput.value = userData.email;
+                profilePhoneInput.value = userData.phone || '';
+                profileRoleInput.value = userData.role === 'admin' ? 'Administrador' : 'Técnico';
+                
+                // Actualizar badge de rol
+                profileRoleBadge.textContent = userData.role === 'admin' ? 'Administrador' : 'Técnico';
+                profileRoleBadge.className = `role-badge ${userData.role === 'admin' ? 'role-admin' : 'role-technician'}`;
+                
+                console.log('Perfil cargado:', userData);
+            } catch (error) {
+                console.error('Error en loadProfileData:', error);
+                showAlert(profileAlert, 'Error al cargar el perfil', 'error');
+            }
+        }
+        
+        // Guardar perfil
+        async function saveProfile() {
+            console.log('Guardando perfil...');
+            
+            if (!currentUser) {
+                showAlert(profileAlert, 'Debes iniciar sesión para guardar cambios', 'error');
+                return;
+            }
+            
+            const name = profileNameInput.value.trim();
+            const phone = profilePhoneInput.value.trim();
+            
+            if (!name) {
+                showAlert(profileAlert, 'El nombre es requerido', 'error');
+                return;
+            }
+            
+            try {
+                // Actualizar usuario en la tabla 'users'
+                const { error } = await supabase
+                    .from('users')
+                    .update({
+                        name,
+                        phone: phone || null,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', currentUser.id);
+                
+                if (error) {
+                    console.error('Error al actualizar perfil:', error);
+                    showAlert(profileAlert, 'Error al guardar cambios: ' + error.message, 'error');
+                    return;
+                }
+                
+                // Actualizar UI
+                profileFullName.textContent = name;
+                profileName.textContent = name;
+                
+                showAlert(profileAlert, 'Perfil actualizado exitosamente', 'success');
+                console.log('Perfil actualizado');
+            } catch (error) {
+                console.error('Error en saveProfile:', error);
+                showAlert(profileAlert, 'Error al guardar cambios', 'error');
             }
         }
         
@@ -1703,98 +1723,29 @@
             
             if (!isAdmin) {
                 console.log('No es admin, no se cargan usuarios');
-                usersTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
-                            <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                            <p>Debes ser administrador para ver los usuarios</p>
-                        </td>
-                    </tr>
-                `;
-                pagination.style.display = 'none';
                 return;
             }
             
             try {
-                // Mostrar loading en la tabla
-                usersTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-color);">
-                            <div class="spinner" style="border: 2px solid var(--primary-color); border-top-color: transparent; width: 2rem; height: 2rem; margin: 0 auto 1rem;"></div>
-                            <p>Cargando usuarios...</p>
-                        </td>
-                    </tr>
-                `;
-                
-                // Construir consulta con filtros
-                let query = supabase
+                // Obtener usuarios de la tabla 'users'
+                const { data: users, error } = await supabase
                     .from('users')
-                    .select('*', { count: 'exact' });
-                
-                // Aplicar filtros
-                if (currentFilters.role) {
-                    query = query.eq('role', currentFilters.role);
-                }
-                
-                if (currentFilters.status === 'active') {
-                    query = query.eq('active', true);
-                } else if (currentFilters.status === 'inactive') {
-                    query = query.eq('active', false);
-                }
-                
-                if (currentFilters.search) {
-                    query = query.or(`name.ilike.%${currentFilters.search}%,email.ilike.%${currentFilters.search}%`);
-                }
-                
-                // Configurar paginación
-                const pageSize = 10;
-                const from = (currentPage - 1) * pageSize;
-                const to = from + pageSize - 1;
-                
-                query = query
-                    .order('created_at', { ascending: false })
-                    .range(from, to);
-                
-                // Ejecutar consulta
-                const { data: users, error, count } = await query;
+                    .select('*')
+                    .order('created_at', { ascending: false });
                 
                 if (error) {
                     console.error('Error al cargar usuarios:', error);
                     showAlert(accountAlert, 'Error al cargar usuarios: ' + error.message, 'error');
-                    usersTableBody.innerHTML = `
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 2rem; color: var(--danger-color);">
-                                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                                <p>Error al cargar usuarios</p>
-                            </td>
-                        </tr>
-                    `;
                     return;
                 }
                 
                 console.log('Usuarios cargados:', users);
-                console.log('Total de usuarios:', count);
-                
-                // Calcular paginación
-                totalPages = Math.ceil(count / pageSize);
                 
                 // Actualizar tabla
                 updateUsersTable(users);
-                
-                // Actualizar controles de paginación
-                updatePagination(count);
-                
             } catch (error) {
                 console.error('Error al cargar usuarios:', error);
                 showAlert(accountAlert, 'Error al cargar usuarios', 'error');
-                usersTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--danger-color);">
-                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                            <p>Error al cargar usuarios</p>
-                        </td>
-                    </tr>
-                `;
             }
         }
         
@@ -1805,13 +1756,9 @@
             if (!users || users.length === 0) {
                 usersTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-color);">
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
                             <i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                            <p>No se encontraron usuarios</p>
-                            ${currentFilters.role || currentFilters.status || currentFilters.search ? 
-                                '<p style="font-size: 0.875rem; margin-top: 0.5rem;">Intenta con otros filtros</p>' : 
-                                '<p style="font-size: 0.875rem; margin-top: 0.5rem;">Crea el primer usuario usando el botón "Crear Nuevo Usuario"</p>'
-                            }
+                            <p>No hay usuarios registrados</p>
                         </td>
                     </tr>
                 `;
@@ -1824,27 +1771,18 @@
                     user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 
                     user.email.substring(0, 2).toUpperCase();
                 
-                // Determinar color del avatar basado en el rol
-                const avatarColor = user.role === 'admin' ? 'var(--primary-color)' : 'var(--success-color)';
-                
                 return `
                     <tr>
                         <td>
                             <div class="user-info">
-                                <div class="user-avatar" style="background-color: ${avatarColor};">${initials}</div>
+                                <div class="user-avatar">${initials}</div>
                                 <div>
                                     <div style="font-weight: 600;">${user.name || 'Sin nombre'}</div>
-                                    <div style="font-size: 0.875rem; color: var(--gray-color);">Registrado: ${formatDate(user.created_at)}</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray-color);">ID: ${user.id.substring(0, 8)}...</div>
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            <div>${user.email}</div>
-                            ${user.id === currentUser?.id ? 
-                                '<span style="font-size: 0.75rem; color: var(--primary-color); font-weight: 600;">(Tú)</span>' : 
-                                ''
-                            }
-                        </td>
+                        <td>${user.email}</td>
                         <td>${user.phone || 'No registrado'}</td>
                         <td>
                             <span class="role-badge ${user.role === 'admin' ? 'role-admin' : 'role-technician'}">
@@ -1852,24 +1790,17 @@
                             </span>
                         </td>
                         <td>
-                            <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
-                                <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
-                                ${user.active ? 'Activo' : 'Inactivo'}
-                            </span>
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${user.active !== false ? '#10b981' : '#ef4444'}; margin-right: 0.5rem;"></span>
+                            ${user.active !== false ? 'Activo' : 'Inactivo'}
                         </td>
                         <td>
                             <div class="actions">
                                 <button class="action-btn edit" data-id="${user.id}" title="Editar usuario">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                ${user.id !== currentUser?.id ? `
-                                    <button class="action-btn toggle" data-id="${user.id}" data-active="${user.active}" title="${user.active ? 'Desactivar usuario' : 'Activar usuario'}">
-                                        <i class="fas ${user.active ? 'fa-user-slash' : 'fa-user-check'}"></i>
-                                    </button>
-                                    <button class="action-btn delete" data-id="${user.id}" title="Eliminar usuario">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                ` : ''}
+                                <button class="action-btn delete" data-id="${user.id}" title="Eliminar usuario">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -1881,43 +1812,8 @@
                 btn.addEventListener('click', () => editUser(btn.getAttribute('data-id')));
             });
             
-            document.querySelectorAll('.action-btn.toggle').forEach(btn => {
-                btn.addEventListener('click', () => toggleUserStatus(
-                    btn.getAttribute('data-id'), 
-                    btn.getAttribute('data-active') === 'true'
-                ));
-            });
-            
             document.querySelectorAll('.action-btn.delete').forEach(btn => {
                 btn.addEventListener('click', () => deleteUser(btn.getAttribute('data-id')));
-            });
-        }
-        
-        // Actualizar controles de paginación
-        function updatePagination(totalCount) {
-            if (totalCount > 10) {
-                pagination.style.display = 'block';
-                pageInfo.textContent = `Página ${currentPage} de ${totalPages} (${totalCount} usuarios)`;
-                
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
-                
-                prevPage.style.opacity = currentPage === 1 ? '0.5' : '1';
-                nextPage.style.opacity = currentPage === totalPages ? '0.5' : '1';
-            } else {
-                pagination.style.display = 'none';
-            }
-        }
-        
-        // Formatear fecha
-        function formatDate(dateString) {
-            if (!dateString) return 'No disponible';
-            
-            const date = new Date(dateString);
-            return date.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
             });
         }
         
@@ -1967,54 +1863,6 @@
             }
         }
         
-        // Alternar estado del usuario (activar/desactivar)
-        async function toggleUserStatus(userId, isCurrentlyActive) {
-            console.log('Alternando estado del usuario:', userId, 'Actualmente activo:', isCurrentlyActive);
-            
-            if (!isAdmin) {
-                showAlert(accountAlert, 'No tienes permisos para modificar usuarios', 'error');
-                return;
-            }
-            
-            if (userId === currentUser?.id) {
-                showAlert(accountAlert, 'No puedes desactivar tu propia cuenta', 'error');
-                return;
-            }
-            
-            const newStatus = !isCurrentlyActive;
-            const action = newStatus ? 'activar' : 'desactivar';
-            
-            if (!confirm(`¿Estás seguro de que quieres ${action} este usuario?`)) {
-                return;
-            }
-            
-            try {
-                // Actualizar estado del usuario
-                const { error } = await supabase
-                    .from('users')
-                    .update({
-                        active: newStatus,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('id', userId);
-                
-                if (error) {
-                    showAlert(accountAlert, `Error al ${action} usuario: ` + error.message, 'error');
-                    return;
-                }
-                
-                console.log(`Usuario ${action}do exitosamente`);
-                
-                // Recargar lista de usuarios
-                await loadUsers();
-                showAlert(accountAlert, `Usuario ${action}do exitosamente`, 'success');
-                
-            } catch (error) {
-                console.error('Error al alternar estado del usuario:', error);
-                showAlert(accountAlert, `Error al ${action} usuario`, 'error');
-            }
-        }
-        
         // Eliminar usuario
         async function deleteUser(userId) {
             console.log('Eliminando usuario:', userId);
@@ -2024,37 +1872,27 @@
                 return;
             }
             
-            if (userId === currentUser?.id) {
-                showAlert(accountAlert, 'No puedes eliminar tu propia cuenta', 'error');
-                return;
-            }
-            
-            if (!confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer y también eliminará su cuenta de autenticación.')) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.')) {
                 return;
             }
             
             try {
-                // Primero eliminar de la tabla 'users'
-                const { error: dbError } = await supabase
+                // Eliminar usuario de la tabla 'users'
+                const { error } = await supabase
                     .from('users')
                     .delete()
                     .eq('id', userId);
                 
-                if (dbError) {
-                    showAlert(accountAlert, 'Error al eliminar usuario de la base de datos: ' + dbError.message, 'error');
+                if (error) {
+                    showAlert(accountAlert, 'Error al eliminar usuario: ' + error.message, 'error');
                     return;
                 }
-                
-                // Luego eliminar de Supabase Auth (esto requiere permisos de administrador en Supabase)
-                // Nota: Esta operación requiere permisos especiales en Supabase
-                // Por ahora solo eliminamos de la tabla users
                 
                 console.log('Usuario eliminado exitosamente');
                 
                 // Recargar lista de usuarios
                 await loadUsers();
                 showAlert(accountAlert, 'Usuario eliminado exitosamente', 'success');
-                
             } catch (error) {
                 console.error('Error al eliminar usuario:', error);
                 showAlert(accountAlert, 'Error al eliminar usuario', 'error');
@@ -2071,9 +1909,9 @@
             }
             
             const userId = document.getElementById('userId').value;
-            const name = document.getElementById('userName').value.trim();
-            const email = document.getElementById('userEmail').value.trim();
-            const phone = document.getElementById('userPhone').value.trim();
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const phone = document.getElementById('userPhone').value;
             const role = document.getElementById('userRole').value;
             const password = document.getElementById('userPassword').value;
             
@@ -2084,7 +1922,7 @@
             }
             
             // Validar nombre
-            if (!name || name.length < 2) {
+            if (!name || name.trim().length < 2) {
                 showAlert(userAlert, 'Por favor ingresa un nombre válido (mínimo 2 caracteres)', 'error');
                 return;
             }
@@ -2102,9 +1940,9 @@
                     const { data, error } = await supabase
                         .from('users')
                         .update({
-                            name,
-                            email,
-                            phone: phone || null,
+                            name: name.trim(),
+                            email: email.trim(),
+                            phone: phone ? phone.trim() : null,
                             role,
                             updated_at: new Date().toISOString()
                         })
@@ -2118,13 +1956,6 @@
                     
                     console.log('Usuario actualizado exitosamente');
                     showAlert(userAlert, 'Usuario actualizado exitosamente', 'success');
-                    
-                    // Cerrar modal después de 2 segundos
-                    setTimeout(() => {
-                        hideModal(userModal);
-                        loadUsers();
-                    }, 2000);
-                    
                 } else {
                     console.log('Creando nuevo usuario');
                     
@@ -2139,11 +1970,11 @@
                     
                     // Primero, crear usuario en Auth
                     const { data: authData, error: authError } = await supabase.auth.signUp({
-                        email,
+                        email: email.trim(),
                         password: userPassword,
                         options: {
                             data: {
-                                name,
+                                name: name.trim(),
                                 role
                             }
                         }
@@ -2162,9 +1993,9 @@
                         .from('users')
                         .insert({
                             id: authData.user.id,
-                            name,
-                            email,
-                            phone: phone || null,
+                            name: name.trim(),
+                            email: email.trim(),
+                            phone: phone ? phone.trim() : null,
                             role,
                             active: true,
                             created_at: new Date().toISOString()
@@ -2178,13 +2009,15 @@
                     
                     console.log('Usuario creado exitosamente');
                     showAlert(userAlert, 'Usuario creado exitosamente. Se ha enviado un correo de verificación.', 'success');
-                    
-                    // Cerrar modal después de 2 segundos
-                    setTimeout(() => {
-                        hideModal(userModal);
-                        loadUsers();
-                    }, 2000);
                 }
+                
+                // Recargar lista de usuarios
+                await loadUsers();
+                
+                // Cerrar modal después de 2 segundos
+                setTimeout(() => {
+                    hideModal(userModal);
+                }, 2000);
                 
             } catch (error) {
                 console.error('Error al guardar usuario:', error);
