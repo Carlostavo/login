@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión - Autenticación</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -95,6 +95,7 @@
             font-weight: 500;
             color: var(--dark-color);
             transition: background-color 0.3s;
+            display: none; /* Oculto por defecto */
         }
         
         .profile-btn:hover {
@@ -252,6 +253,8 @@
             border: none;
             cursor: pointer;
             color: var(--gray-color);
+            font-size: 1rem;
+            padding: 0.25rem;
         }
         
         .forgot-password {
@@ -281,10 +284,19 @@
             cursor: pointer;
             transition: background-color 0.3s;
             margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .submit-btn:hover {
             background-color: var(--secondary-color);
+        }
+        
+        .submit-btn:disabled {
+            background-color: var(--gray-color);
+            cursor: not-allowed;
         }
         
         /* Modal de recuperación de contraseña */
@@ -485,7 +497,7 @@
             padding: 1rem;
             border-radius: 0.5rem;
             margin-bottom: 1.5rem;
-            display: flex;
+            display: none;
             justify-content: space-between;
             align-items: center;
         }
@@ -502,6 +514,12 @@
             border-left: 4px solid var(--danger-color);
         }
         
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid var(--warning-color);
+        }
+        
         .close-alert {
             background: none;
             border: none;
@@ -509,6 +527,7 @@
             cursor: pointer;
             color: inherit;
             line-height: 1;
+            margin-left: 0.5rem;
         }
         
         /* Footer */
@@ -593,6 +612,37 @@
                 gap: 1rem;
             }
         }
+        
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -614,6 +664,11 @@
         
         <div class="user-profile">
             <button class="login-btn" id="loginBtn">Iniciar Sesión</button>
+            <button class="profile-btn" id="profileBtn">
+                <i class="fas fa-user-circle"></i>
+                <span id="profileName">Usuario</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
             <div class="profile-menu" id="profileMenu">
                 <a href="#" id="accountManagement">Gestión de Cuentas</a>
                 <a href="#" id="logoutBtn">Cerrar Sesión</a>
@@ -629,7 +684,7 @@
                 <button class="close-modal" id="closeLogin">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="loginAlert" class="alert" style="display: none;"></div>
+                <div id="loginAlert" class="alert"></div>
                 <form id="loginForm">
                     <div class="form-group">
                         <label for="email">Correo electrónico</label>
@@ -649,8 +704,8 @@
                     </div>
                     <a href="#" class="forgot-password" id="forgotPassword">¿Olvidaste tu contraseña?</a>
                     <button type="submit" class="submit-btn" id="loginSubmit">
-                        <span>Iniciar Sesión</span>
-                        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+                        <span id="loginText">Iniciar Sesión</span>
+                        <div class="spinner" id="loginSpinner" style="display: none;"></div>
                     </button>
                 </form>
             </div>
@@ -665,7 +720,7 @@
                 <button class="close-modal" id="closeRecovery">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="recoveryAlert" class="alert" style="display: none;"></div>
+                <div id="recoveryAlert" class="alert"></div>
                 <form id="recoveryForm">
                     <div class="form-group">
                         <label for="recoveryEmail">Correo electrónico o número de teléfono</label>
@@ -678,8 +733,8 @@
                         </p>
                     </div>
                     <button type="submit" class="submit-btn" id="recoverySubmit">
-                        <span>Enviar Instrucciones</span>
-                        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+                        <span id="recoveryText">Enviar Instrucciones</span>
+                        <div class="spinner" id="recoverySpinner" style="display: none;"></div>
                     </button>
                 </form>
                 <p style="text-align: center; margin-top: 1rem;">
@@ -697,7 +752,7 @@
                 <button class="close-modal" id="closeUserModal">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="userAlert" class="alert" style="display: none;"></div>
+                <div id="userAlert" class="alert"></div>
                 <form id="userForm">
                     <input type="hidden" id="userId" name="userId">
                     <div class="form-row">
@@ -737,7 +792,7 @@
                     </div>
                     <button type="submit" class="submit-btn" id="userSubmit">
                         <span id="userSubmitText">Crear Usuario</span>
-                        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+                        <div class="spinner" id="userSpinner" style="display: none;"></div>
                     </button>
                 </form>
             </div>
@@ -795,7 +850,7 @@
                 <p>Administra los usuarios del sistema (solo visible para administradores)</p>
             </div>
             
-            <div id="accountAlert" class="alert" style="display: none;"></div>
+            <div id="accountAlert" class="alert"></div>
             
             <div class="section-header">
                 <h2 class="section-title">Usuarios del Sistema</h2>
@@ -818,6 +873,12 @@
                     </thead>
                     <tbody id="usersTableBody">
                         <!-- Los usuarios se cargarán aquí dinámicamente -->
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
+                                <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                <p>Inicia sesión como administrador para gestionar usuarios</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -910,10 +971,13 @@
         
         // Elementos del DOM
         const loginBtn = document.getElementById('loginBtn');
+        const profileBtn = document.getElementById('profileBtn');
         const loginModal = document.getElementById('loginModal');
         const closeLogin = document.getElementById('closeLogin');
         const loginForm = document.getElementById('loginForm');
         const loginSubmit = document.getElementById('loginSubmit');
+        const loginText = document.getElementById('loginText');
+        const loginSpinner = document.getElementById('loginSpinner');
         const loginAlert = document.getElementById('loginAlert');
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
@@ -922,6 +986,8 @@
         const closeRecovery = document.getElementById('closeRecovery');
         const recoveryForm = document.getElementById('recoveryForm');
         const recoverySubmit = document.getElementById('recoverySubmit');
+        const recoveryText = document.getElementById('recoveryText');
+        const recoverySpinner = document.getElementById('recoverySpinner');
         const recoveryAlert = document.getElementById('recoveryAlert');
         const backToLogin = document.getElementById('backToLogin');
         const profileMenu = document.getElementById('profileMenu');
@@ -931,30 +997,39 @@
         const closeUserModal = document.getElementById('closeUserModal');
         const userForm = document.getElementById('userForm');
         const userSubmit = document.getElementById('userSubmit');
+        const userSubmitText = document.getElementById('userSubmitText');
+        const userSpinner = document.getElementById('userSpinner');
         const userAlert = document.getElementById('userAlert');
         const createUserBtn = document.getElementById('createUserBtn');
         const usersTableBody = document.getElementById('usersTableBody');
         const accountAlert = document.getElementById('accountAlert');
         const heroLogin = document.getElementById('heroLogin');
         const userModalTitle = document.getElementById('userModalTitle');
-        const userSubmitText = document.getElementById('userSubmitText');
         const passwordField = document.getElementById('passwordField');
         const toggleUserPassword = document.getElementById('toggleUserPassword');
         const userPasswordInput = document.getElementById('userPassword');
+        const profileName = document.getElementById('profileName');
         
         // Navegación entre páginas
         const navLinks = document.querySelectorAll('.nav-links a');
         const pages = document.querySelectorAll('.page');
         
-        // Verificar si hay una sesión activa al cargar la página
+        // Inicializar la aplicación
         document.addEventListener('DOMContentLoaded', () => {
-            checkSession();
-            setupEventListeners();
-            loadUsersIfAdmin();
+            console.log('Aplicación cargada');
+            initApp();
         });
+        
+        async function initApp() {
+            console.log('Inicializando aplicación...');
+            setupEventListeners();
+            await checkSession();
+        }
         
         // Configurar event listeners
         function setupEventListeners() {
+            console.log('Configurando event listeners...');
+            
             // Navegación entre páginas
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -969,55 +1044,92 @@
             });
             
             // Login modal
-            loginBtn.addEventListener('click', () => showModal(loginModal));
-            heroLogin.addEventListener('click', () => showModal(loginModal));
-            closeLogin.addEventListener('click', () => hideModal(loginModal));
+            loginBtn.addEventListener('click', () => {
+                console.log('Botón de login clickeado');
+                showModal(loginModal);
+            });
+            
+            heroLogin.addEventListener('click', () => {
+                console.log('Botón hero login clickeado');
+                showModal(loginModal);
+            });
+            
+            closeLogin.addEventListener('click', () => {
+                console.log('Cerrar login modal');
+                hideModal(loginModal);
+            });
+            
             loginModal.addEventListener('click', (e) => {
-                if (e.target === loginModal) hideModal(loginModal);
+                if (e.target === loginModal) {
+                    hideModal(loginModal);
+                }
             });
             
             // Toggle password visibility
             togglePassword.addEventListener('click', () => {
+                console.log('Toggle password visibility');
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
-                togglePassword.querySelector('i').classList.toggle('fa-eye');
-                togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+                const icon = togglePassword.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
             });
             
             // Toggle user password visibility
             toggleUserPassword.addEventListener('click', () => {
+                console.log('Toggle user password visibility');
                 const type = userPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 userPasswordInput.setAttribute('type', type);
-                toggleUserPassword.querySelector('i').classList.toggle('fa-eye');
-                toggleUserPassword.querySelector('i').classList.toggle('fa-eye-slash');
+                const icon = toggleUserPassword.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
             });
             
             // Login form submission
-            loginForm.addEventListener('submit', handleLogin);
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('Login form submitted');
+                await handleLogin();
+            });
             
             // Forgot password
             forgotPassword.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log('Forgot password clicked');
                 hideModal(loginModal);
                 showModal(recoveryModal);
             });
             
             // Recovery modal
-            closeRecovery.addEventListener('click', () => hideModal(recoveryModal));
-            recoveryModal.addEventListener('click', (e) => {
-                if (e.target === recoveryModal) hideModal(recoveryModal);
+            closeRecovery.addEventListener('click', () => {
+                console.log('Cerrar recovery modal');
+                hideModal(recoveryModal);
             });
+            
+            recoveryModal.addEventListener('click', (e) => {
+                if (e.target === recoveryModal) {
+                    hideModal(recoveryModal);
+                }
+            });
+            
             backToLogin.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log('Back to login clicked');
                 hideModal(recoveryModal);
                 showModal(loginModal);
             });
             
             // Recovery form submission
-            recoveryForm.addEventListener('submit', handlePasswordRecovery);
+            recoveryForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('Recovery form submitted');
+                await handlePasswordRecovery();
+            });
             
-            // Profile menu
-            document.querySelector('.profile-btn').addEventListener('click', () => {
+            // Profile button
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                console.log('Profile button clicked');
                 profileMenu.classList.toggle('active');
             });
             
@@ -1029,25 +1141,44 @@
             });
             
             // Logout
-            logoutBtn.addEventListener('click', handleLogout);
+            logoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                console.log('Logout clicked');
+                await handleLogout();
+            });
             
             // Account management (solo para administradores)
             accountManagement.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log('Account management clicked');
                 if (isAdmin) {
                     showPage('gestion-cuentas');
                     profileMenu.classList.remove('active');
+                } else {
+                    showAlert(accountAlert, 'No tienes permisos de administrador para acceder a esta página', 'error');
                 }
             });
             
             // User modal
-            closeUserModal.addEventListener('click', () => hideModal(userModal));
+            closeUserModal.addEventListener('click', () => {
+                console.log('Cerrar user modal');
+                hideModal(userModal);
+            });
+            
             userModal.addEventListener('click', (e) => {
-                if (e.target === userModal) hideModal(userModal);
+                if (e.target === userModal) {
+                    hideModal(userModal);
+                }
             });
             
             // Crear nuevo usuario
             createUserBtn.addEventListener('click', () => {
+                console.log('Crear nuevo usuario clicked');
+                if (!isAdmin) {
+                    showAlert(accountAlert, 'Debes ser administrador para crear usuarios', 'error');
+                    return;
+                }
+                
                 editingUserId = null;
                 userForm.reset();
                 userModalTitle.textContent = 'Crear Nuevo Usuario';
@@ -1057,11 +1188,16 @@
             });
             
             // User form submission
-            userForm.addEventListener('submit', handleUserSubmit);
+            userForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('User form submitted');
+                await handleUserSubmit();
+            });
         }
         
         // Mostrar página específica
         function showPage(pageId) {
+            console.log('Mostrando página:', pageId);
             pages.forEach(page => {
                 page.classList.remove('active');
             });
@@ -1074,12 +1210,14 @@
         
         // Mostrar modal
         function showModal(modal) {
+            console.log('Mostrando modal');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
         
         // Ocultar modal
         function hideModal(modal) {
+            console.log('Ocultando modal');
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
             
@@ -1098,6 +1236,7 @@
         
         // Verificar sesión activa
         async function checkSession() {
+            console.log('Verificando sesión...');
             try {
                 const { data, error } = await supabase.auth.getSession();
                 
@@ -1106,12 +1245,16 @@
                     return;
                 }
                 
+                console.log('Datos de sesión:', data);
+                
                 if (data.session) {
                     // Sesión activa encontrada
+                    console.log('Sesión activa encontrada');
                     currentUser = data.session.user;
                     await updateUIForLoggedInUser();
                 } else {
                     // No hay sesión activa
+                    console.log('No hay sesión activa');
                     updateUIForLoggedOutUser();
                 }
             } catch (error) {
@@ -1121,121 +1264,163 @@
         
         // Actualizar UI para usuario logueado
         async function updateUIForLoggedInUser() {
+            console.log('Actualizando UI para usuario logueado');
+            
             // Obtener información adicional del usuario
-            const { data: userData, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('id', currentUser.id)
-                .single();
-            
-            if (error) {
-                console.error('Error al obtener datos del usuario:', error);
-                return;
-            }
-            
-            // Verificar si es administrador
-            isAdmin = userData.role === 'admin';
-            
-            // Actualizar botón de login por perfil
-            loginBtn.style.display = 'none';
-            document.querySelector('.profile-btn').style.display = 'flex';
-            document.querySelector('.profile-btn').innerHTML = `
-                <i class="fas fa-user-circle"></i>
-                <span>${userData.name || currentUser.email}</span>
-                <i class="fas fa-chevron-down"></i>
-            `;
-            
-            // Mostrar gestión de cuentas solo para administradores
-            accountManagement.style.display = isAdmin ? 'block' : 'none';
-            
-            // Cargar usuarios si es administrador
-            if (isAdmin) {
-                loadUsers();
+            try {
+                const { data: userData, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (error) {
+                    console.error('Error al obtener datos del usuario:', error);
+                    // Si no existe en la tabla users, usar datos de auth
+                    isAdmin = false;
+                    profileName.textContent = currentUser.email.split('@')[0];
+                } else {
+                    // Verificar si es administrador
+                    isAdmin = userData.role === 'admin';
+                    profileName.textContent = userData.name || currentUser.email.split('@')[0];
+                }
+                
+                // Actualizar botón de login por perfil
+                loginBtn.style.display = 'none';
+                profileBtn.style.display = 'flex';
+                
+                // Mostrar gestión de cuentas solo para administradores
+                accountManagement.style.display = isAdmin ? 'block' : 'none';
+                
+                // Cargar usuarios si es administrador
+                if (isAdmin) {
+                    await loadUsers();
+                }
+                
+                console.log('Usuario es admin:', isAdmin);
+            } catch (error) {
+                console.error('Error en updateUIForLoggedInUser:', error);
             }
         }
         
         // Actualizar UI para usuario no logueado
         function updateUIForLoggedOutUser() {
+            console.log('Actualizando UI para usuario no logueado');
             loginBtn.style.display = 'block';
-            document.querySelector('.profile-btn').style.display = 'none';
+            profileBtn.style.display = 'none';
             profileMenu.classList.remove('active');
+            isAdmin = false;
+            currentUser = null;
             
             // Ocultar página de gestión de cuentas si está visible
             if (document.getElementById('gestion-cuentas').classList.contains('active')) {
                 showPage('inicio');
-                document.querySelector('.nav-links a[data-page="inicio"]').classList.add('active');
+                navLinks.forEach(link => {
+                    if (link.getAttribute('data-page') === 'inicio') {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
             }
         }
         
         // Manejar login
-        async function handleLogin(e) {
-            e.preventDefault();
+        async function handleLogin() {
+            console.log('Manejando login...');
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const submitIcon = loginSubmit.querySelector('i');
             
-            // Mostrar loading
-            loginSubmit.disabled = true;
-            submitIcon.style.display = 'inline-block';
-            
-            // Intentar login
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            });
-            
-            if (error) {
-                // Mostrar error
-                showAlert(loginAlert, error.message, 'error');
-                loginSubmit.disabled = false;
-                submitIcon.style.display = 'none';
+            if (!email || !password) {
+                showAlert(loginAlert, 'Por favor ingresa tu correo y contraseña', 'error');
                 return;
             }
             
-            // Login exitoso
-            currentUser = data.user;
-            await updateUIForLoggedInUser();
-            hideModal(loginModal);
+            // Mostrar loading
+            loginSubmit.disabled = true;
+            loginText.style.display = 'none';
+            loginSpinner.style.display = 'block';
             
-            // Mostrar mensaje de éxito
-            showAlert(accountAlert, 'Inicio de sesión exitoso', 'success');
+            console.log('Intentando login con:', email);
             
-            // Limpiar formulario
-            loginForm.reset();
-            loginSubmit.disabled = false;
-            submitIcon.style.display = 'none';
+            // Intentar login
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                console.log('Respuesta de login:', { data, error });
+                
+                if (error) {
+                    // Mostrar error
+                    showAlert(loginAlert, error.message, 'error');
+                    loginSubmit.disabled = false;
+                    loginText.style.display = 'inline';
+                    loginSpinner.style.display = 'none';
+                    return;
+                }
+                
+                // Login exitoso
+                console.log('Login exitoso');
+                currentUser = data.user;
+                await updateUIForLoggedInUser();
+                hideModal(loginModal);
+                
+                // Mostrar mensaje de éxito
+                showAlert(accountAlert, 'Inicio de sesión exitoso', 'success');
+                
+                // Limpiar formulario
+                loginForm.reset();
+                
+            } catch (error) {
+                console.error('Error en login:', error);
+                showAlert(loginAlert, 'Error de conexión. Intenta nuevamente.', 'error');
+            } finally {
+                loginSubmit.disabled = false;
+                loginText.style.display = 'inline';
+                loginSpinner.style.display = 'none';
+            }
         }
         
         // Manejar recuperación de contraseña
-        async function handlePasswordRecovery(e) {
-            e.preventDefault();
+        async function handlePasswordRecovery() {
+            console.log('Manejando recuperación de contraseña...');
             
             const recoveryEmail = document.getElementById('recoveryEmail').value;
-            const submitIcon = recoverySubmit.querySelector('i');
             
-            // Validar si es email o teléfono
+            if (!recoveryEmail) {
+                showAlert(recoveryAlert, 'Por favor ingresa tu correo electrónico', 'error');
+                return;
+            }
+            
+            // Validar si es email
             const isEmail = recoveryEmail.includes('@');
-            const isPhone = /^\+?[1-9]\d{1,14}$/.test(recoveryEmail.replace(/\D/g, ''));
             
-            if (!isEmail && !isPhone) {
-                showAlert(recoveryAlert, 'Por favor ingresa un correo electrónico válido o un número de teléfono con código de país (ej: +1234567890)', 'error');
+            if (!isEmail) {
+                showAlert(recoveryAlert, 'Por favor ingresa un correo electrónico válido', 'error');
                 return;
             }
             
             // Mostrar loading
             recoverySubmit.disabled = true;
-            submitIcon.style.display = 'inline-block';
+            recoveryText.style.display = 'none';
+            recoverySpinner.style.display = 'block';
             
-            if (isEmail) {
+            console.log('Enviando correo de recuperación a:', recoveryEmail);
+            
+            try {
                 // Enviar correo de recuperación
                 const { error } = await supabase.auth.resetPasswordForEmail(recoveryEmail, {
                     redirectTo: `${window.location.origin}/reset-password`,
                 });
                 
                 if (error) {
+                    console.error('Error en recuperación:', error);
                     showAlert(recoveryAlert, error.message, 'error');
                 } else {
+                    console.log('Correo de recuperación enviado');
                     showAlert(recoveryAlert, 'Se han enviado instrucciones de recuperación a tu correo electrónico', 'success');
                     recoveryForm.reset();
                     
@@ -1245,38 +1430,53 @@
                         showModal(loginModal);
                     }, 3000);
                 }
-            } else {
-                // Para teléfono, simular envío (Supabase no tiene soporte nativo para SMS)
-                showAlert(recoveryAlert, 'Las notificaciones por SMS están deshabilitadas en este momento. Por favor usa tu correo electrónico para recuperar tu contraseña.', 'error');
+            } catch (error) {
+                console.error('Error en recuperación de contraseña:', error);
+                showAlert(recoveryAlert, 'Error de conexión. Intenta nuevamente.', 'error');
+            } finally {
+                recoverySubmit.disabled = false;
+                recoveryText.style.display = 'inline';
+                recoverySpinner.style.display = 'none';
             }
-            
-            recoverySubmit.disabled = false;
-            submitIcon.style.display = 'none';
         }
         
         // Manejar logout
-        async function handleLogout(e) {
-            e.preventDefault();
+        async function handleLogout() {
+            console.log('Manejando logout...');
             
-            const { error } = await supabase.auth.signOut();
-            
-            if (error) {
-                console.error('Error al cerrar sesión:', error);
-                return;
+            try {
+                const { error } = await supabase.auth.signOut();
+                
+                if (error) {
+                    console.error('Error al cerrar sesión:', error);
+                    showAlert(accountAlert, 'Error al cerrar sesión: ' + error.message, 'error');
+                    return;
+                }
+                
+                console.log('Logout exitoso');
+                
+                // Actualizar UI
+                currentUser = null;
+                isAdmin = false;
+                updateUIForLoggedOutUser();
+                
+                // Mostrar mensaje
+                showAlert(accountAlert, 'Sesión cerrada exitosamente', 'success');
+                
+            } catch (error) {
+                console.error('Error en logout:', error);
+                showAlert(accountAlert, 'Error al cerrar sesión', 'error');
             }
-            
-            // Actualizar UI
-            currentUser = null;
-            isAdmin = false;
-            updateUIForLoggedOutUser();
-            
-            // Mostrar mensaje
-            showAlert(accountAlert, 'Sesión cerrada exitosamente', 'success');
         }
         
         // Cargar usuarios (solo para administradores)
         async function loadUsers() {
-            if (!isAdmin) return;
+            console.log('Cargando usuarios...');
+            
+            if (!isAdmin) {
+                console.log('No es admin, no se cargan usuarios');
+                return;
+            }
             
             try {
                 // Obtener usuarios de la tabla 'users'
@@ -1287,30 +1487,30 @@
                 
                 if (error) {
                     console.error('Error al cargar usuarios:', error);
+                    showAlert(accountAlert, 'Error al cargar usuarios: ' + error.message, 'error');
                     return;
                 }
+                
+                console.log('Usuarios cargados:', users);
                 
                 // Actualizar tabla
                 updateUsersTable(users);
             } catch (error) {
                 console.error('Error al cargar usuarios:', error);
-            }
-        }
-        
-        // Cargar usuarios si es administrador
-        async function loadUsersIfAdmin() {
-            if (isAdmin) {
-                loadUsers();
+                showAlert(accountAlert, 'Error al cargar usuarios', 'error');
             }
         }
         
         // Actualizar tabla de usuarios
         function updateUsersTable(users) {
+            console.log('Actualizando tabla de usuarios:', users);
+            
             if (!users || users.length === 0) {
                 usersTableBody.innerHTML = `
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 2rem; color: var(--gray-color);">
-                            No hay usuarios registrados
+                            <i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>No hay usuarios registrados</p>
                         </td>
                     </tr>
                 `;
@@ -1319,7 +1519,9 @@
             
             usersTableBody.innerHTML = users.map(user => {
                 // Obtener iniciales para el avatar
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'US';
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 
+                    user.email.substring(0, 2).toUpperCase();
                 
                 return `
                     <tr>
@@ -1340,8 +1542,8 @@
                             </span>
                         </td>
                         <td>
-                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${user.active ? '#10b981' : '#ef4444'}; margin-right: 0.5rem;"></span>
-                            ${user.active ? 'Activo' : 'Inactivo'}
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${user.active !== false ? '#10b981' : '#ef4444'}; margin-right: 0.5rem;"></span>
+                            ${user.active !== false ? 'Activo' : 'Inactivo'}
                         </td>
                         <td>
                             <div class="actions">
@@ -1369,6 +1571,13 @@
         
         // Editar usuario
         async function editUser(userId) {
+            console.log('Editando usuario:', userId);
+            
+            if (!isAdmin) {
+                showAlert(accountAlert, 'No tienes permisos para editar usuarios', 'error');
+                return;
+            }
+            
             try {
                 // Obtener datos del usuario
                 const { data: user, error } = await supabase
@@ -1382,13 +1591,15 @@
                     return;
                 }
                 
+                console.log('Usuario a editar:', user);
+                
                 // Rellenar formulario
                 editingUserId = userId;
                 document.getElementById('userId').value = user.id;
                 document.getElementById('userName').value = user.name || '';
                 document.getElementById('userEmail').value = user.email;
                 document.getElementById('userPhone').value = user.phone || '';
-                document.getElementById('userRole').value = user.role;
+                document.getElementById('userRole').value = user.role || 'technician';
                 document.getElementById('userPassword').value = '';
                 
                 // Actualizar modal
@@ -1406,6 +1617,13 @@
         
         // Eliminar usuario
         async function deleteUser(userId) {
+            console.log('Eliminando usuario:', userId);
+            
+            if (!isAdmin) {
+                showAlert(accountAlert, 'No tienes permisos para eliminar usuarios', 'error');
+                return;
+            }
+            
             if (!confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.')) {
                 return;
             }
@@ -1422,8 +1640,10 @@
                     return;
                 }
                 
+                console.log('Usuario eliminado exitosamente');
+                
                 // Recargar lista de usuarios
-                loadUsers();
+                await loadUsers();
                 showAlert(accountAlert, 'Usuario eliminado exitosamente', 'success');
             } catch (error) {
                 console.error('Error al eliminar usuario:', error);
@@ -1432,8 +1652,13 @@
         }
         
         // Manejar creación/actualización de usuario
-        async function handleUserSubmit(e) {
-            e.preventDefault();
+        async function handleUserSubmit() {
+            console.log('Manejando envío de formulario de usuario...');
+            
+            if (!isAdmin) {
+                showAlert(userAlert, 'No tienes permisos para gestionar usuarios', 'error');
+                return;
+            }
             
             const userId = document.getElementById('userId').value;
             const name = document.getElementById('userName').value;
@@ -1441,7 +1666,6 @@
             const phone = document.getElementById('userPhone').value;
             const role = document.getElementById('userRole').value;
             const password = document.getElementById('userPassword').value;
-            const submitIcon = userSubmit.querySelector('i');
             
             // Validar email
             if (!email || !email.includes('@')) {
@@ -1449,101 +1673,98 @@
                 return;
             }
             
+            // Validar nombre
+            if (!name || name.trim().length < 2) {
+                showAlert(userAlert, 'Por favor ingresa un nombre válido (mínimo 2 caracteres)', 'error');
+                return;
+            }
+            
             // Mostrar loading
             userSubmit.disabled = true;
-            submitIcon.style.display = 'inline-block';
+            userSubmitText.style.display = 'none';
+            userSpinner.style.display = 'block';
             
             try {
                 if (editingUserId) {
+                    console.log('Actualizando usuario existente:', editingUserId);
+                    
                     // Actualizar usuario existente
                     const { data, error } = await supabase
                         .from('users')
                         .update({
-                            name,
-                            email,
-                            phone,
+                            name: name.trim(),
+                            email: email.trim(),
+                            phone: phone ? phone.trim() : null,
                             role,
                             updated_at: new Date().toISOString()
                         })
                         .eq('id', editingUserId);
                     
                     if (error) {
+                        console.error('Error al actualizar usuario:', error);
                         showAlert(userAlert, 'Error al actualizar usuario: ' + error.message, 'error');
                         return;
                     }
                     
-                    // Actualizar usuario en Auth si el email cambió
-                    if (currentUser.email !== email) {
-                        const { error: authError } = await supabase.auth.updateUser({
-                            email: email
-                        });
-                        
-                        if (authError) {
-                            console.error('Error al actualizar email en Auth:', authError);
-                        }
-                    }
-                    
+                    console.log('Usuario actualizado exitosamente');
                     showAlert(userAlert, 'Usuario actualizado exitosamente', 'success');
                 } else {
-                    // Crear nuevo usuario
-                    // Primero, crear usuario en Auth
-                    let authResponse;
+                    console.log('Creando nuevo usuario');
                     
-                    if (password) {
-                        // Usar contraseña proporcionada
-                        authResponse = await supabase.auth.signUp({
-                            email,
-                            password,
-                            options: {
-                                data: {
-                                    name,
-                                    role
-                                }
-                            }
-                        });
-                    } else {
+                    // Crear nuevo usuario
+                    let userPassword = password;
+                    if (!userPassword) {
                         // Generar contraseña aleatoria
-                        const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10).toUpperCase();
-                        authResponse = await supabase.auth.signUp({
-                            email,
-                            password: randomPassword,
-                            options: {
-                                data: {
-                                    name,
-                                    role
-                                }
-                            }
-                        });
+                        userPassword = Math.random().toString(36).slice(-10) + 
+                                      Math.random().toString(36).slice(-10).toUpperCase();
+                        console.log('Contraseña generada:', userPassword);
                     }
                     
-                    if (authResponse.error) {
-                        showAlert(userAlert, 'Error al crear usuario: ' + authResponse.error.message, 'error');
+                    // Primero, crear usuario en Auth
+                    const { data: authData, error: authError } = await supabase.auth.signUp({
+                        email: email.trim(),
+                        password: userPassword,
+                        options: {
+                            data: {
+                                name: name.trim(),
+                                role
+                            }
+                        }
+                    });
+                    
+                    if (authError) {
+                        console.error('Error al crear usuario en Auth:', authError);
+                        showAlert(userAlert, 'Error al crear usuario: ' + authError.message, 'error');
                         return;
                     }
+                    
+                    console.log('Usuario creado en Auth:', authData);
                     
                     // Luego, agregar a la tabla 'users'
                     const { error: dbError } = await supabase
                         .from('users')
                         .insert({
-                            id: authResponse.data.user.id,
-                            name,
-                            email,
-                            phone,
+                            id: authData.user.id,
+                            name: name.trim(),
+                            email: email.trim(),
+                            phone: phone ? phone.trim() : null,
                             role,
                             active: true,
                             created_at: new Date().toISOString()
                         });
                     
                     if (dbError) {
+                        console.error('Error al guardar usuario en la base de datos:', dbError);
                         showAlert(userAlert, 'Error al guardar usuario en la base de datos: ' + dbError.message, 'error');
                         return;
                     }
                     
+                    console.log('Usuario creado exitosamente');
                     showAlert(userAlert, 'Usuario creado exitosamente. Se ha enviado un correo de verificación.', 'success');
                 }
                 
                 // Recargar lista de usuarios
-                loadUsers();
+                await loadUsers();
                 
                 // Cerrar modal después de 2 segundos
                 setTimeout(() => {
@@ -1555,26 +1776,31 @@
                 showAlert(userAlert, 'Error inesperado: ' + error.message, 'error');
             } finally {
                 userSubmit.disabled = false;
-                submitIcon.style.display = 'none';
+                userSubmitText.style.display = 'inline';
+                userSpinner.style.display = 'none';
             }
         }
         
         // Mostrar alerta
         function showAlert(alertElement, message, type) {
+            console.log(`Mostrando alerta: ${type} - ${message}`);
+            
+            // Limpiar contenido previo
+            alertElement.innerHTML = '';
+            
+            // Configurar alerta
             alertElement.textContent = message;
             alertElement.className = `alert alert-${type}`;
             alertElement.style.display = 'flex';
             
             // Agregar botón para cerrar
-            if (!alertElement.querySelector('.close-alert')) {
-                const closeBtn = document.createElement('button');
-                closeBtn.className = 'close-alert';
-                closeBtn.innerHTML = '&times;';
-                closeBtn.addEventListener('click', () => {
-                    alertElement.style.display = 'none';
-                });
-                alertElement.appendChild(closeBtn);
-            }
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'close-alert';
+            closeBtn.innerHTML = '&times;';
+            closeBtn.addEventListener('click', () => {
+                alertElement.style.display = 'none';
+            });
+            alertElement.appendChild(closeBtn);
             
             // Auto-ocultar después de 5 segundos para alertas de éxito
             if (type === 'success') {
@@ -1582,6 +1808,9 @@
                     alertElement.style.display = 'none';
                 }, 5000);
             }
+            
+            // Para alertas en modales, hacer scroll al principio
+            alertElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     </script>
 </body>
