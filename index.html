@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restablecer Contraseña - Sistema de Gestión</title>
+    <title>Sistema de Gestión - Inicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -13,35 +15,241 @@
         }
 
         body {
-            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            background-color: #f5f7fa;
+            color: #333;
             min-height: 100vh;
+        }
+
+        /* Header y Navegación */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: #3498db;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background: #3498db;
+        }
+
+        /* Botones de usuario */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .login-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: #2980b9;
+        }
+
+        .user-profile {
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+        }
+
+        .profile-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .profile-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-width: 220px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .profile-menu.show {
+            display: block;
+        }
+
+        .profile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s;
+        }
+
+        .profile-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .profile-menu a:last-child {
+            color: #e74c3c;
+            border-bottom: none;
+        }
+
+        /* Modal de Login */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
+            z-index: 2000;
         }
 
-        .reset-container {
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
             background: white;
             border-radius: 12px;
-            width: 100%;
+            width: 90%;
             max-width: 400px;
+            animation: modalSlideIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .modal-body {
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .reset-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .reset-header h1 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .reset-header p {
-            color: #666;
         }
 
         .form-group {
@@ -69,6 +277,35 @@
             border-color: #3498db;
         }
 
+        .password-input {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 0.8rem;
@@ -80,134 +317,1004 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s;
+            margin-top: 1rem;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
         }
 
-        .message {
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal-footer {
+            text-align: center;
             padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #2ecc71;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
             text-align: center;
             display: none;
         }
 
-        .message.success {
+        /* Modal Recuperar Contraseña */
+        #recoveryModal .modal-body {
+            text-align: center;
+        }
+
+        #recoveryModal .info-text {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Modal Gestión de Cuentas */
+        .accounts-modal {
+            max-width: 900px;
+        }
+
+        .accounts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .accounts-table-container {
+            overflow-x: auto;
+        }
+
+        .accounts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            min-width: 600px;
+        }
+
+        .accounts-table th,
+        .accounts-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .accounts-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-edit {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #e67e22;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-new-user {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .btn-new-user:hover {
+            background: #27ae60;
+        }
+
+        /* Badges para roles */
+        .role-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .role-admin {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .role-technical {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-active {
             background: #e8f5e9;
             color: #2e7d32;
-            display: block;
         }
 
-        .message.error {
+        .status-inactive {
             background: #ffebee;
             color: #c62828;
-            display: block;
         }
 
-        .back-link {
+        /* Contenido Principal */
+        main {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 15px;
             text-align: center;
-            margin-top: 1.5rem;
+            margin-bottom: 3rem;
         }
 
-        .back-link a {
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
             color: #3498db;
-            text-decoration: none;
+            margin-bottom: 1rem;
         }
 
-        .back-link a:hover {
-            text-decoration: underline;
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            
+            .modal {
+                width: 95%;
+                margin: 1rem;
+            }
+            
+            .welcome-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .welcome-section {
+                padding: 3rem 1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="reset-container">
-        <div class="reset-header">
-            <h1>Restablecer Contraseña</h1>
-            <p>Ingresa tu nueva contraseña</p>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>Sistema de <span>Gestión</span></h1>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="metas.html"><i class="fas fa-bullseye"></i> Metas</a></li>
+                    <li><a href="indicadores.html"><i class="fas fa-chart-bar"></i> Indicadores</a></li>
+                    <li><a href="avances.html"><i class="fas fa-tasks"></i> Avances</a></li>
+                    <li><a href="reportes.html"><i class="fas fa-file-alt"></i> Reportes</a></li>
+                    <li><a href="formularios.html"><i class="fas fa-edit"></i> Formularios</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-actions">
+                <button class="login-btn" id="openLogin">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+                
+                <div class="user-profile" id="userProfile">
+                    <button class="profile-btn" id="profileToggle">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Usuario</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <!-- Gestión de Cuentas solo para administradores -->
+                        <a href="#" id="manageAccounts" style="display: none;">
+                            <i class="fas fa-users-cog"></i> Gestión de Cuentas
+                        </a>
+                        <a href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <div class="message" id="message"></div>
-
-        <form id="resetForm">
-            <div class="form-group">
-                <label for="newPassword">Nueva Contraseña</label>
-                <input type="password" id="newPassword" class="form-control" required minlength="6">
+    <!-- Modal Login -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Iniciar Sesión</h2>
+                <button class="close-modal" id="closeLogin">&times;</button>
             </div>
-
-            <div class="form-group">
-                <label for="confirmPassword">Confirmar Contraseña</label>
-                <input type="password" id="confirmPassword" class="form-control" required>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" class="form-control" placeholder="correo@ejemplo.com" required>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <div class="password-input">
+                            <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                            <button type="button" class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+                    
+                    <a href="#" class="forgot-password" id="forgotPassword">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                    
+                    <button type="submit" class="submit-btn" id="loginSubmit">
+                        <span id="loginText">Iniciar Sesión</span>
+                        <div class="loader" id="loginLoader"></div>
+                    </button>
+                    
+                    <div class="success-message" id="loginSuccess"></div>
+                </form>
             </div>
-
-            <button type="submit" class="submit-btn" id="submitBtn">
-                Restablecer Contraseña
-            </button>
-        </form>
-
-        <div class="back-link">
-            <a href="index.html">Volver al inicio</a>
         </div>
     </div>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Modal Recuperar Contraseña -->
+    <div class="modal-overlay" id="recoveryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Recuperar Contraseña</h2>
+                <button class="close-modal" id="closeRecovery">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="info-text">
+                    Ingresa tu correo electrónico o número de celular y te enviaremos instrucciones para restablecer tu contraseña.
+                </p>
+                <form id="recoveryForm">
+                    <div class="form-group">
+                        <label for="recoveryEmail">Correo Electrónico</label>
+                        <input type="text" id="recoveryEmail" class="form-control" 
+                               placeholder="correo@ejemplo.com" required>
+                        <div class="error-message" id="recoveryError"></div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="recoverySubmit">
+                        <span id="recoveryText">Enviar Instrucciones</span>
+                        <div class="loader" id="recoveryLoader"></div>
+                    </button>
+                    
+                    <div class="success-message" id="recoverySuccess"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gestión de Cuentas -->
+    <div class="modal-overlay" id="accountsModal">
+        <div class="modal accounts-modal">
+            <div class="modal-header">
+                <h2>Gestión de Cuentas</h2>
+                <button class="close-modal" id="closeAccounts">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="accounts-header">
+                    <h3>Usuarios del Sistema</h3>
+                    <button class="btn-new-user" id="newUserBtn">
+                        <i class="fas fa-plus"></i> Nuevo Usuario
+                    </button>
+                </div>
+                
+                <div class="accounts-table-container">
+                    <table class="accounts-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <!-- Usuarios se cargarán aquí -->
+                            <tr id="noUsersRow">
+                                <td colspan="5" style="text-align: center; padding: 2rem;">
+                                    <i class="fas fa-users" style="font-size: 2rem; color: #ddd; margin-bottom: 1rem;"></i>
+                                    <p>No hay usuarios registrados</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Usuario -->
+    <div class="modal-overlay" id="newUserModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Crear Nuevo Usuario</h2>
+                <button class="close-modal" id="closeNewUser">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="newUserForm">
+                    <div class="form-group">
+                        <label for="newUserName">Nombre Completo *</label>
+                        <input type="text" id="newUserName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newUserEmail">Correo Electrónico *</label>
+                        <input type="email" id="newUserEmail" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newUserRole">Rol *</label>
+                        <select id="newUserRole" class="form-control">
+                            <option value="administrador">Administrador</option>
+                            <option value="tecnico" selected>Técnico</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newUserPassword">Contraseña Temporal *</label>
+                        <input type="password" id="newUserPassword" class="form-control" required minlength="6">
+                        <small style="color: #666; margin-top: 0.5rem; display: block;">
+                            La contraseña debe tener al menos 6 caracteres
+                        </small>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="newUserSubmit">
+                        <span id="newUserText">Crear Usuario</span>
+                        <div class="loader" id="newUserLoader"></div>
+                    </button>
+                    
+                    <div class="success-message" id="newUserSuccess"></div>
+                    <div class="error-message" id="newUserError"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main>
+        <section class="welcome-section">
+            <h2>Bienvenido al Sistema de Gestión</h2>
+            <p>Gestiona tus metas, indicadores y reportes de manera eficiente</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Funcionalidades Principales</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Metas</h3>
+                    <p>Establece y sigue el progreso de tus objetivos organizacionales.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Indicadores</h3>
+                    <p>Monitorea KPIs y métricas importantes para tu organización.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-tasks"></i>
+                    <h3>Avances</h3>
+                    <p>Registra y visualiza el progreso de tus proyectos y actividades.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Sistema de Gestión © 2024 - Todos los derechos reservados</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Desarrollado con Supabase y GitHub Pages
+        </p>
+    </footer>
+
     <script>
         // Configuración Supabase
         const SUPABASE_URL = 'https://fdmyrrlxnrxlfyzjcvvm.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTAxNTcsImV4cCI6MjA2ODg4NjE1N30.6InJE9-kHu1UrRiUzYl-AQ49vJJtXNKVP3DranJ8a2M';
 
+        // Inicializar Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        document.getElementById('resetForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Estado de la aplicación
+        let currentUser = null;
+        let currentUserRole = null;
+
+        // Elementos del DOM
+        const modals = {
+            login: document.getElementById('loginModal'),
+            recovery: document.getElementById('recoveryModal'),
+            accounts: document.getElementById('accountsModal'),
+            newUser: document.getElementById('newUserModal')
+        };
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initApp();
+            setupEventListeners();
+        });
+
+        async function initApp() {
+            // Verificar sesión activa
+            const { data: { session } } = await supabase.auth.getSession();
             
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const messageElement = document.getElementById('message');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            // Validaciones
-            if (newPassword.length < 6) {
-                showMessage('La contraseña debe tener al menos 6 caracteres', 'error');
-                return;
+            if (session) {
+                await handleSuccessfulLogin(session.user);
+            } else {
+                updateUIForLoggedOutUser();
             }
+
+            // Escuchar cambios en la autenticación
+            supabase.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'SIGNED_IN' && session) {
+                    await handleSuccessfulLogin(session.user);
+                } else if (event === 'SIGNED_OUT') {
+                    handleLogout();
+                }
+            });
+        }
+
+        async function handleSuccessfulLogin(user) {
+            currentUser = user;
             
-            if (newPassword !== confirmPassword) {
-                showMessage('Las contraseñas no coinciden', 'error');
-                return;
+            // Obtener el rol del usuario desde metadata
+            currentUserRole = user.user_metadata?.role || 'tecnico';
+            
+            // Actualizar UI
+            updateUIForLoggedInUser();
+            
+            // Mostrar mensaje de bienvenida
+            showMessage('loginSuccess', `¡Bienvenido, ${user.user_metadata?.full_name || user.email}!`, 'success');
+            
+            // Cerrar modal después de 1.5 segundos
+            setTimeout(() => {
+                closeModal('login');
+            }, 1500);
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            currentUserRole = null;
+            updateUIForLoggedOutUser();
+        }
+
+        function updateUIForLoggedInUser() {
+            // Ocultar botón de login
+            document.getElementById('openLogin').style.display = 'none';
+            
+            // Mostrar perfil de usuario
+            const userProfile = document.getElementById('userProfile');
+            userProfile.style.display = 'flex';
+            
+            // Actualizar nombre de usuario
+            const userName = currentUser.user_metadata?.full_name || 
+                           currentUser.email.split('@')[0] || 
+                           'Usuario';
+            document.getElementById('userName').textContent = userName;
+            
+            // Mostrar u ocultar "Gestión de Cuentas" según el rol
+            const manageAccountsBtn = document.getElementById('manageAccounts');
+            if (currentUserRole === 'administrador') {
+                manageAccountsBtn.style.display = 'flex';
+            } else {
+                manageAccountsBtn.style.display = 'none';
             }
+        }
+
+        function updateUIForLoggedOutUser() {
+            // Mostrar botón de login
+            document.getElementById('openLogin').style.display = 'flex';
             
-            // Deshabilitar botón
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Procesando...';
+            // Ocultar perfil de usuario
+            document.getElementById('userProfile').style.display = 'none';
+            
+            // Limpiar formularios
+            document.getElementById('loginForm').reset();
+            document.getElementById('recoveryForm').reset();
+            
+            // Limpiar mensajes de error
+            hideAllErrors();
+        }
+
+        async function handleLogin(email, password) {
+            // Mostrar loader
+            showLoader('loginSubmit', 'loginText', 'loginLoader');
             
             try {
-                const { error } = await supabase.auth.updateUser({
-                    password: newPassword
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email.trim(),
+                    password: password
                 });
+
+                if (error) {
+                    hideLoader('loginSubmit', 'loginText', 'loginLoader');
+                    showError('loginSubmit', error.message);
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                hideLoader('loginSubmit', 'loginText', 'loginLoader');
+                showError('loginSubmit', 'Error al iniciar sesión');
+                return false;
+            }
+        }
+
+        async function handlePasswordRecovery(email) {
+            // Mostrar loader
+            showLoader('recoverySubmit', 'recoveryText', 'recoveryLoader');
+            
+            try {
+                const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+                    redirectTo: `${window.location.origin}/reset-password.html`
+                });
+
+                if (error) {
+                    hideLoader('recoverySubmit', 'recoveryText', 'recoveryLoader');
+                    showError('recoverySubmit', error.message);
+                    return;
+                }
+
+                hideLoader('recoverySubmit', 'recoveryText', 'recoveryLoader');
+                showMessage('recoverySuccess', 'Se han enviado las instrucciones a tu correo.', 'success');
+                
+                // Cerrar modal después de 3 segundos
+                setTimeout(() => {
+                    closeModal('recovery');
+                }, 3000);
+            } catch (error) {
+                hideLoader('recoverySubmit', 'recoveryText', 'recoveryLoader');
+                showError('recoverySubmit', 'Error al enviar las instrucciones');
+            }
+        }
+
+        async function handleCreateUser(userData) {
+            // Mostrar loader
+            showLoader('newUserSubmit', 'newUserText', 'newUserLoader');
+            
+            try {
+                // Crear usuario en Auth
+                const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+                    email: userData.email.trim(),
+                    password: userData.password,
+                    email_confirm: true,
+                    user_metadata: {
+                        full_name: userData.name,
+                        role: userData.role
+                    }
+                });
+
+                if (authError) {
+                    // Si el usuario ya existe, intentar invitarlo
+                    if (authError.message.includes('already registered')) {
+                        const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(userData.email.trim(), {
+                            data: {
+                                full_name: userData.name,
+                                role: userData.role
+                            }
+                        });
+                        
+                        if (inviteError) throw inviteError;
+                    } else {
+                        throw authError;
+                    }
+                }
+
+                hideLoader('newUserSubmit', 'newUserText', 'newUserLoader');
+                showMessage('newUserSuccess', 'Usuario creado exitosamente', 'success');
+                
+                // Limpiar formulario
+                document.getElementById('newUserForm').reset();
+                
+                // Actualizar lista de usuarios
+                await loadUsers();
+                
+                // Cerrar modal después de 2 segundos
+                setTimeout(() => {
+                    closeModal('newUser');
+                }, 2000);
+            } catch (error) {
+                hideLoader('newUserSubmit', 'newUserText', 'newUserLoader');
+                showError('newUserSubmit', error.message || 'Error al crear usuario');
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                // Para producción, deberías tener una tabla 'profiles' o 'users'
+                // Por ahora, obtenemos usuarios de la tabla auth.users (requiere admin)
+                const { data: { users }, error } = await supabase.auth.admin.listUsers();
                 
                 if (error) throw error;
                 
-                showMessage('¡Contraseña actualizada exitosamente! Redirigiendo...', 'success');
+                const tableBody = document.getElementById('usersTable');
+                const noUsersRow = document.getElementById('noUsersRow');
                 
-                // Redirigir después de 2 segundos
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
+                // Limpiar tabla
+                tableBody.innerHTML = '';
                 
+                if (!users || users.length === 0) {
+                    tableBody.appendChild(noUsersRow.cloneNode(true));
+                    return;
+                }
+                
+                // Filtrar usuarios (excluir el usuario actual)
+                const filteredUsers = users.filter(user => user.id !== currentUser?.id);
+                
+                filteredUsers.forEach(user => {
+                    const row = document.createElement('tr');
+                    const userRole = user.user_metadata?.role || 'tecnico';
+                    const userName = user.user_metadata?.full_name || user.email || 'Usuario';
+                    const userEmail = user.email || 'No disponible';
+                    
+                    row.innerHTML = `
+                        <td>${userName}</td>
+                        <td>${userEmail}</td>
+                        <td>
+                            <span class="role-badge ${userRole === 'administrador' ? 'role-admin' : 'role-technical'}">
+                                ${userRole === 'administrador' ? 'Administrador' : 'Técnico'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-active">
+                                Activo
+                            </span>
+                        </td>
+                        <td class="account-actions">
+                            <button class="btn-edit" onclick="editUser('${user.id}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn-delete" onclick="deleteUser('${user.id}')">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
             } catch (error) {
-                showMessage(error.message || 'Error al actualizar la contraseña', 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Restablecer Contraseña';
+                console.error('Error cargando usuarios:', error);
+                showMessage('usersTable', 'Error al cargar usuarios', 'error');
             }
-        });
-
-        function showMessage(text, type) {
-            const messageElement = document.getElementById('message');
-            messageElement.textContent = text;
-            messageElement.className = `message ${type}`;
         }
+
+        function setupEventListeners() {
+            // Botones de apertura de modales
+            document.getElementById('openLogin').addEventListener('click', () => openModal('login'));
+            
+            // Botones de cierre de modales
+            document.getElementById('closeLogin').addEventListener('click', () => closeModal('login'));
+            document.getElementById('closeRecovery').addEventListener('click', () => closeModal('recovery'));
+            document.getElementById('closeAccounts').addEventListener('click', () => closeModal('accounts'));
+            document.getElementById('closeNewUser').addEventListener('click', () => closeModal('newUser'));
+            
+            // Enlace "Olvidé mi contraseña"
+            document.getElementById('forgotPassword').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal('login');
+                setTimeout(() => openModal('recovery'), 300);
+            });
+            
+            // Botón de perfil
+            document.getElementById('profileToggle').addEventListener('click', () => {
+                const profileMenu = document.getElementById('profileMenu');
+                profileMenu.classList.toggle('show');
+            });
+            
+            // Gestión de cuentas
+            document.getElementById('manageAccounts').addEventListener('click', async (e) => {
+                e.preventDefault();
+                profileMenu.classList.remove('show');
+                await loadUsers();
+                openModal('accounts');
+            });
+            
+            // Cerrar sesión
+            document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                profileMenu.classList.remove('show');
+                const { error } = await supabase.auth.signOut();
+                if (error) {
+                    console.error('Error al cerrar sesión:', error);
+                }
+            });
+            
+            // Nuevo usuario
+            document.getElementById('newUserBtn').addEventListener('click', () => {
+                openModal('newUser');
+            });
+            
+            // Toggle visibilidad de contraseña
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            // Formularios
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Validación básica
+                if (!email || !password) {
+                    showError('loginSubmit', 'Por favor completa todos los campos');
+                    return;
+                }
+                
+                await handleLogin(email, password);
+            });
+            
+            document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('recoveryEmail').value;
+                
+                if (!email) {
+                    showError('recoverySubmit', 'Por favor ingresa tu correo electrónico');
+                    return;
+                }
+                
+                await handlePasswordRecovery(email);
+            });
+            
+            document.getElementById('newUserForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userData = {
+                    name: document.getElementById('newUserName').value,
+                    email: document.getElementById('newUserEmail').value,
+                    role: document.getElementById('newUserRole').value,
+                    password: document.getElementById('newUserPassword').value
+                };
+                
+                // Validación
+                if (!userData.name || !userData.email || !userData.password) {
+                    showError('newUserSubmit', 'Por favor completa todos los campos requeridos');
+                    return;
+                }
+                
+                if (userData.password.length < 6) {
+                    showError('newUserSubmit', 'La contraseña debe tener al menos 6 caracteres');
+                    return;
+                }
+                
+                await handleCreateUser(userData);
+            });
+            
+            // Cerrar modales al hacer clic fuera
+            Object.values(modals).forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                    }
+                });
+            });
+            
+            // Cerrar menú de perfil al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                const profileMenu = document.getElementById('profileMenu');
+                const profileToggle = document.getElementById('profileToggle');
+                
+                if (!profileMenu.contains(e.target) && !profileToggle.contains(e.target)) {
+                    profileMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // Funciones de utilidad
+        function openModal(modalName) {
+            Object.values(modals).forEach(modal => modal.classList.remove('show'));
+            if (modals[modalName]) {
+                modals[modalName].classList.add('show');
+                hideAllErrors();
+                hideAllMessages();
+            }
+        }
+
+        function closeModal(modalName) {
+            if (modals[modalName]) {
+                modals[modalName].classList.remove('show');
+                hideAllErrors();
+                hideAllMessages();
+            }
+        }
+
+        function showLoader(buttonId, textId, loaderId) {
+            const button = document.getElementById(buttonId);
+            const text = document.getElementById(textId);
+            const loader = document.getElementById(loaderId);
+            
+            if (button) button.disabled = true;
+            if (text) text.style.display = 'none';
+            if (loader) loader.style.display = 'block';
+        }
+
+        function hideLoader(buttonId, textId, loaderId) {
+            const button = document.getElementById(buttonId);
+            const text = document.getElementById(textId);
+            const loader = document.getElementById(loaderId);
+            
+            if (button) button.disabled = false;
+            if (text) text.style.display = 'block';
+            if (loader) loader.style.display = 'none';
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId + 'Error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        function showMessage(elementId, message, type = 'success') {
+            const messageElement = document.getElementById(elementId);
+            if (messageElement) {
+                messageElement.textContent = message;
+                messageElement.style.display = 'block';
+                messageElement.style.color = type === 'success' ? '#2ecc71' : '#e74c3c';
+            }
+        }
+
+        function hideAllErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        function hideAllMessages() {
+            document.querySelectorAll('.success-message').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        // Funciones globales para acciones de usuario
+        window.editUser = function(userId) {
+            alert(`Función de edición para usuario ID: ${userId}\n\nNota: Implementa la lógica de edición según tus necesidades.`);
+        };
+
+        window.deleteUser = function(userId) {
+            if (confirm('¿Estás seguro de eliminar este usuario?\n\nEsta acción no se puede deshacer.')) {
+                alert(`Función de eliminación para usuario ID: ${userId}\n\nNota: Implementa la lógica de eliminación en Supabase.`);
+            }
+        };
     </script>
 </body>
 </html>
