@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión - Autenticación</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -74,11 +74,17 @@
             gap: 0.75rem;
             font-weight: 700;
             font-size: 1.5rem;
-            color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .logo i {
             font-size: 1.75rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .nav-links {
@@ -118,7 +124,7 @@
             transform: translateX(-50%);
             width: 20px;
             height: 3px;
-            background: var(--primary-color);
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
             border-radius: 3px;
         }
         
@@ -144,6 +150,10 @@
         .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
         }
         
         .profile-btn {
@@ -384,7 +394,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
         }
         
         .modal-header h2 {
@@ -457,6 +467,10 @@
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .input-with-icon input.error {
+            border-color: var(--danger-color);
         }
         
         .input-icon {
@@ -535,6 +549,11 @@
         .submit-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+        
+        /* Modal de recuperación de contraseña */
+        .recovery-modal .modal {
+            max-width: 420px;
         }
         
         /* Contenido principal */
@@ -664,6 +683,17 @@
             box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
         }
         
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+        }
+        
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary-color);
@@ -672,6 +702,11 @@
         
         .btn-outline:hover {
             background-color: rgba(37, 99, 235, 0.08);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
         }
         
         .stats-grid {
@@ -872,6 +907,10 @@
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
         
+        .status-badge i {
+            font-size: 0.7rem;
+        }
+        
         .actions-cell {
             display: flex;
             gap: 0.5rem;
@@ -917,6 +956,18 @@
             color: var(--gray-500);
         }
         
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+        
         /* Modal de creación/edición de usuarios */
         .user-modal .modal {
             max-width: 500px;
@@ -930,6 +981,13 @@
         
         .form-group.full-width {
             grid-column: 1 / -1;
+        }
+        
+        .password-hint {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+            line-height: 1.5;
         }
         
         /* Alertas */
@@ -997,6 +1055,36 @@
             background-color: rgba(0, 0, 0, 0.05);
         }
         
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-600);
+            border-top: 1px solid var(--gray-200);
+            background: white;
+        }
+        
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
         /* Página de inicio */
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
@@ -1007,6 +1095,17 @@
             margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,0L1000,0L1000,100L0,100Z" fill="white" opacity="0.05"/></svg>');
+            background-size: cover;
         }
         
         .hero-content {
@@ -1056,7 +1155,10 @@
         .feature-icon {
             font-size: 3.5rem;
             margin-bottom: 1.5rem;
-            color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .feature-card h3 {
@@ -1069,6 +1171,36 @@
         .feature-card p {
             color: var(--gray-600);
             line-height: 1.7;
+        }
+        
+        /* Páginas placeholder */
+        .placeholder-content {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .placeholder-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+        
+        .placeholder-content p {
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
         
         /* Spinner */
@@ -1087,6 +1219,16 @@
         }
         
         /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.75rem;
+            }
+        }
+        
         @media (max-width: 768px) {
             .header {
                 padding: 0.75rem 1rem;
@@ -1118,6 +1260,47 @@
                 width: 100%;
                 justify-content: flex-start;
             }
+            
+            .profile-btn {
+                min-width: auto;
+                max-width: 220px;
+            }
+            
+            .profile-btn .user-info {
+                max-width: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal {
+                margin: 0 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-menu {
+                min-width: 250px;
+                right: -1rem;
+            }
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: white;
+            color: var(--gray-800);
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
     </style>
 </head>
@@ -1163,6 +1346,14 @@
                     <a href="#" class="profile-menu-item" id="accountManagement">
                         <i class="fas fa-users-cog"></i>
                         <span>Gestión de Usuarios</span>
+                    </a>
+                    <a href="#" class="profile-menu-item" id="myProfile">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                    <a href="#" class="profile-menu-item" id="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
                     </a>
                     <a href="#" class="profile-menu-item logout" id="logoutBtn">
                         <i class="fas fa-sign-out-alt"></i>
@@ -1226,7 +1417,7 @@
                             <i class="fas fa-envelope"></i>
                             <input type="email" id="recoveryEmail" name="recoveryEmail" placeholder="correo@ejemplo.com" required>
                         </div>
-                        <p style="font-size: 0.875rem; color: var(--gray-600); margin-top: 0.5rem;">
+                        <p class="password-hint">
                             Ingresa tu correo electrónico. Te enviaremos un enlace para restablecer tu contraseña.
                         </p>
                     </div>
@@ -1288,9 +1479,15 @@
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
-                        <p style="font-size: 0.875rem; color: var(--gray-600); margin-top: 0.5rem;">
+                        <p class="password-hint">
                             La contraseña debe tener al menos 8 caracteres. Si se deja en blanco, se generará una contraseña segura automáticamente.
                         </p>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>
+                            <input type="checkbox" id="sendWelcomeEmail" name="sendWelcomeEmail" checked>
+                            <span style="margin-left: 0.5rem;">Enviar correo de bienvenida con credenciales</span>
+                        </label>
                     </div>
                     <button type="submit" class="submit-btn" id="userSubmit">
                         <span id="userSubmitText">Crear Usuario</span>
@@ -1308,7 +1505,7 @@
             <div class="hero">
                 <div class="hero-content">
                     <h1>Sistema de Gestión de Metas e Indicadores</h1>
-                    <p>Plataforma integral para el seguimiento de objetivos, medición de indicadores y generación de reportes en tiempo real.</p>
+                    <p>Plataforma integral para el seguimiento de objetivos, medición de indicadores y generación de reportes en tiempo real. Diseñado para equipos que buscan excelencia operativa.</p>
                     <button class="btn btn-primary" id="heroLogin">
                         <i class="fas fa-rocket"></i> Comenzar Ahora
                     </button>
@@ -1317,7 +1514,7 @@
             
             <div class="page-header">
                 <h1>Bienvenido al Sistema de Gestión</h1>
-                <p>Una plataforma completa para administrar y monitorear el progreso de tus objetivos</p>
+                <p>Una plataforma completa para administrar y monitorear el progreso de tus objetivos con herramientas avanzadas y reportes detallados</p>
             </div>
             
             <div class="features">
@@ -1326,7 +1523,7 @@
                         <i class="fas fa-bullseye"></i>
                     </div>
                     <h3>Metas Estratégicas</h3>
-                    <p>Define y da seguimiento a las metas de tu organización con herramientas visuales y reportes detallados.</p>
+                    <p>Define y da seguimiento a las metas de tu organización con herramientas visuales y reportes detallados que facilitan la toma de decisiones.</p>
                 </div>
                 
                 <div class="feature-card">
@@ -1334,7 +1531,7 @@
                         <i class="fas fa-chart-bar"></i>
                     </div>
                     <h3>Indicadores Clave</h3>
-                    <p>Monitorea KPIs importantes con dashboards interactivos y alertas automáticas.</p>
+                    <p>Monitorea KPIs importantes con dashboards interactivos, alertas automáticas y análisis predictivo para anticipar tendencias.</p>
                 </div>
                 
                 <div class="feature-card">
@@ -1342,7 +1539,7 @@
                         <i class="fas fa-file-alt"></i>
                     </div>
                     <h3>Reportes Automatizados</h3>
-                    <p>Genera reportes personalizados y compártelos con tu equipo en diferentes formatos.</p>
+                    <p>Genera reportes personalizados y compártelos con tu equipo en diferentes formatos. Automatiza la generación de informes periódicos.</p>
                 </div>
             </div>
         </section>
@@ -1410,11 +1607,17 @@
                                 <th>Teléfono</th>
                                 <th>Rol</th>
                                 <th>Estado</th>
+                                <th>Último Acceso</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
-                            <!-- Los usuarios se cargarán aquí dinámicamente -->
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 3rem; color: var(--gray-500);">
+                                    <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.3;"></i>
+                                    <h3 style="color: var(--gray-600); margin-bottom: 0.5rem;">Inicia sesión como administrador para gestionar usuarios</h3>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -1427,10 +1630,12 @@
                 <h1>Metas</h1>
                 <p>Define y da seguimiento a las metas de tu organización</p>
             </div>
-            <div class="empty-state">
-                <i class="fas fa-bullseye" style="font-size: 4rem; margin-bottom: 1rem; color: var(--gray-400);"></i>
-                <h3>Gestión de Metas</h3>
-                <p>Esta sección te permitirá definir objetivos estratégicos y monitorear el progreso.</p>
+            <div class="placeholder-content">
+                <div class="placeholder-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h2>Gestión de Metas</h2>
+                <p>Esta sección te permitirá definir objetivos estratégicos, asignar responsables y monitorear el progreso de cada meta en tiempo real.</p>
             </div>
         </section>
         
@@ -1439,10 +1644,12 @@
                 <h1>Indicadores</h1>
                 <p>Monitorea los indicadores clave de desempeño</p>
             </div>
-            <div class="empty-state">
-                <i class="fas fa-chart-bar" style="font-size: 4rem; margin-bottom: 1rem; color: var(--gray-400);"></i>
-                <h3>Dashboard de Indicadores</h3>
-                <p>Visualiza y analiza los KPIs más importantes de tu organización.</p>
+            <div class="placeholder-content">
+                <div class="placeholder-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h2>Dashboard de Indicadores</h2>
+                <p>Visualiza y analiza los KPIs más importantes de tu organización con gráficos interactivos y reportes detallados.</p>
             </div>
         </section>
         
@@ -1451,10 +1658,12 @@
                 <h1>Avances</h1>
                 <p>Visualiza el progreso de tus proyectos y objetivos</p>
             </div>
-            <div class="empty-state">
-                <i class="fas fa-tasks" style="font-size: 4rem; margin-bottom: 1rem; color: var(--gray-400);"></i>
-                <h3>Seguimiento de Avances</h3>
-                <p>Registra y visualiza el progreso de tus proyectos.</p>
+            <div class="placeholder-content">
+                <div class="placeholder-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h2>Seguimiento de Avances</h2>
+                <p>Registra y visualiza el progreso de tus proyectos, con alertas automáticas y notificaciones para mantener todo bajo control.</p>
             </div>
         </section>
         
@@ -1463,10 +1672,12 @@
                 <h1>Reportes</h1>
                 <p>Genera y visualiza reportes detallados</p>
             </div>
-            <div class="empty-state">
-                <i class="fas fa-file-alt" style="font-size: 4rem; margin-bottom: 1rem; color: var(--gray-400);"></i>
-                <h3>Generador de Reportes</h3>
-                <p>Crea reportes personalizados y exporta datos en diferentes formatos.</p>
+            <div class="placeholder-content">
+                <div class="placeholder-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h2>Generador de Reportes</h2>
+                <p>Crea reportes personalizados, exporta datos en diferentes formatos y comparte información con tu equipo de manera eficiente.</p>
             </div>
         </section>
         
@@ -1475,401 +1686,387 @@
                 <h1>Formularios</h1>
                 <p>Gestiona formularios y recopilación de datos</p>
             </div>
-            <div class="empty-state">
-                <i class="fas fa-clipboard-list" style="font-size: 4rem; margin-bottom: 1rem; color: var(--gray-400);"></i>
-                <h3>Formularios Dinámicos</h3>
-                <p>Crea formularios personalizados para recopilar información.</p>
+            <div class="placeholder-content">
+                <div class="placeholder-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h2>Formularios Dinámicos</h2>
+                <p>Crea formularios personalizados para recopilar información, automatizar procesos y mejorar la gestión de datos en tu organización.</p>
             </div>
         </section>
     </main>
+    
+    <footer class="footer">
+        <p>Sistema de Gestión de Metas e Indicadores &copy; 2023. Todos los derechos reservados.</p>
+        <p style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--gray-500);">Versión 2.1.0</p>
+    </footer>
 
     <script>
-        // Configuración de Supabase
-        const SUPABASE_URL = 'https://fdmyrrlxnrxlfyzjcvvm.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTAxNTcsImV4cCI6MjA2ODg4NjE1N30.6InJE9-kHu1UrRiUzYl-AQ49vJJtXNKVP3DranJ8a2M';
+        // Sistema de Gestión - Versión Corregida
+        // Autor: Asistente IA
+        // Fecha: 2024
         
-        // Inicializar Supabase
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('🚀 Inicializando Sistema de Gestión...');
         
-        // Estado de la aplicación
-        let currentUser = null;
-        let isAdmin = false;
-        let editingUserId = null;
-        let allUsers = [];
+        // ========== CONFIGURACIÓN SUPABASE ==========
+        const SUPABASE_CONFIG = {
+            url: 'https://fdmyrrlxnrxlfyzjcvvm.supabase.co',
+            key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTAxNTcsImV4cCI6MjA2ODg4NjE1N30.6InJE9-kHu1UrRiUzYl-AQ49vJJtXNKVP3DranJ8a2M'
+        };
         
-        // Elementos del DOM
-        const loginBtn = document.getElementById('loginBtn');
-        const profileBtn = document.getElementById('profileBtn');
-        const loginModal = document.getElementById('loginModal');
-        const closeLogin = document.getElementById('closeLogin');
-        const loginForm = document.getElementById('loginForm');
-        const loginSubmit = document.getElementById('loginSubmit');
-        const loginText = document.getElementById('loginText');
-        const loginSpinner = document.getElementById('loginSpinner');
-        const loginAlert = document.getElementById('loginAlert');
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const forgotPassword = document.getElementById('forgotPassword');
-        const recoveryModal = document.getElementById('recoveryModal');
-        const closeRecovery = document.getElementById('closeRecovery');
-        const recoveryForm = document.getElementById('recoveryForm');
-        const recoverySubmit = document.getElementById('recoverySubmit');
-        const recoveryText = document.getElementById('recoveryText');
-        const recoverySpinner = document.getElementById('recoverySpinner');
-        const recoveryAlert = document.getElementById('recoveryAlert');
-        const backToLogin = document.getElementById('backToLogin');
-        const profileMenu = document.getElementById('profileMenu');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const accountManagement = document.getElementById('accountManagement');
-        const userModal = document.getElementById('userModal');
-        const closeUserModal = document.getElementById('closeUserModal');
-        const userForm = document.getElementById('userForm');
-        const userSubmit = document.getElementById('userSubmit');
-        const userSubmitText = document.getElementById('userSubmitText');
-        const userSpinner = document.getElementById('userSpinner');
-        const userAlert = document.getElementById('userAlert');
-        const createUserBtn = document.getElementById('createUserBtn');
-        const refreshUsersBtn = document.getElementById('refreshUsers');
-        const usersTableBody = document.getElementById('usersTableBody');
-        const accountAlert = document.getElementById('accountAlert');
-        const heroLogin = document.getElementById('heroLogin');
-        const userModalTitle = document.getElementById('userModalTitle');
-        const passwordField = document.getElementById('passwordField');
-        const toggleUserPassword = document.getElementById('toggleUserPassword');
-        const userPasswordInput = document.getElementById('userPassword');
-        const profileName = document.getElementById('profileName');
-        const profileRole = document.getElementById('profileRole');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const menuName = document.getElementById('menuName');
-        const menuEmail = document.getElementById('menuEmail');
-        const menuAvatar = document.getElementById('menuAvatar');
-        const adminCount = document.getElementById('adminCount');
-        const technicianCount = document.getElementById('technicianCount');
-        const totalUsers = document.getElementById('totalUsers');
+        // ========== INICIALIZACIÓN SUPABASE ==========
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.key);
+            console.log('✅ Supabase inicializado correctamente');
+        } catch (error) {
+            console.error('❌ Error al inicializar Supabase:', error);
+            alert('Error al conectar con la base de datos. Por favor, recarga la página.');
+        }
         
-        // Navegación entre páginas
-        const navLinks = document.querySelectorAll('.nav-links a');
-        const pages = document.querySelectorAll('.page');
+        // ========== ESTADO DE LA APLICACIÓN ==========
+        const AppState = {
+            currentUser: null,
+            isAdmin: false,
+            editingUserId: null,
+            allUsers: [],
+            isLoading: false
+        };
         
-        // Inicializar la aplicación
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Aplicación cargada');
-            setupEventListeners();
-            checkSession();
+        // ========== CACHE DE ELEMENTOS DEL DOM ==========
+        const DOM = {
+            // Header
+            loginBtn: null,
+            profileBtn: null,
+            profileName: null,
+            profileRole: null,
+            profileAvatar: null,
+            profileMenu: null,
+            
+            // Menú de perfil
+            menuName: null,
+            menuEmail: null,
+            menuAvatar: null,
+            accountManagement: null,
+            logoutBtn: null,
+            
+            // Modales
+            loginModal: null,
+            recoveryModal: null,
+            userModal: null,
+            
+            // Formularios
+            loginForm: null,
+            recoveryForm: null,
+            userForm: null,
+            
+            // Navegación
+            navLinks: null,
+            pages: null,
+            
+            // Gestión de usuarios
+            usersTableBody: null,
+            createUserBtn: null,
+            refreshUsersBtn: null,
+            
+            // Alertas
+            loginAlert: null,
+            recoveryAlert: null,
+            userAlert: null,
+            accountAlert: null,
+            
+            // Estadísticas
+            adminCount: null,
+            technicianCount: null,
+            totalUsers: null
+        };
+        
+        // ========== INICIALIZACIÓN DE LA APLICACIÓN ==========
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('📱 DOM cargado, inicializando aplicación...');
+            
+            try {
+                await initDOM();
+                await initEventListeners();
+                await checkAuthSession();
+                
+                console.log('✅ Aplicación inicializada correctamente');
+            } catch (error) {
+                console.error('❌ Error al inicializar la aplicación:', error);
+                showGlobalError('Error al inicializar la aplicación. Por favor, recarga la página.');
+            }
         });
         
-        // Configurar event listeners
-        function setupEventListeners() {
-            console.log('Configurando event listeners...');
+        // ========== INICIALIZACIÓN DEL DOM ==========
+        async function initDOM() {
+            console.log('🔍 Inicializando elementos del DOM...');
+            
+            // Header
+            DOM.loginBtn = document.getElementById('loginBtn');
+            DOM.profileBtn = document.getElementById('profileBtn');
+            DOM.profileName = document.getElementById('profileName');
+            DOM.profileRole = document.getElementById('profileRole');
+            DOM.profileAvatar = document.getElementById('profileAvatar');
+            DOM.profileMenu = document.getElementById('profileMenu');
+            
+            // Menú de perfil
+            DOM.menuName = document.getElementById('menuName');
+            DOM.menuEmail = document.getElementById('menuEmail');
+            DOM.menuAvatar = document.getElementById('menuAvatar');
+            DOM.accountManagement = document.getElementById('accountManagement');
+            DOM.logoutBtn = document.getElementById('logoutBtn');
+            
+            // Modales
+            DOM.loginModal = document.getElementById('loginModal');
+            DOM.recoveryModal = document.getElementById('recoveryModal');
+            DOM.userModal = document.getElementById('userModal');
+            
+            // Formularios
+            DOM.loginForm = document.getElementById('loginForm');
+            DOM.recoveryForm = document.getElementById('recoveryForm');
+            DOM.userForm = document.getElementById('userForm');
+            
+            // Navegación
+            DOM.navLinks = document.querySelectorAll('.nav-links a');
+            DOM.pages = document.querySelectorAll('.page');
+            
+            // Gestión de usuarios
+            DOM.usersTableBody = document.getElementById('usersTableBody');
+            DOM.createUserBtn = document.getElementById('createUserBtn');
+            DOM.refreshUsersBtn = document.getElementById('refreshUsers');
+            
+            // Alertas
+            DOM.loginAlert = document.getElementById('loginAlert');
+            DOM.recoveryAlert = document.getElementById('recoveryAlert');
+            DOM.userAlert = document.getElementById('userAlert');
+            DOM.accountAlert = document.getElementById('accountAlert');
+            
+            // Estadísticas
+            DOM.adminCount = document.getElementById('adminCount');
+            DOM.technicianCount = document.getElementById('technicianCount');
+            DOM.totalUsers = document.getElementById('totalUsers');
+            
+            console.log('✅ DOM inicializado correctamente');
+        }
+        
+        // ========== INICIALIZACIÓN DE EVENT LISTENERS ==========
+        async function initEventListeners() {
+            console.log('🎯 Configurando event listeners...');
             
             // Navegación entre páginas
-            navLinks.forEach(link => {
+            DOM.navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const pageId = link.getAttribute('data-page');
-                    showPage(pageId);
-                    
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
+                    navigateToPage(pageId, link);
                 });
             });
             
-            // Login modal
-            loginBtn.addEventListener('click', () => {
-                showModal(loginModal);
-            });
+            // Botón de login
+            DOM.loginBtn.addEventListener('click', () => showModal(DOM.loginModal));
+            document.getElementById('heroLogin')?.addEventListener('click', () => showModal(DOM.loginModal));
             
-            heroLogin.addEventListener('click', () => {
-                showModal(loginModal);
-            });
-            
-            closeLogin.addEventListener('click', () => {
-                hideModal(loginModal);
-            });
-            
-            loginModal.addEventListener('click', (e) => {
-                if (e.target === loginModal) hideModal(loginModal);
+            // Botón de cerrar modal login
+            document.getElementById('closeLogin')?.addEventListener('click', () => hideModal(DOM.loginModal));
+            DOM.loginModal?.addEventListener('click', (e) => {
+                if (e.target === DOM.loginModal) hideModal(DOM.loginModal);
             });
             
             // Toggle password visibility
-            togglePassword.addEventListener('click', () => {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                const icon = togglePassword.querySelector('i');
-                icon.classList.toggle('fa-eye');
-                icon.classList.toggle('fa-eye-slash');
-            });
+            document.getElementById('togglePassword')?.addEventListener('click', togglePasswordVisibility);
+            document.getElementById('toggleUserPassword')?.addEventListener('click', toggleUserPasswordVisibility);
             
-            toggleUserPassword.addEventListener('click', () => {
-                const type = userPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                userPasswordInput.setAttribute('type', type);
-                const icon = toggleUserPassword.querySelector('i');
-                icon.classList.toggle('fa-eye');
-                icon.classList.toggle('fa-eye-slash');
-            });
+            // Formulario de login
+            DOM.loginForm?.addEventListener('submit', handleLoginSubmit);
             
-            // Login form submission
-            loginForm.addEventListener('submit', async (e) => {
+            // Olvidé mi contraseña
+            document.getElementById('forgotPassword')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                await handleLogin();
+                hideModal(DOM.loginModal);
+                showModal(DOM.recoveryModal);
             });
             
-            // Forgot password
-            forgotPassword.addEventListener('click', (e) => {
+            // Modal de recuperación
+            document.getElementById('closeRecovery')?.addEventListener('click', () => hideModal(DOM.recoveryModal));
+            DOM.recoveryModal?.addEventListener('click', (e) => {
+                if (e.target === DOM.recoveryModal) hideModal(DOM.recoveryModal);
+            });
+            
+            // Volver a login desde recuperación
+            document.getElementById('backToLogin')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                hideModal(loginModal);
-                showModal(recoveryModal);
+                hideModal(DOM.recoveryModal);
+                showModal(DOM.loginModal);
             });
             
-            // Recovery modal
-            closeRecovery.addEventListener('click', () => {
-                hideModal(recoveryModal);
-            });
+            // Formulario de recuperación
+            DOM.recoveryForm?.addEventListener('submit', handlePasswordRecovery);
             
-            recoveryModal.addEventListener('click', (e) => {
-                if (e.target === recoveryModal) hideModal(recoveryModal);
-            });
-            
-            backToLogin.addEventListener('click', (e) => {
-                e.preventDefault();
-                hideModal(recoveryModal);
-                showModal(loginModal);
-            });
-            
-            // Recovery form submission
-            recoveryForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                await handlePasswordRecovery();
-            });
-            
-            // Profile button
-            profileBtn.addEventListener('click', (e) => {
+            // Botón de perfil
+            DOM.profileBtn?.addEventListener('click', (e) => {
                 e.stopPropagation();
-                profileMenu.classList.toggle('active');
-                profileBtn.classList.toggle('active');
+                toggleProfileMenu();
             });
             
             // Cerrar menú de perfil al hacer clic fuera
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.user-profile')) {
-                    profileMenu.classList.remove('active');
-                    profileBtn.classList.remove('active');
+                    hideProfileMenu();
                 }
             });
             
-            // Logout
-            logoutBtn.addEventListener('click', async (e) => {
+            // Gestión de usuarios desde el menú
+            DOM.accountManagement?.addEventListener('click', (e) => {
                 e.preventDefault();
-                await handleLogout();
+                handleAccountManagement();
             });
             
-            // Account management - CORREGIDO
-            accountManagement.addEventListener('click', (e) => {
+            // Cerrar sesión
+            DOM.logoutBtn?.addEventListener('click', (e) => {
                 e.preventDefault();
-                console.log('Gestión de usuarios clickeado, isAdmin:', isAdmin);
-                
-                if (isAdmin) {
-                    showPage('gestion-cuentas');
-                    loadUsers();
-                    profileMenu.classList.remove('active');
-                    profileBtn.classList.remove('active');
-                } else {
-                    showAlert(accountAlert, 'No tienes permisos de administrador para acceder a esta página', 'error');
-                }
+                handleLogout();
             });
             
-            // User modal
-            closeUserModal.addEventListener('click', () => {
-                hideModal(userModal);
-            });
-            
-            userModal.addEventListener('click', (e) => {
-                if (e.target === userModal) hideModal(userModal);
+            // Modal de usuario
+            document.getElementById('closeUserModal')?.addEventListener('click', () => hideModal(DOM.userModal));
+            DOM.userModal?.addEventListener('click', (e) => {
+                if (e.target === DOM.userModal) hideModal(DOM.userModal);
             });
             
             // Crear nuevo usuario
-            createUserBtn.addEventListener('click', () => {
-                if (!isAdmin) {
-                    showAlert(accountAlert, 'Debes ser administrador para crear usuarios', 'error');
-                    return;
-                }
-                
-                editingUserId = null;
-                userForm.reset();
-                userModalTitle.textContent = 'Crear Nuevo Usuario';
-                userSubmitText.textContent = 'Crear Usuario';
-                passwordField.style.display = 'block';
-                showModal(userModal);
-            });
+            DOM.createUserBtn?.addEventListener('click', () => handleCreateUser());
             
-            // Refrescar lista de usuarios
-            refreshUsersBtn.addEventListener('click', async () => {
-                if (isAdmin) {
-                    await loadUsers();
-                    showAlert(accountAlert, 'Lista de usuarios actualizada', 'success');
-                }
-            });
+            // Refrescar usuarios
+            DOM.refreshUsersBtn?.addEventListener('click', () => loadUsers());
             
-            // User form submission
-            userForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                await handleUserSubmit();
-            });
+            // Formulario de usuario
+            DOM.userForm?.addEventListener('submit', handleUserSubmit);
+            
+            console.log('✅ Event listeners configurados correctamente');
         }
         
-        // Mostrar página específica
-        function showPage(pageId) {
-            console.log('Mostrando página:', pageId);
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
+        // ========== FUNCIONES DE NAVEGACIÓN ==========
+        function navigateToPage(pageId, clickedLink = null) {
+            console.log(`📄 Navegando a página: ${pageId}`);
             
+            // Ocultar todas las páginas
+            DOM.pages.forEach(page => page.classList.remove('active'));
+            
+            // Mostrar página seleccionada
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
+                
+                // Si es la página de gestión de usuarios y somos admin, cargar usuarios
+                if (pageId === 'gestion-cuentas' && AppState.isAdmin) {
+                    loadUsers();
+                }
+            }
+            
+            // Actualizar navegación activa
+            if (clickedLink) {
+                DOM.navLinks.forEach(link => link.classList.remove('active'));
+                clickedLink.classList.add('active');
             }
         }
         
-        // Mostrar modal
-        function showModal(modal) {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        // Ocultar modal
-        function hideModal(modal) {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
+        // ========== FUNCIONES DE AUTENTICACIÓN ==========
+        async function checkAuthSession() {
+            console.log('🔍 Verificando sesión de autenticación...');
             
-            // Limpiar alertas
-            const alerts = modal.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                alert.style.display = 'none';
-                alert.textContent = '';
-                alert.className = 'alert';
-            });
-            
-            // Limpiar formularios
-            const forms = modal.querySelectorAll('form');
-            forms.forEach(form => form.reset());
-        }
-        
-        // Verificar sesión activa
-        async function checkSession() {
             try {
                 const { data, error } = await supabase.auth.getSession();
                 
                 if (error) {
-                    console.error('Error al verificar sesión:', error);
+                    console.error('❌ Error al verificar sesión:', error);
+                    updateUIForGuest();
                     return;
                 }
                 
                 if (data.session) {
-                    currentUser = data.session.user;
-                    await updateUIForLoggedInUser();
+                    console.log('✅ Sesión activa encontrada');
+                    AppState.currentUser = data.session.user;
+                    await loadUserProfile();
                 } else {
-                    updateUIForLoggedOutUser();
+                    console.log('⚠️ No hay sesión activa');
+                    updateUIForGuest();
                 }
             } catch (error) {
-                console.error('Error al verificar sesión:', error);
+                console.error('❌ Error en checkAuthSession:', error);
+                updateUIForGuest();
             }
         }
         
-        // Actualizar UI para usuario logueado
-        async function updateUIForLoggedInUser() {
+        async function loadUserProfile() {
+            console.log('👤 Cargando perfil de usuario...');
+            
             try {
-                // Obtener información del usuario desde la tabla users
+                // Intentar obtener datos del usuario desde la tabla 'users'
                 const { data: userData, error } = await supabase
                     .from('users')
                     .select('*')
-                    .eq('id', currentUser.id)
-                    .maybeSingle(); // Usamos maybeSingle en lugar de single
+                    .eq('id', AppState.currentUser.id)
+                    .single();
                 
-                let userName = currentUser.email.split('@')[0];
-                let userRole = 'Usuario';
-                let userEmail = currentUser.email;
-                
-                if (!error && userData) {
-                    userName = userData.name || userName;
-                    userRole = userData.role === 'admin' ? 'Administrador' : 'Técnico';
-                    isAdmin = userData.role === 'admin';
-                } else if (error && error.code !== 'PGRST116') {
-                    console.error('Error al obtener datos del usuario:', error);
+                if (error) {
+                    console.warn('⚠️ Usuario no encontrado en tabla users, usando datos básicos');
+                    // Usar datos básicos del auth
+                    updateUserProfileUI(
+                        AppState.currentUser.email.split('@')[0],
+                        'Usuario',
+                        AppState.currentUser.email,
+                        getInitials(AppState.currentUser.email)
+                    );
+                    AppState.isAdmin = false;
+                } else {
+                    // Actualizar estado
+                    AppState.isAdmin = userData.role === 'admin';
+                    
+                    // Actualizar UI
+                    updateUserProfileUI(
+                        userData.name || AppState.currentUser.email.split('@')[0],
+                        userData.role === 'admin' ? 'Administrador' : 'Técnico',
+                        userData.email || AppState.currentUser.email,
+                        getInitials(userData.name || AppState.currentUser.email)
+                    );
+                    
+                    console.log(`👑 Usuario es admin: ${AppState.isAdmin}`);
                 }
                 
-                // Actualizar UI
-                updateProfileUI(userName, userRole, userEmail);
+                // Mostrar perfil y ocultar botón de login
+                DOM.loginBtn.style.display = 'none';
+                DOM.profileBtn.style.display = 'flex';
                 
-                loginBtn.style.display = 'none';
-                profileBtn.style.display = 'flex';
-                
-                showAlert(accountAlert, `¡Bienvenido de nuevo, ${userName}!`, 'success');
+                // Mostrar alerta de bienvenida si estamos en la página de inicio
+                if (document.getElementById('inicio').classList.contains('active')) {
+                    showAlert(DOM.accountAlert, `🎉 ¡Bienvenido de nuevo, ${DOM.profileName.textContent}!`, 'success');
+                }
                 
             } catch (error) {
-                console.error('Error en updateUIForLoggedInUser:', error);
-                updateUIForLoggedOutUser();
+                console.error('❌ Error al cargar perfil:', error);
+                updateUIForGuest();
             }
         }
         
-        // Actualizar información del perfil
-        function updateProfileUI(name, role, email) {
-            const initials = getInitials(name);
+        // ========== MANEJO DE LOGIN ==========
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            console.log('🔐 Procesando login...');
             
-            profileName.textContent = name;
-            profileRole.textContent = role;
-            profileAvatar.textContent = initials;
-            
-            menuName.textContent = name;
-            menuEmail.textContent = email;
-            menuAvatar.textContent = initials;
-        }
-        
-        // Obtener iniciales
-        function getInitials(name) {
-            return name
-                .split(' ')
-                .map(word => word[0])
-                .join('')
-                .toUpperCase()
-                .substring(0, 2);
-        }
-        
-        // Actualizar UI para usuario no logueado
-        function updateUIForLoggedOutUser() {
-            loginBtn.style.display = 'flex';
-            profileBtn.style.display = 'none';
-            profileMenu.classList.remove('active');
-            profileBtn.classList.remove('active');
-            isAdmin = false;
-            currentUser = null;
-            
-            updateProfileUI('Usuario', 'Invitado', 'usuario@ejemplo.com');
-            
-            // Si estamos en gestión de cuentas, volver a inicio
-            if (document.getElementById('gestion-cuentas').classList.contains('active')) {
-                showPage('inicio');
-                navLinks.forEach(link => {
-                    if (link.getAttribute('data-page') === 'inicio') {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-            }
-        }
-        
-        // Manejar login
-        async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('loginSubmit');
+            const loginText = document.getElementById('loginText');
+            const loginSpinner = document.getElementById('loginSpinner');
             
+            // Validación básica
             if (!email || !password) {
-                showAlert(loginAlert, 'Por favor ingresa tu correo y contraseña', 'error');
+                showAlert(DOM.loginAlert, '⚠️ Por favor completa todos los campos', 'error');
                 return;
             }
             
             // Mostrar loading
-            loginSubmit.disabled = true;
+            submitBtn.disabled = true;
             loginText.style.display = 'none';
             loginSpinner.style.display = 'block';
             
@@ -1880,139 +2077,193 @@
                 });
                 
                 if (error) {
-                    showAlert(loginAlert, error.message, 'error');
+                    console.error('❌ Error de login:', error);
+                    showAlert(DOM.loginAlert, `❌ ${error.message}`, 'error');
                     return;
                 }
                 
-                currentUser = data.user;
-                await updateUIForLoggedInUser();
-                hideModal(loginModal);
+                console.log('✅ Login exitoso');
+                AppState.currentUser = data.user;
+                
+                // Actualizar UI
+                await loadUserProfile();
+                hideModal(DOM.loginModal);
+                
+                // Limpiar formulario
+                DOM.loginForm.reset();
+                
+                // Mostrar mensaje de bienvenida
+                showAlert(DOM.accountAlert, `🎉 ¡Bienvenido, ${DOM.profileName.textContent}!`, 'success');
                 
             } catch (error) {
-                console.error('Error en login:', error);
-                showAlert(loginAlert, 'Error de conexión. Intenta nuevamente.', 'error');
+                console.error('❌ Error en login:', error);
+                showAlert(DOM.loginAlert, '❌ Error de conexión. Intenta nuevamente.', 'error');
             } finally {
-                loginSubmit.disabled = false;
+                // Restaurar botón
+                submitBtn.disabled = false;
                 loginText.style.display = 'inline';
                 loginSpinner.style.display = 'none';
             }
         }
         
-        // Manejar recuperación de contraseña
-        async function handlePasswordRecovery() {
-            const recoveryEmail = document.getElementById('recoveryEmail').value;
+        // ========== MANEJO DE RECUPERACIÓN DE CONTRASEÑA ==========
+        async function handlePasswordRecovery(e) {
+            e.preventDefault();
+            console.log('🔓 Procesando recuperación de contraseña...');
             
-            if (!recoveryEmail) {
-                showAlert(recoveryAlert, 'Por favor ingresa tu correo electrónico', 'error');
+            const email = document.getElementById('recoveryEmail').value;
+            const submitBtn = document.getElementById('recoverySubmit');
+            const recoveryText = document.getElementById('recoveryText');
+            const recoverySpinner = document.getElementById('recoverySpinner');
+            
+            // Validación
+            if (!email || !email.includes('@')) {
+                showAlert(DOM.recoveryAlert, '❌ Ingresa un correo electrónico válido', 'error');
                 return;
             }
             
             // Mostrar loading
-            recoverySubmit.disabled = true;
+            submitBtn.disabled = true;
             recoveryText.style.display = 'none';
             recoverySpinner.style.display = 'block';
             
             try {
-                const { error } = await supabase.auth.resetPasswordForEmail(recoveryEmail, {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
                     redirectTo: `${window.location.origin}/reset-password`,
                 });
                 
                 if (error) {
-                    showAlert(recoveryAlert, error.message, 'error');
-                } else {
-                    showAlert(recoveryAlert, 'Se han enviado instrucciones de recuperación a tu correo electrónico', 'success');
-                    recoveryForm.reset();
-                    
-                    setTimeout(() => {
-                        hideModal(recoveryModal);
-                        showModal(loginModal);
-                    }, 3000);
+                    console.error('❌ Error en recuperación:', error);
+                    showAlert(DOM.recoveryAlert, `❌ ${error.message}`, 'error');
+                    return;
                 }
+                
+                console.log('✅ Correo de recuperación enviado');
+                showAlert(DOM.recoveryAlert, '✅ Se han enviado instrucciones de recuperación a tu correo electrónico', 'success');
+                
+                // Limpiar formulario
+                DOM.recoveryForm.reset();
+                
+                // Cerrar modal después de 3 segundos
+                setTimeout(() => {
+                    hideModal(DOM.recoveryModal);
+                    showModal(DOM.loginModal);
+                }, 3000);
+                
             } catch (error) {
-                console.error('Error en recuperación:', error);
-                showAlert(recoveryAlert, 'Error de conexión. Intenta nuevamente.', 'error');
+                console.error('❌ Error en recuperación:', error);
+                showAlert(DOM.recoveryAlert, '❌ Error de conexión. Intenta nuevamente.', 'error');
             } finally {
-                recoverySubmit.disabled = false;
+                // Restaurar botón
+                submitBtn.disabled = false;
                 recoveryText.style.display = 'inline';
                 recoverySpinner.style.display = 'none';
             }
         }
         
-        // Manejar logout
+        // ========== MANEJO DE LOGOUT ==========
         async function handleLogout() {
+            console.log('🚪 Procesando logout...');
+            
             try {
                 const { error } = await supabase.auth.signOut();
                 
                 if (error) {
-                    showAlert(accountAlert, 'Error al cerrar sesión: ' + error.message, 'error');
+                    console.error('❌ Error al cerrar sesión:', error);
+                    showAlert(DOM.accountAlert, '❌ Error al cerrar sesión', 'error');
                     return;
                 }
                 
-                currentUser = null;
-                isAdmin = false;
-                updateUIForLoggedOutUser();
+                console.log('✅ Logout exitoso');
                 
-                showAlert(accountAlert, 'Sesión cerrada exitosamente', 'success');
+                // Resetear estado
+                AppState.currentUser = null;
+                AppState.isAdmin = false;
+                AppState.allUsers = [];
+                
+                // Actualizar UI
+                updateUIForGuest();
+                hideProfileMenu();
+                
+                // Mostrar mensaje
+                showAlert(DOM.accountAlert, '👋 Sesión cerrada exitosamente', 'success');
                 
             } catch (error) {
-                console.error('Error en logout:', error);
-                showAlert(accountAlert, 'Error al cerrar sesión', 'error');
+                console.error('❌ Error en logout:', error);
+                showAlert(DOM.accountAlert, '❌ Error al cerrar sesión', 'error');
             }
         }
         
-        // Cargar usuarios
+        // ========== GESTIÓN DE USUARIOS ==========
+        function handleAccountManagement() {
+            console.log('👥 Accediendo a gestión de usuarios...');
+            
+            if (!AppState.isAdmin) {
+                showAlert(DOM.accountAlert, '⛔ Solo los administradores pueden acceder a esta sección', 'error');
+                hideProfileMenu();
+                return;
+            }
+            
+            // Navegar a la página de gestión
+            navigateToPage('gestion-cuentas');
+            
+            // Actualizar navegación
+            DOM.navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Cerrar menú de perfil
+            hideProfileMenu();
+        }
+        
         async function loadUsers() {
-            if (!isAdmin) return;
+            console.log('📋 Cargando lista de usuarios...');
+            
+            if (!AppState.isAdmin) {
+                console.log('⛔ Usuario no es admin, no se cargan usuarios');
+                return;
+            }
+            
+            // Mostrar loading
+            DOM.usersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 3rem;">
+                        <div class="spinner" style="border-color: var(--primary-color); border-top-color: white; width: 40px; height: 40px; margin: 0 auto;"></div>
+                        <p style="margin-top: 1rem; color: var(--gray-600);">Cargando usuarios...</p>
+                    </td>
+                </tr>
+            `;
             
             try {
-                // Mostrar loading
-                usersTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 3rem;">
-                            <div class="spinner" style="border-color: var(--primary-color); border-top-color: white; width: 40px; height: 40px; margin: 0 auto;"></div>
-                            <p style="margin-top: 1rem; color: var(--gray-600);">Cargando usuarios...</p>
-                        </td>
-                    </tr>
-                `;
-                
-                // Obtener usuarios de la tabla 'users'
                 const { data: users, error } = await supabase
                     .from('users')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
                 if (error) {
-                    console.error('Error al cargar usuarios:', error);
-                    showAlert(accountAlert, 'Error al cargar usuarios: ' + error.message, 'error');
+                    console.error('❌ Error al cargar usuarios:', error);
+                    showAlert(DOM.accountAlert, `❌ Error al cargar usuarios: ${error.message}`, 'error');
                     return;
                 }
                 
-                allUsers = users || [];
-                updateUsersTable(allUsers);
-                updateUserStats(allUsers);
+                console.log(`✅ ${users.length} usuarios cargados`);
+                AppState.allUsers = users || [];
+                
+                // Actualizar UI
+                updateUsersTable(AppState.allUsers);
+                updateUserStats(AppState.allUsers);
                 
             } catch (error) {
-                console.error('Error al cargar usuarios:', error);
-                showAlert(accountAlert, 'Error al cargar usuarios', 'error');
+                console.error('❌ Error en loadUsers:', error);
+                showAlert(DOM.accountAlert, '❌ Error al cargar usuarios', 'error');
             }
         }
         
-        // Actualizar estadísticas
-        function updateUserStats(users) {
-            const adminUsers = users.filter(u => u.role === 'admin');
-            const technicianUsers = users.filter(u => u.role === 'technician');
-            
-            adminCount.textContent = adminUsers.length;
-            technicianCount.textContent = technicianUsers.length;
-            totalUsers.textContent = users.length;
-        }
-        
-        // Actualizar tabla de usuarios
         function updateUsersTable(users) {
+            console.log('📊 Actualizando tabla de usuarios...');
+            
             if (!users || users.length === 0) {
-                usersTableBody.innerHTML = `
+                DOM.usersTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 3rem; color: var(--gray-500);">
+                        <td colspan="7" style="text-align: center; padding: 3rem; color: var(--gray-500);">
                             <i class="fas fa-user-slash" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.3;"></i>
                             <h3 style="color: var(--gray-600); margin-bottom: 0.5rem;">No hay usuarios registrados</h3>
                             <p>Crea tu primer usuario para comenzar</p>
@@ -2022,10 +2273,19 @@
                 return;
             }
             
-            usersTableBody.innerHTML = users.map(user => {
+            let tableHTML = '';
+            
+            users.forEach(user => {
                 const initials = getInitials(user.name || user.email);
+                const lastLogin = user.last_sign_in_at 
+                    ? new Date(user.last_sign_in_at).toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    })
+                    : 'Nunca';
                 
-                return `
+                tableHTML += `
                     <tr>
                         <td>
                             <div class="user-cell">
@@ -2050,6 +2310,7 @@
                                 ${user.active !== false ? 'Activo' : 'Inactivo'}
                             </span>
                         </td>
+                        <td>${lastLogin}</td>
                         <td>
                             <div class="actions-cell">
                                 <button class="action-btn edit" data-id="${user.id}" title="Editar usuario">
@@ -2062,80 +2323,97 @@
                         </td>
                     </tr>
                 `;
-            }).join('');
+            });
             
-            // Agregar event listeners a los botones
-            document.querySelectorAll('.action-btn.edit').forEach(btn => {
+            DOM.usersTableBody.innerHTML = tableHTML;
+            
+            // Agregar event listeners a los botones de acción
+            DOM.usersTableBody.querySelectorAll('.action-btn.edit').forEach(btn => {
                 btn.addEventListener('click', () => editUser(btn.getAttribute('data-id')));
             });
             
-            document.querySelectorAll('.action-btn.delete').forEach(btn => {
+            DOM.usersTableBody.querySelectorAll('.action-btn.delete').forEach(btn => {
                 btn.addEventListener('click', () => deleteUser(btn.getAttribute('data-id')));
             });
         }
         
-        // Editar usuario
-        async function editUser(userId) {
-            if (!isAdmin) {
-                showAlert(accountAlert, 'No tienes permisos para editar usuarios', 'error');
+        function updateUserStats(users) {
+            const adminCount = users.filter(u => u.role === 'admin').length;
+            const technicianCount = users.filter(u => u.role === 'technician').length;
+            const totalCount = users.length;
+            
+            DOM.adminCount.textContent = adminCount;
+            DOM.technicianCount.textContent = technicianCount;
+            DOM.totalUsers.textContent = totalCount;
+        }
+        
+        // ========== CREACIÓN Y EDICIÓN DE USUARIOS ==========
+        function handleCreateUser() {
+            console.log('➕ Creando nuevo usuario...');
+            
+            if (!AppState.isAdmin) {
+                showAlert(DOM.accountAlert, '⛔ Solo los administradores pueden crear usuarios', 'error');
                 return;
             }
             
-            const user = allUsers.find(u => u.id === userId);
-            if (!user) return;
+            // Resetear estado
+            AppState.editingUserId = null;
             
-            editingUserId = userId;
+            // Resetear formulario
+            DOM.userForm.reset();
+            document.getElementById('userRole').value = '';
+            document.getElementById('sendWelcomeEmail').checked = true;
+            
+            // Configurar modal
+            document.getElementById('userModalTitle').textContent = 'Crear Nuevo Usuario';
+            document.getElementById('userSubmitText').textContent = 'Crear Usuario';
+            document.getElementById('passwordField').style.display = 'block';
+            
+            // Mostrar modal
+            showModal(DOM.userModal);
+        }
+        
+        async function editUser(userId) {
+            console.log(`✏️ Editando usuario: ${userId}`);
+            
+            if (!AppState.isAdmin) {
+                showAlert(DOM.accountAlert, '⛔ Solo los administradores pueden editar usuarios', 'error');
+                return;
+            }
+            
+            const user = AppState.allUsers.find(u => u.id === userId);
+            if (!user) {
+                showAlert(DOM.userAlert, '❌ Usuario no encontrado', 'error');
+                return;
+            }
+            
+            // Configurar estado
+            AppState.editingUserId = userId;
+            
+            // Rellenar formulario
             document.getElementById('userId').value = user.id;
             document.getElementById('userName').value = user.name || '';
             document.getElementById('userEmail').value = user.email;
             document.getElementById('userPhone').value = user.phone || '';
             document.getElementById('userRole').value = user.role || 'technician';
             document.getElementById('userPassword').value = '';
+            document.getElementById('sendWelcomeEmail').checked = false;
             
-            userModalTitle.textContent = 'Editar Usuario';
-            userSubmitText.textContent = 'Actualizar Usuario';
-            passwordField.style.display = 'none';
+            // Configurar modal
+            document.getElementById('userModalTitle').textContent = 'Editar Usuario';
+            document.getElementById('userSubmitText').textContent = 'Actualizar Usuario';
+            document.getElementById('passwordField').style.display = 'none';
             
-            showModal(userModal);
+            // Mostrar modal
+            showModal(DOM.userModal);
         }
         
-        // Eliminar usuario
-        async function deleteUser(userId) {
-            if (!isAdmin) {
-                showAlert(accountAlert, 'No tienes permisos para eliminar usuarios', 'error');
-                return;
-            }
+        async function handleUserSubmit(e) {
+            e.preventDefault();
+            console.log('📝 Procesando formulario de usuario...');
             
-            const user = allUsers.find(u => u.id === userId);
-            if (!user) return;
-            
-            if (!confirm(`¿Estás seguro de que quieres eliminar al usuario ${user.name || user.email}? Esta acción no se puede deshacer.`)) {
-                return;
-            }
-            
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .delete()
-                    .eq('id', userId);
-                
-                if (error) {
-                    showAlert(accountAlert, 'Error al eliminar usuario: ' + error.message, 'error');
-                    return;
-                }
-                
-                await loadUsers();
-                showAlert(accountAlert, 'Usuario eliminado exitosamente', 'success');
-            } catch (error) {
-                console.error('Error al eliminar usuario:', error);
-                showAlert(accountAlert, 'Error al eliminar usuario', 'error');
-            }
-        }
-        
-        // Manejar creación/actualización de usuario
-        async function handleUserSubmit() {
-            if (!isAdmin) {
-                showAlert(userAlert, 'No tienes permisos para gestionar usuarios', 'error');
+            if (!AppState.isAdmin) {
+                showAlert(DOM.userAlert, '⛔ Solo los administradores pueden gestionar usuarios', 'error');
                 return;
             }
             
@@ -2145,82 +2423,38 @@
             const phone = document.getElementById('userPhone').value.trim();
             const role = document.getElementById('userRole').value;
             const password = document.getElementById('userPassword').value;
+            const submitBtn = document.getElementById('userSubmit');
+            const submitText = document.getElementById('userSubmitText');
+            const userSpinner = document.getElementById('userSpinner');
             
             // Validaciones
             if (!name) {
-                showAlert(userAlert, 'El nombre es requerido', 'error');
+                showAlert(DOM.userAlert, '❌ El nombre es obligatorio', 'error');
                 return;
             }
             
             if (!email || !email.includes('@')) {
-                showAlert(userAlert, 'Ingresa un correo electrónico válido', 'error');
+                showAlert(DOM.userAlert, '❌ Ingresa un correo electrónico válido', 'error');
                 return;
             }
             
             if (!role) {
-                showAlert(userAlert, 'Selecciona un rol para el usuario', 'error');
+                showAlert(DOM.userAlert, '❌ Selecciona un rol para el usuario', 'error');
                 return;
             }
             
             // Mostrar loading
-            userSubmit.disabled = true;
-            userSubmitText.style.display = 'none';
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
             userSpinner.style.display = 'block';
             
             try {
-                if (editingUserId) {
+                if (AppState.editingUserId) {
                     // Actualizar usuario existente
-                    const { error } = await supabase
-                        .from('users')
-                        .update({
-                            name,
-                            email,
-                            phone: phone || null,
-                            role,
-                            updated_at: new Date().toISOString()
-                        })
-                        .eq('id', editingUserId);
-                    
-                    if (error) throw error;
-                    
-                    showAlert(userAlert, 'Usuario actualizado exitosamente', 'success');
+                    await updateExistingUser(userId, { name, email, phone, role });
                 } else {
                     // Crear nuevo usuario
-                    let userPassword = password;
-                    if (!userPassword) {
-                        userPassword = generateSecurePassword();
-                    }
-                    
-                    // Crear usuario en Auth
-                    const { data: authData, error: authError } = await supabase.auth.signUp({
-                        email,
-                        password: userPassword,
-                        options: {
-                            data: {
-                                name,
-                                role
-                            }
-                        }
-                    });
-                    
-                    if (authError) throw authError;
-                    
-                    // Agregar a la tabla users
-                    const { error: dbError } = await supabase
-                        .from('users')
-                        .insert({
-                            id: authData.user.id,
-                            name,
-                            email,
-                            phone: phone || null,
-                            role,
-                            active: true,
-                            created_at: new Date().toISOString()
-                        });
-                    
-                    if (dbError) throw dbError;
-                    
-                    showAlert(userAlert, 'Usuario creado exitosamente', 'success');
+                    await createNewUser({ name, email, phone, role, password });
                 }
                 
                 // Recargar lista de usuarios
@@ -2228,20 +2462,240 @@
                 
                 // Cerrar modal después de 2 segundos
                 setTimeout(() => {
-                    hideModal(userModal);
+                    hideModal(DOM.userModal);
                 }, 2000);
                 
             } catch (error) {
-                console.error('Error al guardar usuario:', error);
-                showAlert(userAlert, 'Error: ' + error.message, 'error');
+                console.error('❌ Error en handleUserSubmit:', error);
+                showAlert(DOM.userAlert, `❌ ${error.message}`, 'error');
             } finally {
-                userSubmit.disabled = false;
-                userSubmitText.style.display = 'inline';
+                // Restaurar botón
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
                 userSpinner.style.display = 'none';
             }
         }
         
-        // Generar contraseña segura
+        async function updateExistingUser(userId, userData) {
+            console.log(`🔄 Actualizando usuario ${userId}...`);
+            
+            const { error } = await supabase
+                .from('users')
+                .update({
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone || null,
+                    role: userData.role,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', userId);
+            
+            if (error) throw error;
+            
+            console.log('✅ Usuario actualizado');
+            showAlert(DOM.userAlert, '✅ Usuario actualizado exitosamente', 'success');
+        }
+        
+        async function createNewUser(userData) {
+            console.log('🆕 Creando nuevo usuario...');
+            
+            let password = userData.password;
+            if (!password) {
+                // Generar contraseña segura
+                password = generateSecurePassword();
+                console.log('🔑 Contraseña generada automáticamente');
+            }
+            
+            // Crear usuario en Auth
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: userData.email,
+                password: password,
+                options: {
+                    data: {
+                        name: userData.name,
+                        role: userData.role
+                    }
+                }
+            });
+            
+            if (authError) throw authError;
+            
+            // Crear registro en tabla users
+            const { error: dbError } = await supabase
+                .from('users')
+                .insert({
+                    id: authData.user.id,
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone || null,
+                    role: userData.role,
+                    active: true,
+                    created_at: new Date().toISOString()
+                });
+            
+            if (dbError) throw dbError;
+            
+            console.log('✅ Usuario creado exitosamente');
+            showAlert(DOM.userAlert, '✅ Usuario creado exitosamente', 'success');
+        }
+        
+        async function deleteUser(userId) {
+            console.log(`🗑️ Eliminando usuario ${userId}...`);
+            
+            if (!AppState.isAdmin) {
+                showAlert(DOM.accountAlert, '⛔ Solo los administradores pueden eliminar usuarios', 'error');
+                return;
+            }
+            
+            const user = AppState.allUsers.find(u => u.id === userId);
+            if (!user) return;
+            
+            // Confirmación
+            if (!confirm(`¿Estás seguro de que quieres eliminar al usuario "${user.name || user.email}"? Esta acción no se puede deshacer.`)) {
+                return;
+            }
+            
+            try {
+                // Eliminar de la tabla users
+                const { error } = await supabase
+                    .from('users')
+                    .delete()
+                    .eq('id', userId);
+                
+                if (error) throw error;
+                
+                console.log('✅ Usuario eliminado');
+                showAlert(DOM.accountAlert, '✅ Usuario eliminado exitosamente', 'success');
+                
+                // Recargar lista
+                await loadUsers();
+                
+            } catch (error) {
+                console.error('❌ Error al eliminar usuario:', error);
+                showAlert(DOM.accountAlert, `❌ Error al eliminar usuario: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== FUNCIONES DE UTILIDAD ==========
+        function toggleProfileMenu() {
+            DOM.profileBtn.classList.toggle('active');
+            DOM.profileMenu.classList.toggle('active');
+        }
+        
+        function hideProfileMenu() {
+            DOM.profileBtn.classList.remove('active');
+            DOM.profileMenu.classList.remove('active');
+        }
+        
+        function showModal(modal) {
+            if (!modal) return;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideModal(modal) {
+            if (!modal) return;
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Limpiar alertas dentro del modal
+            const alerts = modal.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.display = 'none';
+                alert.textContent = '';
+                alert.className = 'alert';
+            });
+            
+            // Resetear formularios
+            const forms = modal.querySelectorAll('form');
+            forms.forEach(form => form.reset());
+        }
+        
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('togglePassword').querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        function toggleUserPasswordVisibility() {
+            const passwordInput = document.getElementById('userPassword');
+            const icon = document.getElementById('toggleUserPassword').querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        function updateUserProfileUI(name, role, email, initials) {
+            // Actualizar botón de perfil
+            DOM.profileName.textContent = name;
+            DOM.profileRole.textContent = role;
+            DOM.profileAvatar.textContent = initials;
+            
+            // Actualizar menú de perfil
+            DOM.menuName.textContent = name;
+            DOM.menuEmail.textContent = email;
+            DOM.menuAvatar.textContent = initials;
+            
+            // Estilizar badge de rol
+            if (role === 'Administrador') {
+                DOM.profileRole.style.background = 'rgba(255, 255, 255, 0.3)';
+                DOM.profileRole.style.color = 'white';
+            } else {
+                DOM.profileRole.style.background = 'rgba(255, 255, 255, 0.2)';
+                DOM.profileRole.style.color = 'rgba(255, 255, 255, 0.9)';
+            }
+        }
+        
+        function updateUIForGuest() {
+            // Resetear estado
+            AppState.currentUser = null;
+            AppState.isAdmin = false;
+            
+            // Mostrar botón de login y ocultar perfil
+            DOM.loginBtn.style.display = 'flex';
+            DOM.profileBtn.style.display = 'none';
+            
+            // Resetear información del perfil
+            updateUserProfileUI('Usuario', 'Invitado', 'usuario@ejemplo.com', 'U');
+            
+            // Si estamos en gestión de usuarios, volver a inicio
+            if (document.getElementById('gestion-cuentas').classList.contains('active')) {
+                navigateToPage('inicio');
+                DOM.navLinks.forEach(link => {
+                    if (link.getAttribute('data-page') === 'inicio') {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        }
+        
+        function getInitials(text) {
+            if (!text) return 'U';
+            
+            return text
+                .split(' ')
+                .map(word => word[0])
+                .join('')
+                .toUpperCase()
+                .substring(0, 2);
+        }
+        
         function generateSecurePassword() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
             let password = '';
@@ -2251,28 +2705,57 @@
             return password;
         }
         
-        // Mostrar alerta
-        function showAlert(alertElement, message, type) {
-            alertElement.innerHTML = '';
+        function showAlert(alertElement, message, type = 'info') {
+            if (!alertElement) return;
             
+            // Configurar alerta
             alertElement.textContent = message;
             alertElement.className = `alert alert-${type}`;
             alertElement.style.display = 'flex';
             
-            const closeBtn = document.createElement('button');
-            closeBtn.className = 'close-alert';
-            closeBtn.innerHTML = '&times;';
-            closeBtn.addEventListener('click', () => {
-                alertElement.style.display = 'none';
-            });
-            alertElement.appendChild(closeBtn);
+            // Agregar botón de cerrar
+            if (!alertElement.querySelector('.close-alert')) {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-alert';
+                closeBtn.innerHTML = '&times;';
+                closeBtn.addEventListener('click', () => {
+                    alertElement.style.display = 'none';
+                });
+                alertElement.appendChild(closeBtn);
+            }
             
+            // Auto-ocultar después de 5 segundos
             if (type === 'success' || type === 'info') {
                 setTimeout(() => {
                     alertElement.style.display = 'none';
                 }, 5000);
             }
         }
+        
+        function showGlobalError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--danger-color);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: var(--radius);
+                z-index: 9999;
+                box-shadow: var(--shadow-lg);
+                max-width: 400px;
+            `;
+            errorDiv.textContent = message;
+            
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+        
+        console.log('🎉 Aplicación lista para usar!');
     </script>
 </body>
 </html>
