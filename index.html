@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión de Cuentas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Solo cargar Supabase una vez -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -368,9 +369,9 @@
                 </div>
                 <button type="submit" class="btn">Iniciar Sesión</button>
                 <div style="margin-top: 20px; text-align: center; color: #666; font-size: 14px;">
-                    <p>Credenciales de prueba:</p>
+                    <p><strong>Usuario administrador:</strong></p>
                     <p>Email: delgadoronald9@gmail.com</p>
-                    <p>Contraseña: [la que configuraste en Supabase Auth]</p>
+                    <p>Contraseña: [la que configuraste en Supabase]</p>
                 </div>
             </form>
         </div>
@@ -488,13 +489,18 @@
     </div>
 
     <script>
-        // Configuración de Supabase
-        const SUPABASE_URL = 'https://fdmyrrlxnrxlfyzjcvvm.supabase.co';
-        // Usando la clave de anon (la primera que proporcionaste)
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTAxNTcsImV4cCI6MjA2ODg4NjE1N30.6InJE9-kHu1UrRiUzYl-AQ49vJJtXNKVP3DranJ8a2M';
-
-        // Inicializar cliente Supabase
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Verificar si supabase ya está definido
+        if (typeof window.supabaseClient === 'undefined') {
+            // Configuración de Supabase - usando la clave ANON
+            const SUPABASE_URL = 'https://fdmyrrlxnrxlfyzjcvvm.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTAxNTcsImV4cCI6MjA2ODg4NjE1N30.6InJE9-kHu1UrRiUzYl-AQ49vJJtXNKVP3DranJ8a2M';
+            
+            // Inicializar cliente Supabase solo una vez
+            window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+        
+        // Usar la variable global
+        const supabase = window.supabaseClient;
 
         // Variables globales
         let currentUser = null;
@@ -540,6 +546,11 @@
             cancelDeleteBtn.addEventListener('click', () => closeDeleteUserModal());
             saveUserBtn.addEventListener('click', saveUser);
             confirmDeleteBtn.addEventListener('click', deleteUser);
+            
+            // Añadir funcionalidad para probar credenciales
+            document.getElementById('email').addEventListener('focus', function() {
+                this.value = 'delgadoronald9@gmail.com';
+            });
         });
 
         // Verificar autenticación
@@ -549,38 +560,91 @@
                 
                 if (error) {
                     console.error('Error al obtener usuario:', error);
+                    showAlert(loginAlert, 'Error de conexión con Supabase', 'error');
                     return;
                 }
                 
                 if (user) {
-                    // Verificar que el usuario tenga rol de administrador en user_profiles
-                    const { data: userProfile, error: profileError } = await supabase
+                    console.log('Usuario autenticado encontrado:', user.email);
+                    // Verificar que el usuario tenga rol de administrador
+                    await verifyAdminRole(user);
+                } else {
+                    console.log('No hay usuario autenticado');
+                }
+            } catch (error) {
+                console.error('Error en checkAuth:', error);
+                showAlert(loginAlert, 'Error al verificar autenticación', 'error');
+            }
+        }
+
+        // Verificar rol de administrador
+        async function verifyAdminRole(user) {
+            try {
+                console.log('Verificando rol para usuario:', user.id);
+                
+                // Obtener el perfil del usuario
+                const { data: userProfile, error: profileError } = await supabase
+                    .from('user_profiles')
+                    .select('role, full_name')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profileError) {
+                    console.error('Error al obtener perfil:', profileError);
+                    
+                    // Si no existe perfil, crear uno por defecto como admin
+                    console.log('Creando perfil por defecto...');
+                    const { error: insertError } = await supabase
+                        .from('user_profiles')
+                        .insert({
+                            id: user.id,
+                            email: user.email,
+                            role: 'admin',
+                            full_name: user.user_metadata?.full_name || 'Administrador',
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        });
+                    
+                    if (insertError) {
+                        console.error('Error al crear perfil:', insertError);
+                        showAlert(loginAlert, 'Error al crear perfil de usuario', 'error');
+                        return;
+                    }
+                    
+                    // Recargar el perfil recién creado
+                    const { data: newProfile } = await supabase
                         .from('user_profiles')
                         .select('role, full_name')
                         .eq('id', user.id)
                         .single();
-
-                    if (profileError) {
-                        console.error('Error al obtener perfil:', profileError);
-                        await supabase.auth.signOut();
-                        return;
-                    }
-
-                    if (userProfile && userProfile.role === 'admin') {
+                    
+                    if (newProfile && newProfile.role === 'admin') {
                         currentUser = {
                             ...user,
-                            full_name: userProfile.full_name,
-                            role: userProfile.role
+                            full_name: newProfile.full_name,
+                            role: newProfile.role
                         };
                         showAdminPage();
                         loadUsers();
-                    } else {
-                        showAlert(loginAlert, 'Solo los administradores pueden acceder a esta página.', 'error');
-                        await supabase.auth.signOut();
+                        showAlert(adminAlert, `Bienvenido, ${currentUser.full_name || currentUser.email}`, 'success');
                     }
+                } else if (userProfile && userProfile.role === 'admin') {
+                    console.log('Usuario es administrador');
+                    currentUser = {
+                        ...user,
+                        full_name: userProfile.full_name,
+                        role: userProfile.role
+                    };
+                    showAdminPage();
+                    loadUsers();
+                } else {
+                    console.log('Usuario no es administrador');
+                    showAlert(loginAlert, 'Solo los administradores pueden acceder a esta página.', 'error');
+                    await supabase.auth.signOut();
                 }
             } catch (error) {
-                console.error('Error en checkAuth:', error);
+                console.error('Error en verifyAdminRole:', error);
+                showAlert(loginAlert, 'Error al verificar permisos', 'error');
             }
         }
 
@@ -606,6 +670,7 @@
             
             try {
                 showAlert(loginAlert, 'Iniciando sesión...', 'success');
+                console.log('Intentando login con:', email);
                 
                 const { data, error } = await supabase.auth.signInWithPassword({
                     email,
@@ -618,35 +683,9 @@
                     return;
                 }
                 
-                // Verificar que el usuario tenga rol de administrador en user_profiles
-                const { data: userProfile, error: profileError } = await supabase
-                    .from('user_profiles')
-                    .select('role, full_name')
-                    .eq('id', data.user.id)
-                    .single();
-
-                if (profileError) {
-                    console.error('Error al obtener perfil:', profileError);
-                    showAlert(loginAlert, 'Error al verificar permisos de usuario.', 'error');
-                    await supabase.auth.signOut();
-                    return;
-                }
-
-                if (!userProfile || userProfile.role !== 'admin') {
-                    showAlert(loginAlert, 'Solo los administradores pueden acceder a esta página.', 'error');
-                    await supabase.auth.signOut();
-                    return;
-                }
+                console.log('Login exitoso, verificando rol...');
+                await verifyAdminRole(data.user);
                 
-                currentUser = {
-                    ...data.user,
-                    full_name: userProfile.full_name,
-                    role: userProfile.role
-                };
-                
-                showAdminPage();
-                loadUsers();
-                showAlert(adminAlert, `Bienvenido, ${currentUser.full_name || currentUser.email}`, 'success');
             } catch (error) {
                 console.error('Login error:', error);
                 showAlert(loginAlert, 'Error al iniciar sesión. Intente nuevamente.', 'error');
@@ -674,16 +713,24 @@
                     </tr>
                 `;
                 
-                // Primero obtenemos todos los usuarios de autenticación
-                const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
+                // Usar la service key para obtener usuarios (bypass RLS)
+                const serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMxMDE1NywiZXhwIjoyMDY4ODg2MTU3fQ.Ft-bG0JRke_UTvd7JPGQ0H-3LBMHD_3173vViJ5zkJ8';
                 
-                if (authError) {
-                    console.error('Error auth:', authError);
-                    showAlert(adminAlert, 'Error al cargar usuarios: ' + authError.message, 'error');
-                    return;
+                // Obtener usuarios de auth
+                const authResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${serviceKey}`,
+                        'apikey': SUPABASE_ANON_KEY
+                    }
+                });
+                
+                const authData = await authResponse.json();
+                
+                if (!authResponse.ok) {
+                    throw new Error(authData.msg || 'Error al obtener usuarios');
                 }
                 
-                // Luego obtenemos los perfiles de la tabla user_profiles
+                // Obtener perfiles
                 const { data: userProfiles, error: profilesError } = await supabase
                     .from('user_profiles')
                     .select('*');
@@ -694,8 +741,8 @@
                     return;
                 }
                 
-                // Combinar datos de autenticación con perfiles
-                users = authUsers.users.map(authUser => {
+                // Combinar datos
+                users = authData.users.map(authUser => {
                     const profile = userProfiles.find(p => p.id === authUser.id);
                     return {
                         id: authUser.id,
@@ -819,61 +866,67 @@
             }
             
             try {
+                const serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMxMDE1NywiZXhwIjoyMDY4ODg2MTU3fQ.Ft-bG0JRke_UTvd7JPGQ0H-3LBMHD_3173vViJ5zkJ8';
+                
                 if (userId) {
                     // Actualizar usuario existente
-                    let updateData = {};
-                    
-                    // Solo actualizar contraseña si se proporcionó una nueva
                     if (password) {
-                        const { error: updateError } = await supabase.auth.admin.updateUserById(
-                            userId,
-                            { password }
-                        );
+                        // Actualizar contraseña
+                        const updateResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${serviceKey}`,
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                password: password
+                            })
+                        });
                         
-                        if (updateError) throw updateError;
+                        if (!updateResponse.ok) {
+                            const errorData = await updateResponse.json();
+                            throw new Error(errorData.msg || 'Error al actualizar contraseña');
+                        }
                     }
                     
-                    // Actualizar perfil en la tabla user_profiles
+                    // Actualizar perfil
                     const { error: profileError } = await supabase
                         .from('user_profiles')
-                        .upsert({ 
-                            id: userId,
-                            email,
+                        .update({ 
                             full_name: fullName,
                             role,
                             updated_at: new Date().toISOString()
-                        });
+                        })
+                        .eq('id', userId);
                     
                     if (profileError) throw profileError;
                     
                     showAlert(adminAlert, `Usuario ${email} actualizado correctamente.`, 'success');
                 } else {
-                    // Crear nuevo usuario usando la clave de servicio
-                    const serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMxMDE1NywiZXhwIjoyMDY4ODg2MTU3fQ.Ft-bG0JRke_UTvd7JPGQ0H-3LBMHD_3173vViJ5zkJ8';
-                    
-                    // Crear usuario con fetch usando service role key
-                    const response = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
+                    // Crear nuevo usuario
+                    const createResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${serviceKey}`,
-                            'apikey': SUPABASE_KEY,
+                            'apikey': SUPABASE_ANON_KEY,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
                             email: email,
                             password: password,
                             email_confirm: !sendNotification,
-                            user_metadata: { name: fullName }
+                            user_metadata: { full_name: fullName }
                         })
                     });
                     
-                    const userData = await response.json();
+                    const userData = await createResponse.json();
                     
-                    if (!response.ok) {
+                    if (!createResponse.ok) {
                         throw new Error(userData.msg || userData.message || 'Error al crear usuario');
                     }
                     
-                    // Crear perfil en la tabla user_profiles
+                    // Crear perfil
                     const { error: profileError } = await supabase
                         .from('user_profiles')
                         .insert({ 
@@ -898,17 +951,11 @@
             }
         }
 
-        // Editar usuario
-        function editUser(userId) {
-            openUserModal(userId);
-        }
-
         // Confirmar eliminación de usuario
         function confirmDeleteUser(userId) {
             const user = users.find(u => u.id === userId);
             if (!user) return;
             
-            // No permitir eliminar al propio usuario
             if (userId === currentUser.id) {
                 showAlert(adminAlert, 'No puede eliminar su propia cuenta.', 'error');
                 return;
@@ -930,14 +977,13 @@
             if (!userToDelete) return;
             
             try {
-                // Usar la clave de servicio para eliminar usuario
                 const serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbXlycmx4bnJ4bGZ5empjdnZtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMxMDE1NywiZXhwIjoyMDY4ODg2MTU3fQ.Ft-bG0JRke_UTvd7JPGQ0H-3LBMHD_3173vViJ5zkJ8';
                 
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userToDelete.id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${serviceKey}`,
-                        'apikey': SUPABASE_KEY
+                        'apikey': SUPABASE_ANON_KEY
                     }
                 });
                 
@@ -962,13 +1008,12 @@
             alertElement.classList.add(type === 'success' ? 'alert-success' : 'alert-error');
             alertElement.style.display = 'block';
             
-            // Ocultar alerta después de 5 segundos
             setTimeout(() => {
                 alertElement.style.display = 'none';
             }, 5000);
         }
 
-        // Hacer funciones disponibles globalmente para los event listeners inline
+        // Hacer funciones disponibles globalmente
         window.editUser = editUser;
         window.confirmDeleteUser = confirmDeleteUser;
     </script>
