@@ -403,6 +403,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Email</th>
+                        <th>Nombre Completo</th>
                         <th>Rol</th>
                         <th>Creado</th>
                         <th>Último Acceso</th>
@@ -411,7 +412,7 @@
                 </thead>
                 <tbody id="usersTableBody">
                     <tr>
-                        <td colspan="6" style="text-align: center;">Cargando usuarios...</td>
+                        <td colspan="7" style="text-align: center;">Cargando usuarios...</td>
                     </tr>
                 </tbody>
             </table>
@@ -432,6 +433,10 @@
                         <input type="email" id="userEmail" class="form-control" required>
                     </div>
                     <div class="form-group">
+                        <label for="userFullName">Nombre Completo</label>
+                        <input type="text" id="userFullName" class="form-control">
+                    </div>
+                    <div class="form-group">
                         <label for="userPassword">Contraseña *</label>
                         <input type="password" id="userPassword" class="form-control" required>
                         <small style="color: #777;">Mínimo 6 caracteres</small>
@@ -446,7 +451,7 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <input type="checkbox" id="sendNotification">
+                            <input type="checkbox" id="sendNotification" checked>
                             Enviar notificación por correo
                         </label>
                     </div>
@@ -537,15 +542,25 @@
             const { data: { user } } = await supabase.auth.getUser();
             
             if (user) {
-                // Verificar que el usuario tenga rol de administrador
-                const { data: userData } = await supabase
-                    .from('profiles')
-                    .select('role')
+                // Verificar que el usuario tenga rol de administrador en user_profiles
+                const { data: userProfile, error } = await supabase
+                    .from('user_profiles')
+                    .select('role, full_name')
                     .eq('id', user.id)
                     .single();
 
-                if (userData && userData.role === 'admin') {
-                    currentUser = user;
+                if (error) {
+                    console.error('Error al obtener perfil:', error);
+                    await supabase.auth.signOut();
+                    return;
+                }
+
+                if (userProfile && userProfile.role === 'admin') {
+                    currentUser = {
+                        ...user,
+                        full_name: userProfile.full_name,
+                        role: userProfile.role
+                    };
                     showAdminPage();
                     loadUsers();
                 } else {
@@ -586,23 +601,35 @@
                     return;
                 }
                 
-                // Verificar que el usuario tenga rol de administrador
-                const { data: userData } = await supabase
-                    .from('profiles')
-                    .select('role')
+                // Verificar que el usuario tenga rol de administrador en user_profiles
+                const { data: userProfile, error: profileError } = await supabase
+                    .from('user_profiles')
+                    .select('role, full_name')
                     .eq('id', data.user.id)
                     .single();
 
-                if (!userData || userData.role !== 'admin') {
+                if (profileError) {
+                    console.error('Error al obtener perfil:', profileError);
+                    showAlert(loginAlert, 'Error al verificar permisos de usuario.', 'error');
+                    await supabase.auth.signOut();
+                    return;
+                }
+
+                if (!userProfile || userProfile.role !== 'admin') {
                     showAlert(loginAlert, 'Solo los administradores pueden acceder a esta página.', 'error');
                     await supabase.auth.signOut();
                     return;
                 }
                 
-                currentUser = data.user;
+                currentUser = {
+                    ...data.user,
+                    full_name: userProfile.full_name,
+                    role: userProfile.role
+                };
+                
                 showAdminPage();
                 loadUsers();
-                showAlert(adminAlert, `Bienvenido, ${currentUser.email}`, 'success');
+                showAlert(adminAlert, `Bienvenido, ${currentUser.full_name || currentUser.email}`, 'success');
             } catch (error) {
                 showAlert(loginAlert, 'Error al iniciar sesión. Intente nuevamente.', 'error');
                 console.error('Login error:', error);
@@ -630,9 +657,9 @@
                     return;
                 }
                 
-                // Luego obtenemos los perfiles con roles
-                const { data: profiles, error: profilesError } = await supabase
-                    .from('profiles')
+                // Luego obtenemos los perfiles de la tabla user_profiles
+                const { data: userProfiles, error: profilesError } = await supabase
+                    .from('user_profiles')
                     .select('*');
                 
                 if (profilesError) {
@@ -642,12 +669,14 @@
                 
                 // Combinar datos de autenticación con perfiles
                 users = authUsers.users.map(authUser => {
-                    const profile = profiles.find(p => p.id === authUser.id);
+                    const profile = userProfiles.find(p => p.id === authUser.id);
                     return {
                         id: authUser.id,
                         email: authUser.email,
-                        role: profile ? profile.role : 'tecnico', // Por defecto técnico si no tiene perfil
-                        created_at: new Date(authUser.created_at).toLocaleDateString('es-ES'),
+                        full_name: profile ? profile.full_name : '',
+                        role: profile ? profile.role : 'tecnico',
+                        created_at: profile ? new Date(profile.created_at).toLocaleDateString('es-ES') : 
+                                  new Date(authUser.created_at).toLocaleDateString('es-ES'),
                         last_sign_in_at: authUser.last_sign_in_at 
                             ? new Date(authUser.last_sign_in_at).toLocaleDateString('es-ES')
                             : 'Nunca'
@@ -667,7 +696,7 @@
             if (users.length === 0) {
                 usersTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="text-align: center;">No hay usuarios registrados</td>
+                        <td colspan="7" style="text-align: center;">No hay usuarios registrados</td>
                     </tr>
                 `;
                 return;
@@ -677,6 +706,7 @@
                 <tr>
                     <td>${user.id.substring(0, 8)}...</td>
                     <td>${user.email}</td>
+                    <td>${user.full_name || '-'}</td>
                     <td><span class="role-badge ${user.role === 'admin' ? 'role-admin' : 'role-tecnico'}">${user.role}</span></td>
                     <td>${user.created_at}</td>
                     <td>${user.last_sign_in_at}</td>
@@ -709,7 +739,8 @@
                 modalTitle.textContent = 'Editar Usuario';
                 document.getElementById('userId').value = user.id;
                 document.getElementById('userEmail').value = user.email;
-                document.getElementById('userEmail').readOnly = true; // No se puede cambiar el email
+                document.getElementById('userEmail').readOnly = true;
+                document.getElementById('userFullName').value = user.full_name || '';
                 document.getElementById('userPassword').required = false;
                 document.getElementById('userPassword').placeholder = 'Dejar en blanco para no cambiar';
                 document.getElementById('userRole').value = user.role;
@@ -717,9 +748,12 @@
                 // Modo creación
                 modalTitle.textContent = 'Crear Nuevo Usuario';
                 document.getElementById('userId').value = '';
+                document.getElementById('userEmail').value = '';
                 document.getElementById('userEmail').readOnly = false;
+                document.getElementById('userFullName').value = '';
                 document.getElementById('userPassword').required = true;
                 document.getElementById('userPassword').placeholder = '';
+                document.getElementById('userRole').value = '';
             }
             
             userModal.style.display = 'flex';
@@ -735,6 +769,7 @@
         async function saveUser() {
             const userId = document.getElementById('userId').value;
             const email = document.getElementById('userEmail').value;
+            const fullName = document.getElementById('userFullName').value;
             const password = document.getElementById('userPassword').value;
             const role = document.getElementById('userRole').value;
             const sendNotification = document.getElementById('sendNotification').checked;
@@ -770,11 +805,13 @@
                         if (updateError) throw updateError;
                     }
                     
-                    // Actualizar rol en la tabla profiles
+                    // Actualizar perfil en la tabla user_profiles
                     const { error: profileError } = await supabase
-                        .from('profiles')
+                        .from('user_profiles')
                         .upsert({ 
-                            id: userId, 
+                            id: userId,
+                            email,
+                            full_name: fullName,
                             role,
                             updated_at: new Date().toISOString()
                         });
@@ -792,14 +829,16 @@
                     
                     if (error) throw error;
                     
-                    // Crear perfil con rol
+                    // Crear perfil en la tabla user_profiles
                     const { error: profileError } = await supabase
-                        .from('profiles')
+                        .from('user_profiles')
                         .insert({ 
                             id: data.user.id, 
                             email,
+                            full_name: fullName,
                             role,
-                            created_at: new Date().toISOString()
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
                         });
                     
                     if (profileError) throw profileError;
@@ -847,6 +886,7 @@
             if (!userToDelete) return;
             
             try {
+                // Eliminar usuario de Supabase Auth (esto también eliminará el perfil por la foreign key cascade)
                 const { error } = await supabase.auth.admin.deleteUser(userToDelete.id);
                 
                 if (error) throw error;
