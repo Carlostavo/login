@@ -1,3 +1,4 @@
+app/auth/reset-password/page.tsx
 "use client"
 
 import type React from "react"
@@ -17,31 +18,51 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [isValidToken, setIsValidToken] = useState(false)
+  const [checkingToken, setCheckingToken] = useState(true)
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
     const checkToken = async () => {
-      const code = searchParams.get("code")
+      try {
+        setCheckingToken(true)
+        const tokenHash = searchParams.get("token_hash")
+        const type = searchParams.get("type")
 
-      console.log("[v0] Código de recuperación:", code)
+        console.log("[Reset Password] Parámetros recibidos:", { token_hash: tokenHash, type })
 
-      if (code) {
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+        if (type !== "recovery" || !tokenHash) {
+          console.error("[Reset Password] Tipo o token_hash inválido")
+          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
+          setIsValidToken(false)
+          setCheckingToken(false)
+          return
+        }
 
-        if (exchangeError) {
-          console.error("[v0] Error al intercambiar código:", exchangeError)
+        // Verificar si el token es válido
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery'
+        })
+
+        if (verifyError) {
+          console.error("[Reset Password] Error al verificar token:", verifyError)
           setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
           setIsValidToken(false)
-        } else {
-          console.log("[v0] Código intercambiado exitosamente")
-          setIsValidToken(true)
+          setCheckingToken(false)
+          return
         }
-      } else {
-        console.log("[v0] No se encontró código de recuperación")
-        setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
+
+        console.log("[Reset Password] Token verificado exitosamente")
+        setIsValidToken(true)
+        setError("")
+      } catch (err) {
+        console.error("[Reset Password] Error inesperado:", err)
+        setError("Ocurrió un error al verificar el enlace. Por favor, inténtalo de nuevo.")
         setIsValidToken(false)
+      } finally {
+        setCheckingToken(false)
       }
     }
 
@@ -71,13 +92,13 @@ export default function ResetPasswordPage() {
       })
 
       if (updateError) {
-        console.error("[v0] Error al actualizar contraseña:", updateError)
-        setError(updateError.message)
+        console.error("[Reset Password] Error al actualizar contraseña:", updateError)
+        setError(updateError.message || "Error al actualizar la contraseña")
         setLoading(false)
         return
       }
 
-      console.log("[v0] Contraseña actualizada exitosamente")
+      console.log("[Reset Password] Contraseña actualizada exitosamente")
       setSuccess(true)
       setLoading(false)
 
@@ -86,10 +107,29 @@ export default function ResetPasswordPage() {
         router.push("/login")
       }, 3000)
     } catch (err: any) {
-      console.error("[v0] Error inesperado:", err)
+      console.error("[Reset Password] Error inesperado:", err)
       setError(err.message || "Ocurrió un error al actualizar la contraseña")
       setLoading(false)
     }
+  }
+
+  // Mostrar estado de carga mientras se verifica el token
+  if (checkingToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-secondary-bg px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-xl border border-border p-8 shadow-lg text-center">
+            <div className="flex justify-center mb-6">
+              <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            </div>
+            <h1 className="text-xl font-semibold text-foreground mb-2">
+              Verificando enlace de recuperación...
+            </h1>
+            <p className="text-secondary-text">Por favor, espera un momento.</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (success) {
@@ -143,14 +183,24 @@ export default function ResetPasswordPage() {
           {!isValidToken ? (
             <div className="space-y-6">
               <div className="bg-destructive/10 border border-destructive rounded-lg p-4">
-                <p className="text-sm text-destructive text-center">{error}</p>
+                <p className="text-sm text-destructive text-center">
+                  {error || "El enlace de recuperación no es válido o ha expirado."}
+                </p>
               </div>
-              <Link
-                href="/login"
-                className="block w-full text-center bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:opacity-90 transition-opacity"
-              >
-                Volver al Inicio de Sesión
-              </Link>
+              <div className="space-y-3">
+                <Link
+                  href="/login"
+                  className="block w-full text-center bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  Volver al Inicio de Sesión
+                </Link>
+                <Link
+                  href="/auth/forgot-password"
+                  className="block w-full text-center text-primary hover:underline text-sm py-2"
+                >
+                  Solicitar nuevo enlace
+                </Link>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleResetPassword} className="space-y-6">
