@@ -20,27 +20,33 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+  const handleResetPassword = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError("")
+  setLoading(true)
 
-    try {
-      const formData = new FormData()
-      formData.append("email", email)
-      formData.append("password", password)
+  try {
+    // Usar el cliente de Supabase directamente
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
+    })
 
-      const result = await login(formData)
-      
-      if (result?.error) {
-        setError(result.error)
-        setLoading(false)
-      }
-    } catch (err: any) {
-      setError(err.message || "Ocurrió un error inesperado")
+    if (resetError) {
+      console.error("[Login - Reset] Error:", resetError)
+      setError(resetError.message || "Error al enviar el correo de recuperación")
       setLoading(false)
+      return
     }
+
+    console.log("[Login - Reset] Correo enviado exitosamente a:", email)
+    setResetSent(true)
+    setLoading(false)
+  } catch (err: any) {
+    console.error("[Login - Reset] Error inesperado:", err)
+    setError("Ocurrió un error al enviar el correo de recuperación")
+    setLoading(false)
   }
+}
 
   const handleResetPassword = async (e: React.FormEvent) => {
   e.preventDefault()
