@@ -43,29 +43,18 @@ export default function LoginPage() {
   }
 
   const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+  e.preventDefault()
+  setError("")
+  setLoading(true)
 
-    try {
-      const formData = new FormData()
-      formData.append("email", email)
-
-      const result = await resetPassword(formData)
-      
-      if (result?.error) {
-        setError(result.error)
-        setLoading(false)
-        return
-      }
-
-      setResetSent(true)
-      setLoading(false)
-    } catch (err: any) {
-      setError("Ocurrió un error al enviar el correo de recuperación")
-      setLoading(false)
-    }
+  try {
+    // Redirigir directamente a la página de recuperación de contraseña
+    router.push("/auth/forgot-password")
+  } catch (err: any) {
+    setError("Ocurrió un error al procesar la solicitud")
+    setLoading(false)
   }
+}
 
   if (showResetForm) {
     return (
