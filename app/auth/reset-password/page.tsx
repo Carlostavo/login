@@ -8,7 +8,6 @@ import { Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react"
 import Image from "next/image"
 import { createClient } from "@/lib/supabase/client"
 
-// Componente principal envuelto en Suspense
 function ResetPasswordContent() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -28,65 +27,28 @@ function ResetPasswordContent() {
       try {
         setCheckingToken(true)
         const code = searchParams.get("code")
-        const tokenHash = searchParams.get("token_hash")
-        const type = searchParams.get("type")
 
-        console.log("[Reset Password] Parámetros recibidos:", { 
-          code, 
-          token_hash: tokenHash, 
-          type 
-        })
+        console.log("[Reset Password] Código recibido:", code)
 
-        // Verificar si ya hay una sesión activa
-        const { data: { session } } = await supabase.auth.getSession()
-        
-        if (session) {
-          console.log("[Reset Password] Sesión ya activa")
-          setIsValidToken(true)
-          setError("")
+        if (!code) {
+          console.error("[Reset Password] No se encontró código")
+          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
+          setIsValidToken(false)
           setCheckingToken(false)
           return
         }
 
-        // Si viene con code
-        if (code) {
-          console.log("[Reset Password] Procesando con código:", code)
-          
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-          
-          if (exchangeError) {
-            console.error("[Reset Password] Error al intercambiar código:", exchangeError)
-            setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
-            setIsValidToken(false)
-          } else {
-            console.log("[Reset Password] Código intercambiado exitosamente")
-            setIsValidToken(true)
-            setError("")
-          }
-        }
-        // Si viene con token_hash y type
-        else if (type === "recovery" && tokenHash) {
-          console.log("[Reset Password] Procesando con token_hash:", tokenHash)
-          
-          const { error: verifyError } = await supabase.auth.verifyOtp({
-            token_hash: tokenHash,
-            type: 'recovery'
-          })
-
-          if (verifyError) {
-            console.error("[Reset Password] Error al verificar token:", verifyError)
-            setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
-            setIsValidToken(false)
-          } else {
-            console.log("[Reset Password] Token verificado exitosamente")
-            setIsValidToken(true)
-            setError("")
-          }
-        }
-        else {
-          console.error("[Reset Password] No se encontraron parámetros válidos")
-          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
+        // Intercambiar el código por una sesión
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+        
+        if (exchangeError) {
+          console.error("[Reset Password] Error al intercambiar código:", exchangeError)
+          setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
           setIsValidToken(false)
+        } else {
+          console.log("[Reset Password] Código intercambiado exitosamente")
+          setIsValidToken(true)
+          setError("")
         }
       } catch (err: any) {
         console.error("[Reset Password] Error inesperado:", err)
@@ -104,7 +66,6 @@ function ResetPasswordContent() {
     e.preventDefault()
     setError("")
 
-    // Validaciones
     if (password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres")
       return
@@ -144,7 +105,6 @@ function ResetPasswordContent() {
     }
   }
 
-  // Mostrar estado de carga mientras se verifica el token
   if (checkingToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-secondary-bg px-4">
@@ -320,7 +280,6 @@ function ResetPasswordContent() {
   )
 }
 
-// Componente de fallback
 function ResetPasswordLoading() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary-bg px-4">
