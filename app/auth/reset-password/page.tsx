@@ -1,3 +1,4 @@
+app/auth/reset-password/page.tsx
 "use client"
 
 import type React from "react"
@@ -27,26 +28,25 @@ export default function ResetPasswordPage() {
       try {
         setCheckingToken(true)
         const code = searchParams.get("code")
+        const type = searchParams.get("type")
 
-        console.log("[Reset Password] Parámetros recibidos:", { 
-          code, 
-          allParams: Object.fromEntries(searchParams.entries()) 
-        })
+        console.log("[Reset Password] Parámetros recibidos:", { code, type })
+
+        if (type !== "recovery") {
+          console.warn("[Reset Password] Tipo incorrecto o no especificado:", type)
+          // Continuar de todos modos si tenemos código
+        }
 
         if (!code) {
           console.error("[Reset Password] No se encontró código")
-          setError("El enlace de recuperación no es válido. Falta el código de verificación.")
+          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
           setIsValidToken(false)
           setCheckingToken(false)
           return
         }
 
-        console.log("[Reset Password] Intercambiando código por sesión...")
-        
         // Para PKCE, intercambiamos el código por una sesión
-        const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-
-        console.log("[Reset Password] Respuesta de exchangeCodeForSession:", { data, exchangeError })
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
         if (exchangeError) {
           console.error("[Reset Password] Error al intercambiar código:", exchangeError)
@@ -61,18 +61,12 @@ export default function ResetPasswordPage() {
         // Verificar si el usuario está autenticado
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
-        console.log("[Reset Password] Sesión obtenida:", session)
-        
-        if (sessionError) {
+        if (sessionError || !session) {
           console.error("[Reset Password] Error obteniendo sesión:", sessionError)
-        }
-
-        if (!session) {
-          console.error("[Reset Password] No hay sesión activa después del intercambio")
           setError("No se pudo establecer la sesión. Por favor, solicita un nuevo enlace.")
           setIsValidToken(false)
         } else {
-          console.log("[Reset Password] Sesión establecida exitosamente para usuario:", session.user.email)
+          console.log("[Reset Password] Sesión establecida exitosamente")
           setIsValidToken(true)
           setError("")
         }
@@ -85,10 +79,7 @@ export default function ResetPasswordPage() {
       }
     }
 
-    // Esperar un momento para asegurar que el componente está montado
-    setTimeout(() => {
-      checkToken()
-    }, 100)
+    checkToken()
   }, [searchParams, supabase.auth])
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -109,8 +100,6 @@ export default function ResetPasswordPage() {
     setLoading(true)
 
     try {
-      console.log("[Reset Password] Actualizando contraseña...")
-      
       const { error: updateError } = await supabase.auth.updateUser({
         password: password,
       })
