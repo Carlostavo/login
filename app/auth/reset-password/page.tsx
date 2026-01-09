@@ -27,49 +27,56 @@ export default function ResetPasswordPage() {
       try {
         setCheckingToken(true)
         const code = searchParams.get("code")
+        const tokenHash = searchParams.get("token_hash")
         const type = searchParams.get("type")
 
-        console.log("[Reset Password] Parámetros recibidos:", { code, type })
+        console.log("[Reset Password] Parámetros recibidos:", { 
+          code, 
+          token_hash: tokenHash, 
+          type 
+        })
 
-        if (type !== "recovery") {
-          console.warn("[Reset Password] Tipo incorrecto o no especificado:", type)
-          // Continuar de todos modos si tenemos código
+        // Si viene con code (formato de Supabase más reciente)
+        if (code) {
+          console.log("[Reset Password] Procesando con código:", code)
+          
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+          
+          if (exchangeError) {
+            console.error("[Reset Password] Error al intercambiar código:", exchangeError)
+            setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
+            setIsValidToken(false)
+          } else {
+            console.log("[Reset Password] Código intercambiado exitosamente")
+            setIsValidToken(true)
+            setError("")
+          }
         }
+        // Si viene con token_hash y type (formato antiguo)
+        else if (type === "recovery" && tokenHash) {
+          console.log("[Reset Password] Procesando con token_hash:", tokenHash)
+          
+          const { error: verifyError } = await supabase.auth.verifyOtp({
+            token_hash: tokenHash,
+            type: 'recovery'
+          })
 
-        if (!code) {
-          console.error("[Reset Password] No se encontró código")
+          if (verifyError) {
+            console.error("[Reset Password] Error al verificar token:", verifyError)
+            setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
+            setIsValidToken(false)
+          } else {
+            console.log("[Reset Password] Token verificado exitosamente")
+            setIsValidToken(true)
+            setError("")
+          }
+        }
+        else {
+          console.error("[Reset Password] No se encontraron parámetros válidos")
           setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
           setIsValidToken(false)
-          setCheckingToken(false)
-          return
         }
-
-        // Para PKCE, intercambiamos el código por una sesión
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-
-        if (exchangeError) {
-          console.error("[Reset Password] Error al intercambiar código:", exchangeError)
-          setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
-          setIsValidToken(false)
-          setCheckingToken(false)
-          return
-        }
-
-        console.log("[Reset Password] Código intercambiado exitosamente")
-        
-        // Verificar si el usuario está autenticado
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-        
-        if (sessionError || !session) {
-          console.error("[Reset Password] Error obteniendo sesión:", sessionError)
-          setError("No se pudo establecer la sesión. Por favor, solicita un nuevo enlace.")
-          setIsValidToken(false)
-        } else {
-          console.log("[Reset Password] Sesión establecida exitosamente")
-          setIsValidToken(true)
-          setError("")
-        }
-      } catch (err) {
+      } catch (err: any) {
         console.error("[Reset Password] Error inesperado:", err)
         setError("Ocurrió un error al verificar el enlace. Por favor, inténtalo de nuevo.")
         setIsValidToken(false)
@@ -111,10 +118,6 @@ export default function ResetPasswordPage() {
       }
 
       console.log("[Reset Password] Contraseña actualizada exitosamente")
-      
-      // Cerrar sesión después de actualizar la contraseña
-      await supabase.auth.signOut()
-      
       setSuccess(true)
       setLoading(false)
 
