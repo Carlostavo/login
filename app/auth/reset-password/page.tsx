@@ -23,70 +23,81 @@ export default function ResetPasswordPage() {
   const supabase = createClient()
 
   useEffect(() => {
-    const checkToken = async () => {
-      try {
-        setCheckingToken(true)
-        const code = searchParams.get("code")
-        const tokenHash = searchParams.get("token_hash")
-        const type = searchParams.get("type")
+  const checkToken = async () => {
+    try {
+      setCheckingToken(true)
+      const code = searchParams.get("code")
+      const tokenHash = searchParams.get("token_hash")
+      const type = searchParams.get("type")
 
-        console.log("[Reset Password] Parámetros recibidos:", { 
-          code, 
-          token_hash: tokenHash, 
-          type 
+      console.log("[Reset Password] Parámetros recibidos:", { 
+        code, 
+        token_hash: tokenHash, 
+        type 
+      })
+
+      // Verificar si ya hay una sesión activa
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (session) {
+        console.log("[Reset Password] Sesión ya activa")
+        setIsValidToken(true)
+        setError("")
+        setCheckingToken(false)
+        return
+      }
+
+      // Si viene con code
+      if (code) {
+        console.log("[Reset Password] Procesando con código:", code)
+        
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+        
+        if (exchangeError) {
+          console.error("[Reset Password] Error al intercambiar código:", exchangeError)
+          setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
+          setIsValidToken(false)
+        } else {
+          console.log("[Reset Password] Código intercambiado exitosamente")
+          setIsValidToken(true)
+          setError("")
+        }
+      }
+      // Si viene con token_hash y type
+      else if (type === "recovery" && tokenHash) {
+        console.log("[Reset Password] Procesando con token_hash:", tokenHash)
+        
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery'
         })
 
-        // Si viene con code (formato de Supabase más reciente)
-        if (code) {
-          console.log("[Reset Password] Procesando con código:", code)
-          
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-          
-          if (exchangeError) {
-            console.error("[Reset Password] Error al intercambiar código:", exchangeError)
-            setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
-            setIsValidToken(false)
-          } else {
-            console.log("[Reset Password] Código intercambiado exitosamente")
-            setIsValidToken(true)
-            setError("")
-          }
-        }
-        // Si viene con token_hash y type (formato antiguo)
-        else if (type === "recovery" && tokenHash) {
-          console.log("[Reset Password] Procesando con token_hash:", tokenHash)
-          
-          const { error: verifyError } = await supabase.auth.verifyOtp({
-            token_hash: tokenHash,
-            type: 'recovery'
-          })
-
-          if (verifyError) {
-            console.error("[Reset Password] Error al verificar token:", verifyError)
-            setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
-            setIsValidToken(false)
-          } else {
-            console.log("[Reset Password] Token verificado exitosamente")
-            setIsValidToken(true)
-            setError("")
-          }
-        }
-        else {
-          console.error("[Reset Password] No se encontraron parámetros válidos")
-          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
+        if (verifyError) {
+          console.error("[Reset Password] Error al verificar token:", verifyError)
+          setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
           setIsValidToken(false)
+        } else {
+          console.log("[Reset Password] Token verificado exitosamente")
+          setIsValidToken(true)
+          setError("")
         }
-      } catch (err: any) {
-        console.error("[Reset Password] Error inesperado:", err)
-        setError("Ocurrió un error al verificar el enlace. Por favor, inténtalo de nuevo.")
-        setIsValidToken(false)
-      } finally {
-        setCheckingToken(false)
       }
+      else {
+        console.error("[Reset Password] No se encontraron parámetros válidos")
+        setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
+        setIsValidToken(false)
+      }
+    } catch (err: any) {
+      console.error("[Reset Password] Error inesperado:", err)
+      setError("Ocurrió un error al verificar el enlace. Por favor, inténtalo de nuevo.")
+      setIsValidToken(false)
+    } finally {
+      setCheckingToken(false)
     }
+  }
 
-    checkToken()
-  }, [searchParams, supabase.auth])
+  checkToken()
+}, [searchParams, supabase.auth])
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()
