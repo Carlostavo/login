@@ -1,4 +1,3 @@
-app/auth/reset-password/page.tsx
 "use client"
 
 import type React from "react"
