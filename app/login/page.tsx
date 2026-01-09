@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Eye, EyeOff, Loader2, ArrowLeft } from "lucide-react" // AÑADIR ArrowLeft
+import { Eye, EyeOff, Loader2, ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import { login, resetPassword } from "@/app/actions/auth"
 import { createClient } from "@/lib/supabase/client"
@@ -20,47 +20,55 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const handleResetPassword = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError("")
-  setLoading(true)
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
 
-  try {
-    // Usar el cliente de Supabase directamente
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
-    })
+    try {
+      const formData = new FormData()
+      formData.append("email", email)
+      formData.append("password", password)
 
-    if (resetError) {
-      console.error("[Login - Reset] Error:", resetError)
-      setError(resetError.message || "Error al enviar el correo de recuperación")
+      const result = await login(formData)
+      
+      if (result?.error) {
+        setError(result.error)
+        setLoading(false)
+      }
+    } catch (err: any) {
+      setError(err.message || "Ocurrió un error inesperado")
       setLoading(false)
-      return
     }
-
-    console.log("[Login - Reset] Correo enviado exitosamente a:", email)
-    setResetSent(true)
-    setLoading(false)
-  } catch (err: any) {
-    console.error("[Login - Reset] Error inesperado:", err)
-    setError("Ocurrió un error al enviar el correo de recuperación")
-    setLoading(false)
   }
-}
 
   const handleResetPassword = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError("")
-  setLoading(true)
+    e.preventDefault()
+    setError("")
+    setLoading(true)
 
-  try {
-    // Redirigir directamente a la página de recuperación de contraseña
-    router.push("/auth/forgot-password")
-  } catch (err: any) {
-    setError("Ocurrió un error al procesar la solicitud")
-    setLoading(false)
+    try {
+      // Usar el cliente de Supabase directamente con la URL correcta
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
+      })
+
+      if (resetError) {
+        console.error("[Login - Reset] Error:", resetError)
+        setError(resetError.message || "Error al enviar el correo de recuperación")
+        setLoading(false)
+        return
+      }
+
+      console.log("[Login - Reset] Correo enviado exitosamente a:", email)
+      setResetSent(true)
+      setLoading(false)
+    } catch (err: any) {
+      console.error("[Login - Reset] Error inesperado:", err)
+      setError("Ocurrió un error al enviar el correo de recuperación")
+      setLoading(false)
+    }
   }
-}
 
   if (showResetForm) {
     return (
@@ -86,7 +94,7 @@ export default function LoginPage() {
             </div>
 
             {resetSent ? (
-              <div className="bg-primary-lighter border border-primary rounded-lg p-4 mb-6">
+              <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 mb-6">
                 <p className="text-sm text-foreground text-center">
                   Se ha enviado un correo de recuperación a <strong>{email}</strong>. Revisa tu bandeja de entrada.
                 </p>
@@ -110,6 +118,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="tucorreo@ejemplo.com"
                   />
                 </div>
 
@@ -132,10 +141,14 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center">
               <button
-                onClick={() => setShowResetForm(false)}
-                className="text-sm text-primary hover:text-primary-light font-medium flex items-center justify-center gap-2 mx-auto"
+                onClick={() => {
+                  setShowResetForm(false)
+                  setResetSent(false)
+                  setError("")
+                }}
+                className="text-sm text-primary hover:text-primary/80 font-medium flex items-center justify-center gap-2 mx-auto"
               >
-                <ArrowLeft className="w-4 h-4" /> {/* AQUÍ se usa ArrowLeft */}
+                <ArrowLeft className="w-4 h-4" />
                 Volver al inicio de sesión
               </button>
             </div>
@@ -184,6 +197,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="tucorreo@ejemplo.com"
               />
             </div>
 
@@ -215,7 +229,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowResetForm(true)}
-                className="text-sm text-primary hover:text-primary-light font-medium"
+                className="text-sm text-primary hover:text-primary/80 font-medium"
               >
                 ¿Olvidaste tu contraseña?
               </button>
