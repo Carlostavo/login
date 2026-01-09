@@ -33,18 +33,20 @@ export async function resetPassword(formData: FormData) {
   const supabase = await createClient()
   const email = formData.get("email") as string
 
-  // Usar directamente la URL de producción o variable de entorno
+  // URL correcta para el callback
   const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`
-    : "https://login-umber-kappa.vercel.app/auth/reset-password"
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+    : "https://login-umber-kappa.vercel.app/auth/callback"
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: redirectUrl,
   })
 
   if (error) {
+    console.error("[Auth Action - Reset] Error:", error)
     return { error: error.message }
   }
 
+  console.log("[Auth Action - Reset] Correo enviado a:", email)
   return { success: true }
 }
