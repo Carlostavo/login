@@ -26,36 +26,56 @@ export default function ResetPasswordPage() {
     const checkToken = async () => {
       try {
         setCheckingToken(true)
-        const tokenHash = searchParams.get("token_hash")
-        const type = searchParams.get("type")
+        const code = searchParams.get("code")
 
-        console.log("[Reset Password] Parámetros recibidos:", { token_hash: tokenHash, type })
+        console.log("[Reset Password] Parámetros recibidos:", { 
+          code, 
+          allParams: Object.fromEntries(searchParams.entries()) 
+        })
 
-        if (type !== "recovery" || !tokenHash) {
-          console.error("[Reset Password] Tipo o token_hash inválido")
-          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
+        if (!code) {
+          console.error("[Reset Password] No se encontró código")
+          setError("El enlace de recuperación no es válido. Falta el código de verificación.")
           setIsValidToken(false)
           setCheckingToken(false)
           return
         }
 
-        // Verificar si el token es válido
-        const { error: verifyError } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: 'recovery'
-        })
+        console.log("[Reset Password] Intercambiando código por sesión...")
+        
+        // Para PKCE, intercambiamos el código por una sesión
+        const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
-        if (verifyError) {
-          console.error("[Reset Password] Error al verificar token:", verifyError)
+        console.log("[Reset Password] Respuesta de exchangeCodeForSession:", { data, exchangeError })
+
+        if (exchangeError) {
+          console.error("[Reset Password] Error al intercambiar código:", exchangeError)
           setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
           setIsValidToken(false)
           setCheckingToken(false)
           return
         }
 
-        console.log("[Reset Password] Token verificado exitosamente")
-        setIsValidToken(true)
-        setError("")
+        console.log("[Reset Password] Código intercambiado exitosamente")
+        
+        // Verificar si el usuario está autenticado
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        console.log("[Reset Password] Sesión obtenida:", session)
+        
+        if (sessionError) {
+          console.error("[Reset Password] Error obteniendo sesión:", sessionError)
+        }
+
+        if (!session) {
+          console.error("[Reset Password] No hay sesión activa después del intercambio")
+          setError("No se pudo establecer la sesión. Por favor, solicita un nuevo enlace.")
+          setIsValidToken(false)
+        } else {
+          console.log("[Reset Password] Sesión establecida exitosamente para usuario:", session.user.email)
+          setIsValidToken(true)
+          setError("")
+        }
       } catch (err) {
         console.error("[Reset Password] Error inesperado:", err)
         setError("Ocurrió un error al verificar el enlace. Por favor, inténtalo de nuevo.")
@@ -65,7 +85,10 @@ export default function ResetPasswordPage() {
       }
     }
 
-    checkToken()
+    // Esperar un momento para asegurar que el componente está montado
+    setTimeout(() => {
+      checkToken()
+    }, 100)
   }, [searchParams, supabase.auth])
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -86,6 +109,8 @@ export default function ResetPasswordPage() {
     setLoading(true)
 
     try {
+      console.log("[Reset Password] Actualizando contraseña...")
+      
       const { error: updateError } = await supabase.auth.updateUser({
         password: password,
       })
@@ -98,6 +123,10 @@ export default function ResetPasswordPage() {
       }
 
       console.log("[Reset Password] Contraseña actualizada exitosamente")
+      
+      // Cerrar sesión después de actualizar la contraseña
+      await supabase.auth.signOut()
+      
       setSuccess(true)
       setLoading(false)
 
