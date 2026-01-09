@@ -6,14 +6,12 @@ import Link from "next/link"
 import { Mail, Loader2, ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
   const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,18 +21,21 @@ export default function ForgotPasswordPage() {
 
     try {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/reset-password`,
       })
 
       if (resetError) {
-        setError(resetError.message)
+        console.error("[Forgot Password] Error:", resetError)
+        setError(resetError.message || "Error al enviar el correo de recuperación")
         setLoading(false)
         return
       }
 
+      console.log("[Forgot Password] Correo enviado exitosamente a:", email)
       setSuccess(true)
       setLoading(false)
     } catch (err: any) {
+      console.error("[Forgot Password] Error inesperado:", err)
       setError(err.message || "Ocurrió un error al enviar el correo")
       setLoading(false)
     }
