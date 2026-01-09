@@ -1,11 +1,11 @@
 "use client"
 
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Loader2 } from "lucide-react"
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
@@ -44,7 +44,7 @@ export default function AuthCallbackPage() {
           if (tokenHash) {
             router.push(`/auth/reset-password?token_hash=${tokenHash}&type=recovery`)
           } else {
-            router.push("/auth/reset-password")
+            router.push("/auth/reset-password?code=" + code)
           }
         } else {
           // Para otros casos, redirigir a la página principal o la especificada
@@ -59,6 +59,11 @@ export default function AuthCallbackPage() {
     handleCallback()
   }, [router, searchParams, supabase.auth])
 
+  return null
+}
+
+// Componente de fallback para Suspense
+function CallbackLoading() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-secondary-bg px-4">
       <div className="w-full max-w-md text-center">
@@ -73,5 +78,13 @@ export default function AuthCallbackPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<CallbackLoading />}>
+      <AuthCallbackContent />
+    </Suspense>
   )
 }
