@@ -39,14 +39,18 @@ function AuthCallbackContent() {
         const type = searchParams.get("type")
         
         if (type === "recovery") {
-          // Para recuperación de contraseña, redirigir a reset-password con el código
-          const tokenHash = searchParams.get("token_hash")
-          if (tokenHash) {
-            router.push(`/auth/reset-password?token_hash=${tokenHash}&type=recovery`)
-          } else {
-            router.push("/auth/reset-password?code=" + code)
-          }
-        } else {
+  // Para recuperación de contraseña, redirigir a reset-password
+  const tokenHash = searchParams.get("token_hash")
+  const code = searchParams.get("code")
+  
+  if (tokenHash) {
+    router.push(`/auth/reset-password?token_hash=${tokenHash}`)
+  } else if (code) {
+    router.push(`/auth/reset-password?code=${code}`)
+  } else {
+    router.push("/auth/reset-password")
+  }
+} else {
           // Para otros casos, redirigir a la página principal o la especificada
           router.push(next)
         }
