@@ -45,7 +45,7 @@ export async function resetPassword(formData: FormData) {
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://login-umber-kappa.vercel.app"
-  const redirectUrl = `${siteUrl}/auth/callback?next=/auth/update-password`
+  const redirectUrl = `${siteUrl}/auth/callback?next=/auth/reset-password`
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: redirectUrl,
