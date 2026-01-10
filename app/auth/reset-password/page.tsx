@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react"
 import Image from "next/image"
-import { createClient } from "@/lib/supabase/client"
 
 function ResetPasswordContent() {
   const [password, setPassword] = useState("")
@@ -16,51 +15,16 @@ function ResetPasswordContent() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [isValidToken, setIsValidToken] = useState(false)
-  const [checkingToken, setCheckingToken] = useState(true)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const supabase = createClient()
 
   useEffect(() => {
-    const checkToken = async () => {
-      try {
-        setCheckingToken(true)
-        const code = searchParams.get("code")
-
-        console.log("[Reset Password] Código recibido:", code)
-
-        if (!code) {
-          console.error("[Reset Password] No se encontró código")
-          setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
-          setIsValidToken(false)
-          setCheckingToken(false)
-          return
-        }
-
-        // Intercambiar el código por una sesión
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-        
-        if (exchangeError) {
-          console.error("[Reset Password] Error al intercambiar código:", exchangeError)
-          setError("El enlace de recuperación no es válido o ha expirado. Por favor, solicita uno nuevo.")
-          setIsValidToken(false)
-        } else {
-          console.log("[Reset Password] Código intercambiado exitosamente")
-          setIsValidToken(true)
-          setError("")
-        }
-      } catch (err: any) {
-        console.error("[Reset Password] Error inesperado:", err)
-        setError("Ocurrió un error al verificar el enlace. Por favor, inténtalo de nuevo.")
-        setIsValidToken(false)
-      } finally {
-        setCheckingToken(false)
-      }
+    // Check if we have a code parameter
+    const code = searchParams.get("code")
+    if (!code) {
+      setError("El enlace de recuperación no es válido. Por favor, solicita uno nuevo.")
     }
-
-    checkToken()
-  }, [searchParams, supabase.auth])
+  }, [searchParams])
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -79,48 +43,31 @@ function ResetPasswordContent() {
     setLoading(true)
 
     try {
-      const { error: updateError } = await supabase.auth.updateUser({
-        password: password,
+      const response = await fetch("/api/auth/update-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
       })
 
-      if (updateError) {
-        console.error("[Reset Password] Error al actualizar contraseña:", updateError)
-        setError(updateError.message || "Error al actualizar la contraseña")
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || "Error al actualizar la contraseña")
         setLoading(false)
         return
       }
 
-      console.log("[Reset Password] Contraseña actualizada exitosamente")
       setSuccess(true)
       setLoading(false)
 
-      // Redirigir al login después de 3 segundos
+      // Redirect to login after 3 seconds
       setTimeout(() => {
         router.push("/login")
       }, 3000)
     } catch (err: any) {
-      console.error("[Reset Password] Error inesperado:", err)
       setError(err.message || "Ocurrió un error al actualizar la contraseña")
       setLoading(false)
     }
-  }
-
-  if (checkingToken) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary-bg px-4">
-        <div className="w-full max-w-md">
-          <div className="bg-card rounded-xl border border-border p-8 shadow-lg text-center">
-            <div className="flex justify-center mb-6">
-              <Loader2 className="w-12 h-12 text-primary animate-spin" />
-            </div>
-            <h1 className="text-xl font-semibold text-foreground mb-2">
-              Verificando enlace de recuperación...
-            </h1>
-            <p className="text-secondary-text">Por favor, espera un momento.</p>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   if (success) {
@@ -157,120 +104,92 @@ function ResetPasswordContent() {
         <div className="bg-card rounded-xl border border-border p-8 shadow-lg">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
-              <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-primary/30">
-                <Image
-                  src="/images/ingenieria-20-282-29.jpeg"
-                  alt="Logo"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 128px) 100vw, 128px"
-                />
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20 shadow-md">
+                <Image src="/images/ingenieria-20-282-29.jpeg" alt="Logo" fill className="object-cover" sizes="96px" />
               </div>
             </div>
             <h1 className="text-2xl font-bold text-foreground">Restablecer Contraseña</h1>
-            <p className="text-secondary-text mt-2">Ingresa tu nueva contraseña</p>
+            <p className="text-secondary-text mt-2 text-sm">Ingresa tu nueva contraseña</p>
           </div>
 
-          {!isValidToken ? (
-            <div className="space-y-6">
-              <div className="bg-destructive/10 border border-destructive rounded-lg p-4">
-                <p className="text-sm text-destructive text-center">
-                  {error || "El enlace de recuperación no es válido o ha expirado."}
-                </p>
+          <form onSubmit={handleResetPassword} className="space-y-6">
+            {error && (
+              <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-3">
+                <p className="text-sm text-destructive">{error}</p>
               </div>
-              <div className="space-y-3">
-                <Link
-                  href="/login"
-                  className="block w-full text-center bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+            )}
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+                Nueva Contraseña
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-11 transition-all"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-text hover:text-foreground transition-colors"
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 >
-                  Volver al Inicio de Sesión
-                </Link>
-                <Link
-                  href="/auth/forgot-password"
-                  className="block w-full text-center text-primary hover:underline text-sm py-2"
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              <p className="text-xs text-secondary-text mt-1">Mínimo 6 caracteres</p>
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-2">
+                Confirmar Contraseña
+              </label>
+              <div className="relative">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-11 transition-all"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-text hover:text-foreground transition-colors"
+                  aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 >
-                  Solicitar nuevo enlace
-                </Link>
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
             </div>
-          ) : (
-            <form onSubmit={handleResetPassword} className="space-y-6">
-              {error && (
-                <div className="bg-destructive/10 border border-destructive rounded-lg p-3">
-                  <p className="text-sm text-destructive">{error}</p>
-                </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Actualizando...
+                </>
+              ) : (
+                "Actualizar Contraseña"
               )}
+            </button>
+          </form>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
-                  Nueva Contraseña
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary pr-10"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-text hover:text-foreground"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-                <p className="text-xs text-secondary-text mt-1">Mínimo 6 caracteres</p>
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-2">
-                  Confirmar Contraseña
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary pr-10"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-text hover:text-foreground"
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Actualizando...
-                  </>
-                ) : (
-                  "Actualizar Contraseña"
-                )}
-              </button>
-            </form>
-          )}
-
-          <div className="mt-6 text-center">
-            <Link href="/login" className="text-sm text-secondary-text hover:text-foreground">
+          <div className="mt-6 pt-6 border-t border-border text-center">
+            <Link href="/login" className="text-sm text-secondary-text hover:text-foreground transition-colors">
               Volver al inicio de sesión
             </Link>
           </div>
@@ -285,13 +204,8 @@ function ResetPasswordLoading() {
     <div className="min-h-screen flex items-center justify-center bg-secondary-bg px-4">
       <div className="w-full max-w-md">
         <div className="bg-card rounded-xl border border-border p-8 shadow-lg text-center">
-          <div className="flex justify-center mb-6">
-            <Loader2 className="w-12 h-12 text-primary animate-spin" />
-          </div>
-          <h1 className="text-xl font-semibold text-foreground mb-2">
-            Cargando...
-          </h1>
-          <p className="text-secondary-text">Por favor, espera un momento.</p>
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+          <p className="text-secondary-text">Cargando...</p>
         </div>
       </div>
     </div>

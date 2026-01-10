@@ -2,12 +2,12 @@
 
 import type React from "react"
 import { useState } from "react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Loader2, ArrowLeft } from "lucide-react"
 import Image from "next/image"
-import { login, resetPassword } from "@/app/actions/auth"
 
 export default function LoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -22,16 +22,23 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const formData = new FormData()
-      formData.append("email", email)
-      formData.append("password", password)
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
 
-      const result = await login(formData)
+      const data = await response.json()
 
-      if (result?.error) {
-        setError(result.error)
+      if (!response.ok) {
+        setError(data.error || "Error al iniciar sesión")
         setLoading(false)
+        return
       }
+
+      // Redirect to home page
+      router.push("/")
+      router.refresh()
     } catch (err: any) {
       setError(err.message || "Ocurrió un error inesperado")
       setLoading(false)
@@ -44,13 +51,16 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const formData = new FormData()
-      formData.append("email", email)
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
 
-      const result = await resetPassword(formData)
+      const data = await response.json()
 
-      if (result?.error) {
-        setError(result.error)
+      if (!response.ok) {
+        setError(data.error || "Error al enviar correo")
         setLoading(false)
         return
       }
@@ -262,13 +272,13 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 pt-6 border-t border-border text-center">
-            <Link
-              href="/"
+            <button
+              onClick={() => router.push("/")}
               className="text-sm text-secondary-text hover:text-foreground transition-colors inline-flex items-center gap-1"
             >
               <ArrowLeft className="w-4 h-4" />
               Volver al inicio
-            </Link>
+            </button>
           </div>
         </div>
       </div>
