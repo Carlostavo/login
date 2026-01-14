@@ -1,284 +1,207 @@
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { FileText, FolderOpen, Download, Calendar, BarChart, Eye } from "lucide-react";
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 export default function AvancesPage() {
-  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list";
-  const directDriveUrl = "https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG";
-
-  // Datos de ejemplo para estadísticas
-  const stats = [
-    { label: "Documentos activos", value: "48", icon: <FileText className="w-5 h-5" /> },
-    { label: "Carpetas compartidas", value: "12", icon: <FolderOpen className="w-5 h-5" /> },
-    { label: "Última actualización", value: "Hoy", icon: <Calendar className="w-5 h-5" /> },
-    { label: "Total de visitas", value: "1.2K", icon: <Eye className="w-5 h-5" /> },
-  ];
-
-  // Categorías de documentos
-  const categories = [
-    { name: "Reportes Anuales", count: 8, color: "bg-blue-100 text-blue-800" },
-    { name: "Estudios Técnicos", count: 12, color: "bg-green-100 text-green-800" },
-    { name: "Indicadores", count: 15, color: "bg-purple-100 text-purple-800" },
-    { name: "Presentaciones", count: 6, color: "bg-amber-100 text-amber-800" },
-    { name: "Datos Abiertos", count: 7, color: "bg-cyan-100 text-cyan-800" },
-  ];
+  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list"
 
   return (
     <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
       <Header />
       <main className="flex-grow w-full">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary-dark to-accent text-white">
-          <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-          <div className="container-safe relative z-10 py-12 sm:py-16 md:py-20 lg:py-24">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm mb-6">
-                <BarChart className="w-4 h-4" />
-                <span className="text-sm font-medium">SEGUIMIENTO EN TIEMPO REAL</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-                Avances y<span className="block text-accent-lighter">Documentación</span>
-              </h1>
-              <p className="text-lg sm:text-xl text-white/90 mb-8 leading-relaxed max-w-2xl">
-                Acceso directo a todos los documentos, reportes y avances del cantón. 
-                Visualización en tiempo real de carpetas compartidas en Google Drive.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <a 
-                  href={directDriveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition-all hover:scale-105"
-                >
-                  <FolderOpen className="w-5 h-5" />
-                  Explorar en Google Drive
-                </a>
-                <button className="inline-flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-white/30 text-white rounded-lg hover:bg-white/10 transition-all">
-                  <Download className="w-5 h-5" />
-                  Guía de uso
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* Wave divider */}
-          <div className="absolute bottom-0 left-0 right-0">
-            <svg className="w-full h-12 text-background" viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="currentColor"/>
-            </svg>
+        <section className="gradient-eco text-white py-12 sm:py-16 md:py-20 lg:py-28 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/5"></div>
+          <div className="container-safe relative z-10">
+            <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-white text-xs font-medium mb-4">
+              SEGUIMIENTO Y PROGRESO
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-balance leading-tight">
+              Avances
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl text-balance leading-relaxed">
+              Seguimiento del progreso en la implementación de programas ambientales y cumplimiento de metas del cantón.
+            </p>
           </div>
         </section>
 
-        {/* Estadísticas */}
-        <section className="py-8 bg-gray-50">
+        {/* Visualización de Google Drive en tiempo real */}
+        <section className="py-12 sm:py-16 md:py-20 lg:py-28 bg-background">
           <div className="container-safe">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                      <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
-                    </div>
-                    <div className="text-primary">
-                      {stat.icon}
-                    </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+              {/* Columna izquierda - Información y contexto */}
+              <div className="lg:col-span-1">
+                <span className="inline-block px-3 py-1 rounded-full bg-accent-lighter text-accent font-medium text-xs mb-6">
+                  CARPETAS EN TIEMPO REAL
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary-text mb-4">
+                  Documentación y Reportes
+                </h2>
+                
+                <div className="space-y-4 mb-8">
+                  <div className="p-4 bg-primary/5 rounded-lg">
+                    <h3 className="font-semibold text-primary-text mb-2">📁 Acceso Directo</h3>
+                    <p className="text-sm text-secondary-text">
+                      Explora los documentos compartidos en Google Drive. Los archivos se actualizan automáticamente.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 bg-green-50 rounded-lg">
+                    <h3 className="font-semibold text-primary-text mb-2">🔄 Actualización Automática</h3>
+                    <p className="text-sm text-secondary-text">
+                      Los cambios en Google Drive se reflejan instantáneamente en esta vista.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <h3 className="font-semibold text-primary-text mb-2">📊 Tipos de Archivos</h3>
+                    <ul className="text-sm text-secondary-text space-y-1">
+                      <li>• Documentos de seguimiento</li>
+                      <li>• Reportes mensuales</li>
+                      <li>• Datos de indicadores</li>
+                      <li>• Informes de progreso</li>
+                    </ul>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Vista Principal de Google Drive */}
-        <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-background">
-          <div className="container-safe">
-            <div className="max-w-6xl mx-auto">
-              {/* Header de la sección */}
-              <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                  Documentación <span className="text-primary">Compartida</span>
-                </h2>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                  Visualiza y accede a todos los documentos oficiales. Los archivos se actualizan automáticamente 
-                  desde Google Drive en tiempo real.
-                </p>
-              </div>
-
-              {/* Categorías */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Categorías de documentos</h3>
-                <div className="flex flex-wrap gap-3">
-                  {categories.map((category, index) => (
-                    <span 
-                      key={index}
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${category.color}`}
+                
+                <div className="mt-8">
+                  <h3 className="font-semibold text-primary-text mb-3">Accesos Rápidos</h3>
+                  <div className="space-y-2">
+                    <a 
+                      href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors group"
                     >
-                      {category.name}
-                      <span className="bg-white/50 px-2 py-0.5 rounded-full text-xs">
-                        {category.count}
-                      </span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Contenedor Principal */}
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-                {/* Barra de herramientas */}
-                <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                  <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <FolderOpen className="w-6 h-6 text-primary" />
+                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
+                        <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"/>
+                        </svg>
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">Carpeta: Avances Cantonales</h3>
-                        <p className="text-sm text-gray-500">Actualizado automáticamente desde Google Drive</p>
+                        <p className="font-medium text-primary-text">Abrir en Google Drive</p>
+                        <p className="text-xs text-gray-500">Acceso completo a todas las funciones</p>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <a 
-                        href={directDriveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors text-sm font-medium"
-                      >
-                        <FolderOpen className="w-4 h-4" />
-                        Abrir en nueva pestaña
-                      </a>
-                    </div>
+                    </a>
+                    
+                    <a 
+                      href="https://docs.google.com/document/u/0/?tgif=d" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors group"
+                    >
+                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-green-200 transition-colors">
+                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M14,17H7V15H14M17,13H7V11H17M17,9H7V7H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-medium text-primary-text">Crear Nuevo Documento</p>
+                        <p className="text-xs text-gray-500">Agregar reportes directamente</p>
+                      </div>
+                    </a>
                   </div>
                 </div>
+              </div>
 
-                {/* Vista de Google Drive */}
-                <div className="p-1 sm:p-2">
-                  <div className="relative rounded-xl overflow-hidden border border-gray-300 bg-gradient-to-br from-gray-50 to-white">
-                    <div className="absolute top-4 right-4 z-10">
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-lg border border-gray-200 shadow-sm">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                          <span className="text-xs font-medium text-gray-700">Conectado</span>
-                        </div>
+              {/* Columna derecha - Vista de Google Drive */}
+              <div className="lg:col-span-2">
+                <div className="card-elevated overflow-hidden h-full">
+                  <div className="p-4 sm:p-6 border-b border-gray-200">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-primary-text">Carpeta: Avances Ambientales</h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Última actualización: En tiempo real
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                          Conectado
+                        </span>
+                        <button 
+                          onClick={() => window.open(driveFolderUrl.replace('/embeddedfolderview', ''), '_blank')}
+                          className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                        >
+                          Actualizar Vista
+                        </button>
                       </div>
                     </div>
-                    
+                  </div>
+
+                  {/* Contenedor del iframe de Google Drive */}
+                  <div className="relative w-full overflow-hidden">
                     <iframe
                       src={driveFolderUrl}
                       className="w-full h-[500px] sm:h-[600px] md:h-[700px]"
                       frameBorder="0"
-                      title="Google Drive - Documentos Cantonales"
-                      allow="autoplay; fullscreen; clipboard-write"
-                      loading="lazy"
+                      title="Google Drive - Avances Ambientales"
+                      allow="autoplay; fullscreen"
+                      allowFullScreen
                     />
+                    
+                    {/* Overlay informativo al cargar */}
+                    <div className="absolute bottom-4 left-4 right-4 p-3 bg-black/70 text-white text-sm rounded-lg backdrop-blur-sm">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6Z"/>
+                          </svg>
+                          <span>Vista de carpetas en tiempo real</span>
+                        </div>
+                        <button 
+                          onClick={() => window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank')}
+                          className="text-blue-300 hover:text-white underline text-xs"
+                        >
+                          Abrir en nueva pestaña
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Información adicional */}
-                <div className="border-t border-gray-200 bg-gray-50 px-6 py-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-gray-900 text-sm">📋 Instrucciones</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        <li>• Haz clic en cualquier archivo para previsualizarlo</li>
-                        <li>• Usa el botón de descarga para guardar copias</li>
-                        <li>• Los cambios se reflejan automáticamente</li>
-                      </ul>
+                  {/* Información adicional debajo del iframe */}
+                  <div className="p-4 sm:p-6 bg-gray-50">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="text-center p-3 bg-white rounded-lg">
+                        <div className="text-2xl font-bold text-primary-text">24/7</div>
+                        <div className="text-sm text-gray-600">Disponibilidad</div>
+                      </div>
+                      <div className="text-center p-3 bg-white rounded-lg">
+                        <div className="text-2xl font-bold text-primary-text">Automática</div>
+                        <div className="text-sm text-gray-600">Sincronización</div>
+                      </div>
+                      <div className="text-center p-3 bg-white rounded-lg">
+                        <div className="text-2xl font-bold text-primary-text">Seguro</div>
+                        <div className="text-sm text-gray-600">Acceso controlado</div>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-gray-900 text-sm">🔒 Seguridad</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        <li>• Conexión segura con Google</li>
-                        <li>• Acceso de solo lectura</li>
-                        <li>• Datos actualizados en tiempo real</li>
-                      </ul>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-gray-900 text-sm">📞 Soporte</h4>
+                    
+                    <div className="mt-4 pt-4 border-t border-gray-200">
                       <p className="text-sm text-gray-600">
-                        ¿Problemas para acceder? Contacta a nuestro equipo técnico en 
-                        <a href="mailto:soporte@canton.com" className="text-primary hover:underline ml-1">
-                          soporte@canton.com
-                        </a>
+                        <strong>Nota:</strong> Esta vista muestra las carpetas y archivos compartidos de Google Drive. 
+                        Para subir nuevos documentos o modificar permisos, accede directamente a Google Drive.
                       </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Métodos alternativos de acceso */}
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-blue-100 rounded-lg">
-                      <Download className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Descarga masiva</h4>
-                      <p className="text-sm text-gray-600 mb-4">
-                        ¿Necesitas todos los documentos? Solicita un archivo comprimido con toda la documentación.
-                      </p>
-                      <button className="text-sm text-blue-600 font-medium hover:text-blue-700">
-                        Solicitar descarga completa →
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-green-100 rounded-lg">
-                      <BarChart className="w-6 h-6 text-green-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">API de Datos</h4>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Para desarrolladores: accede a los datos mediante nuestra API RESTful.
-                      </p>
-                      <button className="text-sm text-green-600 font-medium hover:text-green-700">
-                        Ver documentación de API →
-                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Sección de información adicional */}
-        <section className="py-12 bg-gray-50">
-          <div className="container-safe">
-            <div className="max-w-4xl mx-auto text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Transparencia y <span className="text-primary">Acceso Público</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
-                <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Eye className="w-6 h-6 text-primary" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Visibilidad Total</h4>
-                  <p className="text-gray-600 text-sm">
-                    Todos los documentos públicos del cantón disponibles para consulta ciudadana.
+            {/* Sección de ayuda */}
+            <div className="mt-12 p-6 bg-blue-50 rounded-xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-primary-text mb-2">¿Necesitas ayuda con Google Drive?</h3>
+                  <p className="text-secondary-text">
+                    Consulta nuestra guía de uso o contacta al administrador del sistema.
                   </p>
                 </div>
-                <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="w-6 h-6 text-primary" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Actualización Constante</h4>
-                  <p className="text-gray-600 text-sm">
-                    Los documentos se actualizan automáticamente manteniendo la información actual.
-                  </p>
-                </div>
-                <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <FileText className="w-6 h-6 text-primary" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Documentación Completa</h4>
-                  <p className="text-gray-600 text-sm">
-                    Reportes, estudios, indicadores y presentaciones organizadas por categorías.
-                  </p>
+                <div className="flex gap-3">
+                  <button className="px-4 py-2 text-sm border border-primary text-primary rounded-lg hover:bg-primary/5 transition-colors">
+                    Ver Tutorial
+                  </button>
+                  <button className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                    Contactar Soporte
+                  </button>
                 </div>
               </div>
             </div>
@@ -287,5 +210,5 @@ export default function AvancesPage() {
       </main>
       <Footer />
     </div>
-  );
+  )
 }
