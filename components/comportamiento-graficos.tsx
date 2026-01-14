@@ -325,63 +325,40 @@ const formatearPorcentajeGrafico = (valor: number): string => {
   return `${redondeado.toFixed(1)}%`
 }
 
-const PREGUNTAS_LIKERT: Record<string, string> = {
-  conoce_desechos_solidos: "¿Conoce usted qué son los desechos sólidos domiciliarios?",
-  cree_comportamiento_adecuado_manejo:
-    "¿Cree usted que existe un comportamiento adecuado en el manejo de los desechos sólidos domiciliarios en la comunidad?",
-  separar_desechos_por_origen:
-    "¿Se debe separar los desechos sólidos según su tipo ejemplo: (papel - plástico - orgánico - inorgánico)?",
-  clasificacion_correcta_desechos:
-    "¿Es importante la correcta clasificación de los desechos sólidos orgánicos e inorgánicos en el hogar?",
-  comportamiento_comunidad_influye:
-    "¿Cree que el comportamiento de la comunidad influye en deterioro del medio ambiente?",
-  dedica_tiempo_reducir_reutilizar_reciclar:
-    "¿Dedica tiempo para reducir, reutilizar y/o reciclar los desechos sólidos que se generan en el hogar?",
-  desechos_solidos_problema_comunidad: "¿Los desechos sólidos son un gran problema para la comunidad?",
-  preocupa_exceso_desechos: "¿Le preocupa el exceso de desechos sólidos domiciliarios?",
-  desechos_contaminan_ambiente:
-    "¿Considera que los desechos sólidos domiciliarios intervienen en las consecuencias climáticas?",
-  afecta_emocionalmente_noticias_contaminacion:
-    "¿Le afecta emocionalmente cuando escucha noticias acerca de los desastres naturales?",
-  frustracion_falta_acciones_ambientales:
-    "¿Siente frustración debido a la falta de acciones significativas para abordar la generación de los desechos sólidos?",
-  importancia_planeta_futuras_generaciones:
-    "¿Considera importante pensar en el tipo de planeta que dejaremos a las futuras generaciones?",
-  consciente_impacto_desechos_salud:
-    "¿Es consciente del impacto de los desechos sólidos domiciliarios en el medio ambiente?",
-  investiga_temas_ambientales: "¿Investiga frecuentemente acerca de temas medio ambientales?",
-  consequencias_acumulacion_desechos:
-    "¿Conoce las consecuencias de la acumulación de los desechos sólidos domiciliarios?",
-  beneficios_reutilizar_residuo: "¿Conoce los beneficios de reutilizar un residuo domiciliario?",
-  falta_informacion_obstaculo_gestion:
-    "¿La falta de información es un obstáculo para la correcta gestión de los residuos sólidos domiciliario?",
-  desechos_organicos_funcionalidad: "¿Los desechos orgánicos generados en el hogar pueden tener otra funcionalidad?",
-  acumulacion_desechos_afecta_salud: "¿La acumulación de desechos afectan a la salud de de la población?",
-  reduccion_reciclaje_reutilizacion_cuida_ambiente:
-    "¿La reducción, reciclaje y la reutilización de los desechos sólidos puede cuidar al medio ambiente y a la vida silvestre?",
-  transformacion_desechos_nuevos_productos:
-    "¿Cree que la transformación de desechos sólidos en nuevos productos puede contribuir significativamente a la reducción de la generación de desechos?",
-  necesita_info_educacion_ambiental: "¿Necesita más información acerca de educación ambiental?",
-  practica_separacion_reciclaje_ingreso:
-    "¿En su hogar practica la separación de los desechos para el reciclaje y le representa algún ingreso?",
-  desechos_hogar_reutilizados:
-    "¿Los desechos sólidos generados en el hogar pueden ser reutilizados para una nueva función o creación de un producto?",
-  manejo_adecuado_desechos_aporta_desarrollo:
-    "¿Cree que el manejo adecuado de los desechos sólidos domiciliarios podría aportar al desarrollo económico comunitario?",
-  emprendimientos_reutilizacion_aportan_economia:
-    "¿Los emprendimientos en base a la reutilización de los desechos aporta a su economía?",
-  manejo_adecuado_desechos_oportunidad_emprendimiento:
-    "¿El manejo adecuado de los desechos sólidos domiciliarios ofrece oportunidades para el emprendimiento?",
-  reducir_residuos_eventos_concientizacion:
-    "¿Es posible reducir la generación de residuos sólidos domiciliarios por medio de eventos de concientización?",
-  participaria_talleres_buenas_practicas:
-    "¿Participaría en talleres de buenas prácticas y capacitaciones para el correcto manejo de los desechos sólidos domiciliarios?",
-  manejo_adecuado_desechos_impacto_ambiente:
-    "¿El manejo adecuado de los desechos sólidos domiciliarios puede tener un impacto significativo al medio ambiente?",
-  dispuesto_participar_emprendimiento_desechos:
-    "¿Está dispuesto a participar en un emprendimiento en base al uso de los desechos sólidos?",
-  participaria_feria_emprendimientos_desechos:
-    "¿Participaría a una feria de emprendimientos comunitarios en base a desechos domiciliarios reutilizados?",
+// Versión abreviada de las preguntas para tablas
+const PREGUNTAS_ABREVIADAS: Record<string, string> = {
+  conoce_desechos_solidos: "Conoce desechos sólidos",
+  cree_comportamiento_adecuado_manejo: "Comportamiento adecuado",
+  separar_desechos_por_origen: "Separar desechos por tipo",
+  clasificacion_correcta_desechos: "Clasificación correcta",
+  comportamiento_comunidad_influye: "Comportamiento comunitario",
+  dedica_tiempo_reducir_reutilizar_reciclar: "Dedica tiempo a reducir",
+  desechos_solidos_problema_comunidad: "Desechos son problema",
+  preocupa_exceso_desechos: "Preocupa exceso de desechos",
+  desechos_contaminan_ambiente: "Desechos contaminan ambiente",
+  afecta_emocionalmente_noticias_contaminacion: "Afecta emocionalmente",
+  frustracion_falta_acciones_ambientales: "Frustración por falta de acciones",
+  importancia_planeta_futuras_generaciones: "Planeta futuro generaciones",
+  consciente_impacto_desechos_salud: "Consciente del impacto",
+  investiga_temas_ambientales: "Investiga temas ambientales",
+  consequencias_acumulacion_desechos: "Conoce consecuencias acumulación",
+  beneficios_reutilizar_residuo: "Beneficios reutilizar",
+  falta_informacion_obstaculo_gestion: "Falta información obstáculo",
+  desechos_organicos_funcionalidad: "Desechos orgánicos funcionalidad",
+  acumulacion_desechos_afecta_salud: "Acumulación afecta salud",
+  reduccion_reciclaje_reutilizacion_cuida_ambiente: "Reducción cuida ambiente",
+  transformacion_desechos_nuevos_productos: "Transformación en productos",
+  necesita_info_educacion_ambiental: "Necesita info educación ambiental",
+  practica_separacion_reciclaje_ingreso: "Separación genera ingreso",
+  desechos_hogar_reutilizados: "Desechos reutilizados",
+  manejo_adecuado_desechos_aporta_desarrollo: "Manejo aporta desarrollo",
+  emprendimientos_reutilizacion_aportan_economia: "Emprendimientos aportan economía",
+  manejo_adecuado_desechos_oportunidad_emprendimiento: "Ofrece oportunidades emprendimiento",
+  reducir_residuos_eventos_concientizacion: "Eventos reducen residuos",
+  participaria_talleres_buenas_practicas: "Participaría en talleres",
+  manejo_adecuado_desechos_impacto_ambiente: "Manejo tiene impacto",
+  dispuesto_participar_emprendimiento_desechos: "Dispuesto a participar",
+  participaria_feria_emprendimientos_desechos: "Participaría en feria",
 }
 
 const generarTablaLikertPorSeccion = (datos: any[], seccionSeleccionada: string) => {
@@ -418,7 +395,7 @@ const generarTablaLikertPorSeccion = (datos: any[], seccionSeleccionada: string)
 
     return {
       nombreGrupo: grupo.nombre,
-      pregunta: PREGUNTAS_LIKERT[grupo.campo as keyof typeof PREGUNTAS_LIKERT] || grupo.nombre,
+      pregunta: PREGUNTAS_ABREVIADAS[grupo.campo as keyof typeof PREGUNTAS_ABREVIADAS] || grupo.nombre,
       conteos,
       totalEncuestas,
       promedio,
@@ -882,35 +859,37 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                 {seccionKey === "distribucion-demografica" && tablasSeccion && tablasSeccion.length > 0 && (
                   <div className="space-y-6 sm:space-y-8">
                     {tablasSeccion?.map((tabla, idx) => (
-                      <div key={idx} className="w-full overflow-hidden">
+                      <div key={idx}>
                         <h4 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">
                           {tabla.nombreGrupo}
                         </h4>
-                        <Table className="w-full table-auto">
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead className="font-bold text-xs sm:text-sm w-1/3">Categoría</TableHead>
-                              <TableHead className="font-bold text-right text-xs sm:text-sm w-1/3">Cantidad</TableHead>
-                              <TableHead className="font-bold text-right text-xs sm:text-sm w-1/3">% del Total</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {tabla.datos.map((fila, idx2) => (
-                              <TableRow key={idx2}>
-                                <TableCell className="font-medium text-xs sm:text-sm w-1/3">{fila.name}</TableCell>
-                                <TableCell className="text-right text-xs sm:text-sm w-1/3">{fila.value}</TableCell>
-                                <TableCell className="text-right text-xs sm:text-sm w-1/3">
-                                  {formatearPorcentaje(fila.porcentaje)}
-                                </TableCell>
+                        <div className="w-full">
+                          <Table className="w-full">
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead className="font-bold text-xs sm:text-sm px-2 py-2 text-left">Categoría</TableHead>
+                                <TableHead className="font-bold text-xs sm:text-sm px-2 py-2 text-right">Cantidad</TableHead>
+                                <TableHead className="font-bold text-xs sm:text-sm px-2 py-2 text-right">% del Total</TableHead>
                               </TableRow>
-                            ))}
-                            <TableRow className="bg-muted/50 font-bold">
-                              <TableCell className="text-xs sm:text-sm w-1/3">Total</TableCell>
-                              <TableCell className="text-right text-xs sm:text-sm w-1/3">{tabla.total}</TableCell>
-                              <TableCell className="text-right text-xs sm:text-sm w-1/3">100%</TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
+                            </TableHeader>
+                            <TableBody>
+                              {tabla.datos.map((fila, idx2) => (
+                                <TableRow key={idx2}>
+                                  <TableCell className="font-medium text-xs sm:text-sm px-2 py-2">{fila.name}</TableCell>
+                                  <TableCell className="text-right text-xs sm:text-sm px-2 py-2">{fila.value}</TableCell>
+                                  <TableCell className="text-right text-xs sm:text-sm px-2 py-2">
+                                    {formatearPorcentaje(fila.porcentaje)}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                              <TableRow className="bg-muted/50 font-bold">
+                                <TableCell className="text-xs sm:text-sm px-2 py-2">Total</TableCell>
+                                <TableCell className="text-right text-xs sm:text-sm px-2 py-2">{tabla.total}</TableCell>
+                                <TableCell className="text-right text-xs sm:text-sm px-2 py-2">100%</TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -918,65 +897,65 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
 
                 {seccionKey !== "distribucion-demografica" && tablasLikert && tablasLikert.length > 0 && (
                   <div className="space-y-6 sm:space-y-8">
-                    <div className="w-full overflow-hidden">
+                    <div className="w-full">
                       <div className="hidden lg:block">
-                        <Table className="w-full table-auto">
+                        <Table className="w-full table-fixed">
                           <TableHeader>
                             <TableRow>
-                              <TableHead className="font-bold w-[40%] min-w-[300px]">Pregunta</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[120px]">
-                                Totalmente Desacuerdo
+                              <TableHead className="font-bold text-xs px-2 py-2 w-[200px] min-w-[200px] max-w-[200px]">Pregunta</TableHead>
+                              <TableHead className="font-bold text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
+                                TD
                               </TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[100px]">Desacuerdo</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[100px]">Indiferente</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[100px]">De Acuerdo</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[120px]">
-                                Totalmente Acuerdo
+                              <TableHead className="font-bold text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">D</TableHead>
+                              <TableHead className="font-bold text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">I</TableHead>
+                              <TableHead className="font-bold text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">A</TableHead>
+                              <TableHead className="font-bold text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
+                                TA
                               </TableHead>
-                              <TableHead className="font-bold text-center bg-muted whitespace-nowrap w-[10%] min-w-[80px]">
-                                Promedio
+                              <TableHead className="font-bold text-center text-xs bg-muted px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
+                                Prom.
                               </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {tablasLikert.map((tabla, idx) => (
-                              <TableRow key={idx}>
-                                <TableCell className="font-medium text-sm leading-tight py-3 w-[40%] min-w-[300px]">
+                              <TableRow key={idx} className="hover:bg-muted/30">
+                                <TableCell className="text-xs px-2 py-2 align-top w-[200px] min-w-[200px] max-w-[200px] break-words">
                                   {tabla.pregunta}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[120px]">
+                                <TableCell className="text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Totalmente desacuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[100px]">
+                                <TableCell className="text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Desacuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[100px]">
+                                <TableCell className="text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Indiferente"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[100px]">
+                                <TableCell className="text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["De acuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[120px]">
+                                <TableCell className="text-center text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Totalmente de acuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center bg-muted font-bold text-sm py-3 w-[10%] min-w-[80px]">
+                                <TableCell className="text-center bg-muted font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                   {formatearPorcentaje(tabla.promedio)}
                                 </TableCell>
                               </TableRow>
                             ))}
                             <TableRow className="bg-muted/70">
-                              <TableCell className="font-bold text-sm py-3 w-[40%] min-w-[300px]">Promedio General</TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[120px]">
+                              <TableCell className="font-bold text-xs px-2 py-2 w-[200px] min-w-[200px] max-w-[200px]">Promedio General</TableCell>
+                              <TableCell className="text-center font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -986,7 +965,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[100px]">
+                              <TableCell className="text-center font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -996,7 +975,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[100px]">
+                              <TableCell className="text-center font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1006,7 +985,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[100px]">
+                              <TableCell className="text-center font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1016,7 +995,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[120px]">
+                              <TableCell className="text-center font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1026,7 +1005,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center bg-muted font-bold text-sm py-3 w-[10%] min-w-[80px]">
+                              <TableCell className="text-center bg-muted font-bold text-xs px-1 py-2 w-[80px] min-w-[80px] max-w-[80px]">
                                 {tablasLikert.length > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce((sum, t) => sum + t.promedio, 0) / tablasLikert.length
