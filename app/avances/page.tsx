@@ -1,8 +1,28 @@
+"use client"; // <-- Agrega esto al inicio
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { useState } from "react" // Importamos useState
 
 export default function AvancesPage() {
-  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list"
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list";
+
+  // Función para manejar el clic
+  const handleOpenInNewTab = () => {
+    window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank');
+  };
+
+  // Función para actualizar la vista
+  const handleRefreshView = () => {
+    setIsRefreshing(true);
+    // Forzar recarga del iframe
+    const iframe = document.querySelector('iframe[title="Google Drive - Avances Ambientales"]') as HTMLIFrameElement;
+    if (iframe) {
+      iframe.src = iframe.src; // Recargar iframe
+    }
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
@@ -65,11 +85,9 @@ export default function AvancesPage() {
                 <div className="mt-8">
                   <h3 className="font-semibold text-primary-text mb-3">Accesos Rápidos</h3>
                   <div className="space-y-2">
-                    <a 
-                      href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors group"
+                    <button 
+                      onClick={handleOpenInNewTab}
+                      className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors group w-full text-left"
                     >
                       <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
                         <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
@@ -80,7 +98,7 @@ export default function AvancesPage() {
                         <p className="font-medium text-primary-text">Abrir en Google Drive</p>
                         <p className="text-xs text-gray-500">Acceso completo a todas las funciones</p>
                       </div>
-                    </a>
+                    </button>
                     
                     <a 
                       href="https://docs.google.com/document/u/0/?tgif=d" 
@@ -119,10 +137,26 @@ export default function AvancesPage() {
                           Conectado
                         </span>
                         <button 
-                          onClick={() => window.open(driveFolderUrl.replace('/embeddedfolderview', ''), '_blank')}
-                          className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                          onClick={handleRefreshView}
+                          disabled={isRefreshing}
+                          className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                         >
-                          Actualizar Vista
+                          {isRefreshing ? (
+                            <>
+                              <svg className="animate-spin h-4 w-4 mr-2 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Actualizando...
+                            </>
+                          ) : (
+                            <>
+                              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                              </svg>
+                              Actualizar Vista
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>
@@ -137,6 +171,7 @@ export default function AvancesPage() {
                       title="Google Drive - Avances Ambientales"
                       allow="autoplay; fullscreen"
                       allowFullScreen
+                      key={isRefreshing ? "refreshing" : "normal"}
                     />
                     
                     {/* Overlay informativo al cargar */}
@@ -149,7 +184,7 @@ export default function AvancesPage() {
                           <span>Vista de carpetas en tiempo real</span>
                         </div>
                         <button 
-                          onClick={() => window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank')}
+                          onClick={handleOpenInNewTab}
                           className="text-blue-300 hover:text-white underline text-xs"
                         >
                           Abrir en nueva pestaña
@@ -196,10 +231,16 @@ export default function AvancesPage() {
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <button className="px-4 py-2 text-sm border border-primary text-primary rounded-lg hover:bg-primary/5 transition-colors">
+                  <button 
+                    onClick={() => window.open('/ayuda/google-drive', '_blank')}
+                    className="px-4 py-2 text-sm border border-primary text-primary rounded-lg hover:bg-primary/5 transition-colors"
+                  >
                     Ver Tutorial
                   </button>
-                  <button className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                  <button 
+                    onClick={() => window.location.href = '/contacto'}
+                    className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                  >
                     Contactar Soporte
                   </button>
                 </div>
