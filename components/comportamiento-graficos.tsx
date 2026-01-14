@@ -21,7 +21,6 @@ import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ChevronDown } from "lucide-react"
 
 interface GraficosProps {
   datos: any[]
@@ -306,9 +305,8 @@ const calcularAnchoEjeY = (datos: any[], esMovil: boolean) => {
   return Math.max(50, maxDigitos * 8 + 20)
 }
 
-// Función para formatear porcentaje: dos decimales si es decimal, ninguno si es entero
 const formatearPorcentaje = (valor: number): string => {
-  const redondeado = Math.round(valor * 100) / 100 // Redondear a 2 decimales
+  const redondeado = Math.round(valor * 100) / 100
   const esEntero = Math.abs(redondeado - Math.round(redondeado)) < 0.001
   
   if (esEntero) {
@@ -317,9 +315,8 @@ const formatearPorcentaje = (valor: number): string => {
   return `${redondeado.toFixed(2)}%`
 }
 
-// Función para formatear porcentaje con 1 decimal para gráficos (cuando se usa toFixed(1))
 const formatearPorcentajeGrafico = (valor: number): string => {
-  const redondeado = Math.round(valor * 10) / 10 // Redondear a 1 decimal
+  const redondeado = Math.round(valor * 10) / 10
   const esEntero = Math.abs(redondeado - Math.round(redondeado)) < 0.01
   
   if (esEntero) {
@@ -328,9 +325,7 @@ const formatearPorcentajeGrafico = (valor: number): string => {
   return `${redondeado.toFixed(1)}%`
 }
 
-// Mapeo de nombres de campos a preguntas legibles COMPLETAS
 const PREGUNTAS_LIKERT: Record<string, string> = {
-  // Determinantes Socioculturales
   conoce_desechos_solidos: "¿Conoce usted qué son los desechos sólidos domiciliarios?",
   cree_comportamiento_adecuado_manejo:
     "¿Cree usted que existe un comportamiento adecuado en el manejo de los desechos sólidos domiciliarios en la comunidad?",
@@ -343,7 +338,6 @@ const PREGUNTAS_LIKERT: Record<string, string> = {
   dedica_tiempo_reducir_reutilizar_reciclar:
     "¿Dedica tiempo para reducir, reutilizar y/o reciclar los desechos sólidos que se generan en el hogar?",
   desechos_solidos_problema_comunidad: "¿Los desechos sólidos son un gran problema para la comunidad?",
-  // Determinantes Afectivos
   preocupa_exceso_desechos: "¿Le preocupa el exceso de desechos sólidos domiciliarios?",
   desechos_contaminan_ambiente:
     "¿Considera que los desechos sólidos domiciliarios intervienen en las consecuencias climáticas?",
@@ -353,7 +347,6 @@ const PREGUNTAS_LIKERT: Record<string, string> = {
     "¿Siente frustración debido a la falta de acciones significativas para abordar la generación de los desechos sólidos?",
   importancia_planeta_futuras_generaciones:
     "¿Considera importante pensar en el tipo de planeta que dejaremos a las futuras generaciones?",
-  // Determinantes Cognitivos
   consciente_impacto_desechos_salud:
     "¿Es consciente del impacto de los desechos sólidos domiciliarios en el medio ambiente?",
   investiga_temas_ambientales: "¿Investiga frecuentemente acerca de temas medio ambientales?",
@@ -362,7 +355,6 @@ const PREGUNTAS_LIKERT: Record<string, string> = {
   beneficios_reutilizar_residuo: "¿Conoce los beneficios de reutilizar un residuo domiciliario?",
   falta_informacion_obstaculo_gestion:
     "¿La falta de información es un obstáculo para la correcta gestión de los residuos sólidos domiciliario?",
-  // Sustentabilidad Ambiental
   desechos_organicos_funcionalidad: "¿Los desechos orgánicos generados en el hogar pueden tener otra funcionalidad?",
   acumulacion_desechos_afecta_salud: "¿La acumulación de desechos afectan a la salud de de la población?",
   reduccion_reciclaje_reutilizacion_cuida_ambiente:
@@ -370,7 +362,6 @@ const PREGUNTAS_LIKERT: Record<string, string> = {
   transformacion_desechos_nuevos_productos:
     "¿Cree que la transformación de desechos sólidos en nuevos productos puede contribuir significativamente a la reducción de la generación de desechos?",
   necesita_info_educacion_ambiental: "¿Necesita más información acerca de educación ambiental?",
-  // Sustentabilidad Económica
   practica_separacion_reciclaje_ingreso:
     "¿En su hogar practica la separación de los desechos para el reciclaje y le representa algún ingreso?",
   desechos_hogar_reutilizados:
@@ -381,7 +372,6 @@ const PREGUNTAS_LIKERT: Record<string, string> = {
     "¿Los emprendimientos en base a la reutilización de los desechos aporta a su economía?",
   manejo_adecuado_desechos_oportunidad_emprendimiento:
     "¿El manejo adecuado de los desechos sólidos domiciliarios ofrece oportunidades para el emprendimiento?",
-  // Desarrollo Comunitario
   reducir_residuos_eventos_concientizacion:
     "¿Es posible reducir la generación de residuos sólidos domiciliarios por medio de eventos de concientización?",
   participaria_talleres_buenas_practicas:
@@ -403,7 +393,6 @@ const generarTablaLikertPorSeccion = (datos: any[], seccionSeleccionada: string)
   return Object.entries(seccion.grupos).map(([key, grupo]) => {
     const opcionesLikert = ["Totalmente desacuerdo", "Desacuerdo", "Indiferente", "De acuerdo", "Totalmente de acuerdo"]
 
-    // CONTARA: contar cuántas veces aparece cada opción
     const conteos: Record<string, number> = {}
     opcionesLikert.forEach((opcion) => {
       conteos[opcion] = 0
@@ -419,7 +408,6 @@ const generarTablaLikertPorSeccion = (datos: any[], seccionSeleccionada: string)
       }
     })
 
-    // Calcular promedio ponderado
     const suma =
       conteos["Totalmente desacuerdo"] * 1 +
       conteos["Desacuerdo"] * 2 +
@@ -436,296 +424,6 @@ const generarTablaLikertPorSeccion = (datos: any[], seccionSeleccionada: string)
       promedio,
     }
   })
-}
-
-function GraficosPorSeccion({ datos, seccion }: { datos: any[]; seccion: string }) {
-  const [tipoGrafico, setTipoGrafico] = useState<"barras" | "torta" | "lineal">("barras")
-  const [esMovil, setEsMovil] = useState(false)
-
-  useEffect(() => {
-    const verificarMovil = () => {
-      setEsMovil(window.innerWidth < 768)
-    }
-    verificarMovil()
-    window.addEventListener("resize", verificarMovil)
-    return () => window.removeEventListener("resize", verificarMovil)
-  }, [])
-
-  const datosSeccion = datos.filter((item) => item.seccion === seccion)
-  const datosGrafico = datosSeccion.map((item) => ({
-    name: item.pregunta,
-    ...item.respuestas,
-    respuestas: item.respuestas,
-  }))
-  const respuestasKeys = datosSeccion.length > 0 ? Object.keys(datosSeccion[0].respuestas) : []
-
-  const datosGraficoTorta = respuestasKeys.map((key) => ({
-    name: key,
-    value: datosSeccion.reduce((acc, item) => acc + (item.respuestas[key] || 0), 0),
-    porcentaje:
-      (datosSeccion.reduce((acc, item) => acc + (item.respuestas[key] || 0), 0) /
-        datosSeccion.reduce(
-          (acc, item) => acc + Object.values(item.respuestas).reduce((a: any, b: any) => a + b, 0),
-          0,
-        )) *
-      100,
-  }))
-
-  const datosTabla = datosSeccion.map((item) => ({
-    pregunta: item.pregunta,
-    respuestas: item.respuestas,
-  }))
-
-  const anchoEjeY = calcularAnchoEjeY(datosGraficoTorta, esMovil)
-  const margenBarras = esMovil
-    ? { top: 20, right: 5, left: 10, bottom: 80 }
-    : { top: 30, right: 30, left: anchoEjeY, bottom: 100 }
-  const margenLineal = esMovil
-    ? { top: 20, right: 5, left: 15, bottom: 80 }
-    : { top: 30, right: 30, left: anchoEjeY + 80, bottom: 100 }
-
-  return (
-    <Card className="p-3 sm:p-4 md:p-6 border border-border">
-      <div className="mb-4 sm:mb-6 md:mb-8">
-        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 sm:mb-4 md:mb-6">{seccion}</h3>
-        <div className="flex gap-2 sm:gap-3 flex-wrap">
-          <Button
-            onClick={() => setTipoGrafico("barras")}
-            variant={tipoGrafico === "barras" ? "default" : "outline"}
-            size="sm"
-            className={tipoGrafico === "barras" ? "bg-primary text-white hover:bg-primary" : "text-xs sm:text-sm"}
-          >
-            Gráfico de Barras
-          </Button>
-          <Button
-            onClick={() => setTipoGrafico("torta")}
-            variant={tipoGrafico === "torta" ? "default" : "outline"}
-            size="sm"
-            className={tipoGrafico === "torta" ? "bg-primary text-white hover:bg-primary" : "text-xs sm:text-sm"}
-          >
-            Gráfico Circular
-          </Button>
-          <Button
-            onClick={() => setTipoGrafico("lineal")}
-            variant={tipoGrafico === "lineal" ? "default" : "outline"}
-            size="sm"
-            className={tipoGrafico === "lineal" ? "bg-primary text-white hover:bg-primary" : "text-xs sm:text-sm"}
-          >
-            Gráfico de Línea
-          </Button>
-        </div>
-      </div>
-
-      <Tabs defaultValue="graficos" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="graficos" className="text-xs sm:text-sm">
-            Gráficos
-          </TabsTrigger>
-          <TabsTrigger value="tabla" className="text-xs sm:text-sm">
-            Datos Detallados
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="graficos" className="w-full overflow-hidden">
-          {tipoGrafico === "barras" && (
-            <div className="w-full" style={{ height: esMovil ? "450px" : "550px" }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={datosGrafico} margin={margenBarras}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    height={esMovil ? 100 : 120}
-                    fontSize={esMovil ? 9 : 12}
-                    tick={{ fill: "#4b5563" }}
-                    interval={0}
-                  />
-                  <YAxis fontSize={esMovil ? 10 : 12} tick={{ fill: "#4b5563" }} width={esMovil ? 35 : 60} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#fff",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: "6px",
-                      fontSize: esMovil ? "11px" : "14px",
-                    }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: esMovil ? "10px" : "12px" }} iconSize={esMovil ? 10 : 14} />
-                  {respuestasKeys.map((key, index) => (
-                    <Bar
-                      key={key}
-                      dataKey={`respuestas.${key}`}
-                      fill={COLORS[index % COLORS.length].bg}
-                      stroke={COLORS[index % COLORS.length].border}
-                      strokeWidth={2}
-                      radius={[6, 6, 0, 0]}
-                      name={key}
-                    />
-                  ))}
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-
-          {tipoGrafico === "torta" && (
-            <div className="w-full" style={{ height: esMovil ? "550px" : "600px" }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={datosGraficoTorta}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={(entry: any) => {
-                      const porcentaje = entry.porcentaje ?? 0
-                      if (esMovil && porcentaje < 5) return ""
-                      if (!esMovil && porcentaje < 2) return ""
-                      return formatearPorcentajeGrafico(porcentaje)
-                    }}
-                    outerRadius={esMovil ? 70 : 160}
-                    innerRadius={esMovil ? 35 : 80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    paddingAngle={2}
-                    activeIndex={undefined}
-                    activeShape={{
-                      outerRadius: esMovil ? 75 : 170,
-                      stroke: "#fff",
-                      strokeWidth: 3,
-                    }}
-                  >
-                    {datosGraficoTorta.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={SOLID_COLORS[index % SOLID_COLORS.length]}
-                        stroke="#fff"
-                        strokeWidth={2}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value) => `${value} respuestas`}
-                    contentStyle={{
-                      backgroundColor: "#fff",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: "6px",
-                      fontSize: esMovil ? "11px" : "14px",
-                    }}
-                  />
-                  <Legend
-                    verticalAlign="bottom"
-                    height={esMovil ? 180 : 150}
-                    wrapperStyle={{
-                      paddingTop: esMovil ? "10px" : "20px",
-                      fontSize: esMovil ? "8px" : "11px",
-                      maxHeight: esMovil ? "180px" : "150px",
-                      overflowY: "auto",
-                    }}
-                    formatter={(value, entry: any) => {
-                      const porcentaje = entry.payload?.porcentaje ?? 0
-                      return `${value} (${formatearPorcentajeGrafico(porcentaje)})`
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-
-          {tipoGrafico === "lineal" && (
-            <div className="w-full" style={{ height: esMovil ? "450px" : "550px" }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={datosGrafico} margin={margenLineal}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    height={esMovil ? 100 : 120}
-                    fontSize={esMovil ? 9 : 12}
-                    tick={{ fill: "#4b5563" }}
-                    interval={0}
-                  />
-                  <YAxis fontSize={esMovil ? 10 : 12} tick={{ fill: "#4b5563" }} width={esMovil ? 35 : 60} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#fff",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: "6px",
-                      fontSize: esMovil ? "11px" : "14px",
-                    }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: esMovil ? "10px" : "12px" }} iconSize={esMovil ? 10 : 14} />
-                  {respuestasKeys.map((key, index) => (
-                    <Line
-                      key={key}
-                      type="monotone"
-                      dataKey={`respuestas.${key}`}
-                      stroke={COLORS[index % COLORS.length].border}
-                      strokeWidth={esMovil ? 2 : 3}
-                      dot={{
-                        fill: COLORS[index % COLORS.length].bg,
-                        stroke: "#fff",
-                        strokeWidth: 2,
-                        r: esMovil ? 4 : 6,
-                      }}
-                      name={key}
-                    />
-                  ))}
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-        </TabsContent>
-
-        <TabsContent value="tabla" className="w-full overflow-x-auto">
-          <div className="hidden md:block">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[40%] text-xs lg:text-sm">Pregunta</TableHead>
-                  {respuestasKeys.map((key) => (
-                    <TableHead key={key} className="text-center text-xs lg:text-sm">
-                      {key}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {datosTabla.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium text-xs lg:text-sm">{item.pregunta}</TableCell>
-                    {respuestasKeys.map((key) => (
-                      <TableCell key={key} className="text-center text-xs lg:text-sm">
-                        {item.respuestas[key] || 0}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="md:hidden space-y-4">
-            {datosTabla.map((item, index) => (
-              <Card key={index} className="p-4 border border-border">
-                <h4 className="font-bold text-sm text-foreground mb-3">{item.pregunta}</h4>
-                <div className="space-y-2">
-                  {respuestasKeys.map((key) => (
-                    <div
-                      key={key}
-                      className="flex justify-between items-center py-1 border-b border-border/50 last:border-0"
-                    >
-                      <span className="text-xs text-foreground/70">{key}</span>
-                      <span className="text-xs font-semibold text-foreground">{item.respuestas[key] || 0}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
-    </Card>
-  )
 }
 
 function ComportamientoGraficos({ datos }: GraficosProps) {
@@ -901,42 +599,6 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
     ? { top: 20, right: 5, left: 15, bottom: 80 }
     : { top: 30, right: 30, left: anchoEjeY + 80, bottom: 100 }
 
-  // Función para obtener la pregunta completa de un grupo
-  const obtenerPreguntaCompleta = (grupo: any) => {
-    if (seccionSeleccionada === "distribucion-demografica") {
-      return grupo.nombre
-    }
-    return PREGUNTAS_LIKERT[grupo.campo as keyof typeof PREGUNTAS_LIKERT] || grupo.nombre
-  }
-
-  // Función para mostrar texto en el selector
-  const obtenerTextoSelector = () => {
-    const seccion = SECCIONES[seccionSeleccionada as keyof typeof SECCIONES]
-    const grupo = seccion?.grupos[grupoSeleccionado as keyof typeof seccion.grupos]
-    
-    if (!grupo) return "Seleccionar variable"
-    
-    const preguntaCompleta = obtenerPreguntaCompleta(grupo)
-    
-    // Para móvil, mostrar desde el signo de pregunta hasta donde alcance
-    if (esMovil && seccionSeleccionada !== "distribucion-demografica") {
-      // Encontrar el primer signo de pregunta
-      const indicePregunta = preguntaCompleta.indexOf("¿")
-      if (indicePregunta !== -1) {
-        const textoDesdePregunta = preguntaCompleta.substring(indicePregunta)
-        
-        // Si el texto es muy largo, cortar y agregar puntos suspensivos
-        if (textoDesdePregunta.length > 40) {
-          return textoDesdePregunta.substring(0, 37) + "..."
-        }
-        return textoDesdePregunta
-      }
-    }
-    
-    // Para PC o secciones sin signo de pregunta, mostrar texto completo
-    return preguntaCompleta
-  }
-
   return (
     <div className="space-y-8">
       <Tabs
@@ -976,7 +638,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                       <SelectValue>
                         <div className="pr-4 overflow-hidden text-left">
                           <span className="font-medium text-foreground text-sm sm:text-base whitespace-normal break-words line-clamp-2">
-                            {obtenerTextoSelector()}
+                            {seccion.grupos[grupoSeleccionado as keyof typeof seccion.grupos]?.nombre}
                           </span>
                         </div>
                       </SelectValue>
@@ -993,7 +655,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                         >
                           <div className="flex flex-col">
                             <span className="font-medium text-sm sm:text-base mb-1 text-foreground whitespace-normal break-words leading-tight">
-                              {obtenerPreguntaCompleta(grupo)}
+                              {grupo.nombre}
                             </span>
                           </div>
                         </SelectItem>
@@ -1220,37 +882,35 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                 {seccionKey === "distribucion-demografica" && tablasSeccion && tablasSeccion.length > 0 && (
                   <div className="space-y-6 sm:space-y-8">
                     {tablasSeccion?.map((tabla, idx) => (
-                      <div key={idx}>
+                      <div key={idx} className="w-full overflow-hidden">
                         <h4 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">
                           {tabla.nombreGrupo}
                         </h4>
-                        <div className="w-full overflow-x-auto">
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead className="font-bold text-xs sm:text-sm">Categoría</TableHead>
-                                <TableHead className="font-bold text-right text-xs sm:text-sm">Cantidad</TableHead>
-                                <TableHead className="font-bold text-right text-xs sm:text-sm">% del Total</TableHead>
+                        <Table className="w-full table-auto">
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="font-bold text-xs sm:text-sm w-1/3">Categoría</TableHead>
+                              <TableHead className="font-bold text-right text-xs sm:text-sm w-1/3">Cantidad</TableHead>
+                              <TableHead className="font-bold text-right text-xs sm:text-sm w-1/3">% del Total</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {tabla.datos.map((fila, idx2) => (
+                              <TableRow key={idx2}>
+                                <TableCell className="font-medium text-xs sm:text-sm w-1/3">{fila.name}</TableCell>
+                                <TableCell className="text-right text-xs sm:text-sm w-1/3">{fila.value}</TableCell>
+                                <TableCell className="text-right text-xs sm:text-sm w-1/3">
+                                  {formatearPorcentaje(fila.porcentaje)}
+                                </TableCell>
                               </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {tabla.datos.map((fila, idx2) => (
-                                <TableRow key={idx2}>
-                                  <TableCell className="font-medium text-xs sm:text-sm">{fila.name}</TableCell>
-                                  <TableCell className="text-right text-xs sm:text-sm">{fila.value}</TableCell>
-                                  <TableCell className="text-right text-xs sm:text-sm">
-                                    {formatearPorcentaje(fila.porcentaje)}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                              <TableRow className="bg-muted/50 font-bold">
-                                <TableCell className="text-xs sm:text-sm">Total</TableCell>
-                                <TableCell className="text-right text-xs sm:text-sm">{tabla.total}</TableCell>
-                                <TableCell className="text-right text-xs sm:text-sm">100%</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </div>
+                            ))}
+                            <TableRow className="bg-muted/50 font-bold">
+                              <TableCell className="text-xs sm:text-sm w-1/3">Total</TableCell>
+                              <TableCell className="text-right text-xs sm:text-sm w-1/3">{tabla.total}</TableCell>
+                              <TableCell className="text-right text-xs sm:text-sm w-1/3">100%</TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
                       </div>
                     ))}
                   </div>
@@ -1258,23 +918,22 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
 
                 {seccionKey !== "distribucion-demografica" && tablasLikert && tablasLikert.length > 0 && (
                   <div className="space-y-6 sm:space-y-8">
-                    <div className="w-full">
-                      {/* Versión Desktop: Tabla tradicional */}
+                    <div className="w-full overflow-hidden">
                       <div className="hidden lg:block">
-                        <Table>
+                        <Table className="w-full table-auto">
                           <TableHeader>
                             <TableRow>
-                              <TableHead className="font-bold">Pregunta</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap">
+                              <TableHead className="font-bold w-[40%] min-w-[300px]">Pregunta</TableHead>
+                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[120px]">
                                 Totalmente Desacuerdo
                               </TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap">Desacuerdo</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap">Indiferente</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap">De Acuerdo</TableHead>
-                              <TableHead className="font-bold text-center whitespace-nowrap">
+                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[100px]">Desacuerdo</TableHead>
+                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[100px]">Indiferente</TableHead>
+                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[100px]">De Acuerdo</TableHead>
+                              <TableHead className="font-bold text-center whitespace-nowrap w-[10%] min-w-[120px]">
                                 Totalmente Acuerdo
                               </TableHead>
-                              <TableHead className="font-bold text-center bg-muted whitespace-nowrap">
+                              <TableHead className="font-bold text-center bg-muted whitespace-nowrap w-[10%] min-w-[80px]">
                                 Promedio
                               </TableHead>
                             </TableRow>
@@ -1282,42 +941,42 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                           <TableBody>
                             {tablasLikert.map((tabla, idx) => (
                               <TableRow key={idx}>
-                                <TableCell className="font-medium text-sm leading-tight py-3">
+                                <TableCell className="font-medium text-sm leading-tight py-3 w-[40%] min-w-[300px]">
                                   {tabla.pregunta}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3">
+                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[120px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Totalmente desacuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3">
+                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[100px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Desacuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3">
+                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[100px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Indiferente"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3">
+                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[100px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["De acuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center text-sm py-3">
+                                <TableCell className="text-center text-sm py-3 w-[10%] min-w-[120px]">
                                   {tabla.totalEncuestas > 0
                                     ? formatearPorcentaje((tabla.conteos["Totalmente de acuerdo"] / tabla.totalEncuestas) * 100)
                                     : "0%"}
                                 </TableCell>
-                                <TableCell className="text-center bg-muted font-bold text-sm py-3">
+                                <TableCell className="text-center bg-muted font-bold text-sm py-3 w-[10%] min-w-[80px]">
                                   {formatearPorcentaje(tabla.promedio)}
                                 </TableCell>
                               </TableRow>
                             ))}
                             <TableRow className="bg-muted/70">
-                              <TableCell className="font-bold text-sm py-3">Promedio General</TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3">
+                              <TableCell className="font-bold text-sm py-3 w-[40%] min-w-[300px]">Promedio General</TableCell>
+                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[120px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1327,7 +986,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3">
+                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[100px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1337,7 +996,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3">
+                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[100px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1347,7 +1006,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3">
+                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[100px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1357,7 +1016,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center font-bold text-sm py-3">
+                              <TableCell className="text-center font-bold text-sm py-3 w-[10%] min-w-[120px]">
                                 {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce(
@@ -1367,7 +1026,7 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                                     )
                                   : "0%"}
                               </TableCell>
-                              <TableCell className="text-center bg-muted font-bold text-sm py-3">
+                              <TableCell className="text-center bg-muted font-bold text-sm py-3 w-[10%] min-w-[80px]">
                                 {tablasLikert.length > 0
                                   ? formatearPorcentaje(
                                       tablasLikert.reduce((sum, t) => sum + t.promedio, 0) / tablasLikert.length
@@ -1433,88 +1092,6 @@ function ComportamientoGraficos({ datos }: GraficosProps) {
                             </div>
                           </div>
                         ))}
-
-                        {/* Promedio General en mobile */}
-                        <div className="border rounded-lg p-4 bg-muted/70">
-                          <h5 className="font-bold text-sm mb-4">Promedio General</h5>
-                          <div className="grid grid-cols-2 gap-3 text-xs">
-                            <div>
-                              <span className="text-muted-foreground block mb-1">Totalmente Desacuerdo</span>
-                              <span className="font-semibold">
-                                {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
-                                  ? formatearPorcentaje(
-                                      tablasLikert.reduce(
-                                        (sum, t) => sum + (t.conteos["Totalmente desacuerdo"] / t.totalEncuestas) * 100,
-                                        0,
-                                      ) / tablasLikert.length
-                                    )
-                                  : "0%"}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground block mb-1">Desacuerdo</span>
-                              <span className="font-semibold">
-                                {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
-                                  ? formatearPorcentaje(
-                                      tablasLikert.reduce(
-                                        (sum, t) => sum + (t.conteos["Desacuerdo"] / t.totalEncuestas) * 100,
-                                        0,
-                                      ) / tablasLikert.length
-                                    )
-                                  : "0%"}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground block mb-1">Indiferente</span>
-                              <span className="font-semibold">
-                                {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
-                                  ? formatearPorcentaje(
-                                      tablasLikert.reduce(
-                                        (sum, t) => sum + (t.conteos["Indiferente"] / t.totalEncuestas) * 100,
-                                        0,
-                                      ) / tablasLikert.length
-                                    )
-                                  : "0%"}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground block mb-1">De Acuerdo</span>
-                              <span className="font-semibold">
-                                {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
-                                  ? formatearPorcentaje(
-                                      tablasLikert.reduce(
-                                        (sum, t) => sum + (t.conteos["De acuerdo"] / t.totalEncuestas) * 100,
-                                        0,
-                                      ) / tablasLikert.length
-                                    )
-                                  : "0%"}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground block mb-1">Totalmente Acuerdo</span>
-                              <span className="font-semibold">
-                                {tablasLikert.length > 0 && tablasLikert[0].totalEncuestas > 0
-                                  ? formatearPorcentaje(
-                                      tablasLikert.reduce(
-                                        (sum, t) => sum + (t.conteos["Totalmente de acuerdo"] / t.totalEncuestas) * 100,
-                                        0,
-                                      ) / tablasLikert.length
-                                    )
-                                  : "0%"}
-                              </span>
-                            </div>
-                            <div className="col-span-2 mt-2 pt-2 border-t">
-                              <span className="text-muted-foreground block mb-1">Promedio Total</span>
-                              <span className="font-bold text-base">
-                                {tablasLikert.length > 0
-                                  ? formatearPorcentaje(
-                                      tablasLikert.reduce((sum, t) => sum + t.promedio, 0) / tablasLikert.length
-                                    )
-                                  : "0%"}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
