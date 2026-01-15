@@ -3,39 +3,10 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useState } from "react"
-import { 
-  RefreshCw, 
-  ExternalLink, 
-  Folder, 
-  FileText, 
-  BarChart3, 
-  Download,
-  Calendar,
-  Users,
-  Shield,
-  Zap
-} from "lucide-react"
 
 export default function AvancesPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
   const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list";
-
-  // Datos de ejemplo para estadísticas
-  const stats = [
-    { label: "Documentos Activos", value: "156", icon: FileText, color: "text-blue-600", bgColor: "bg-blue-50" },
-    { label: "Carpetas", value: "24", icon: Folder, color: "text-green-600", bgColor: "bg-green-50" },
-    { label: "Última Actualización", value: "Hoy", icon: Calendar, color: "text-purple-600", bgColor: "bg-purple-50" },
-    { label: "Colaboradores", value: "18", icon: Users, color: "text-orange-600", bgColor: "bg-orange-50" },
-  ];
-
-  // Tipos de documentos comunes
-  const fileTypes = [
-    { type: "PDF", count: 45, color: "bg-red-100 text-red-800" },
-    { type: "Word", count: 67, color: "bg-blue-100 text-blue-800" },
-    { type: "Excel", count: 32, color: "bg-green-100 text-green-800" },
-    { type: "PPT", count: 12, color: "bg-yellow-100 text-yellow-800" },
-  ];
 
   const handleOpenInNewTab = () => {
     window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank');
@@ -51,310 +22,188 @@ export default function AvancesPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
       <Header />
-      
-      {/* Header con gradiente profesional */}
-      <div className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="container mx-auto px-4 py-12 sm:py-16 md:py-20 relative">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium mb-6">
-              <Zap className="w-4 h-4 mr-2" />
-              PLATAFORMA DE GESTIÓN DOCUMENTAL
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Centro de <span className="text-blue-300">Documentación</span>
+      <main className="flex-grow w-full">
+        <section className="gradient-eco text-white py-12 sm:py-16 md:py-20 lg:py-28 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/5"></div>
+          <div className="container-safe relative z-10">
+            <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-white text-xs font-medium mb-4">
+              SEGUIMIENTO Y PROGRESO
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-balance leading-tight">
+              Avances
             </h1>
-            <p className="text-lg sm:text-xl text-blue-100 max-w-2xl leading-relaxed">
-              Acceso centralizado a documentos, reportes y avances del programa ambiental. 
-              Datos actualizados en tiempo real con seguridad empresarial.
+            <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl text-balance leading-relaxed">
+              Visualización en tiempo real de documentos y reportes ambientales almacenados en Google Drive.
             </p>
           </div>
-        </div>
-      </div>
-
-      <main className="flex-grow w-full">
-        {/* Panel de estadísticas */}
-        <section className="py-8 bg-white border-b">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stats.map((stat, index) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={index} className={`${stat.bgColor} p-4 rounded-xl border`}>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                        <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-                      </div>
-                      <Icon className={`w-8 h-8 ${stat.color}`} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </section>
 
-        {/* Contenido principal */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              
-              {/* Sidebar izquierdo */}
-              <div className="lg:col-span-1 space-y-6">
+        {/* Visualización de Google Drive */}
+        <section className="py-12 sm:py-16 md:py-20 lg:py-28 bg-background">
+          <div className="container-safe">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
+              {/* Columna izquierda - Información */}
+              <div className="lg:col-span-1">
+                <span className="inline-block px-3 py-1 rounded-full bg-accent-lighter text-accent font-medium text-xs mb-6">
+                  VISTA DIRECTA
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary-text mb-6">
+                  Documentos en Google Drive
+                </h2>
                 
-                {/* Panel de control */}
-                <div className="bg-white rounded-2xl border p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                    <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
-                    Panel de Control
-                  </h3>
-                  <div className="space-y-3">
-                    <button 
-                      onClick={handleRefreshView}
-                      disabled={isRefreshing}
-                      className="w-full flex items-center justify-between p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors"
-                    >
-                      <div className="flex items-center">
-                        <RefreshCw className={`w-4 h-4 mr-3 ${isRefreshing ? 'animate-spin' : ''} text-blue-600`} />
-                        <span className="font-medium text-gray-900">
-                          {isRefreshing ? 'Actualizando...' : 'Sincronizar Ahora'}
-                        </span>
-                      </div>
-                      <span className="text-xs text-gray-500">Ctrl+R</span>
-                    </button>
-                    
-                    <button 
-                      onClick={handleOpenInNewTab}
-                      className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center">
-                        <ExternalLink className="w-4 h-4 mr-3 text-gray-600" />
-                        <span className="font-medium text-gray-900">Abrir en Drive</span>
-                      </div>
-                      <span className="text-xs text-gray-500">↗</span>
-                    </button>
-                    
-                    <button className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <div className="flex items-center">
-                        <Download className="w-4 h-4 mr-3 text-gray-600" />
-                        <span className="font-medium text-gray-900">Exportar Metadatos</span>
-                      </div>
-                      <span className="text-xs text-gray-500">CSV</span>
-                    </button>
+                <div className="space-y-6">
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
+                    <h3 className="font-semibold text-primary-text mb-2 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                      </svg>
+                      Carpetas Disponibles
+                    </h3>
+                    <ul className="text-sm text-secondary-text space-y-2 mt-3">
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
+                        Reportes Mensuales
+                      </li>
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                        Datos de Indicadores
+                      </li>
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                        Documentos Técnicos
+                      </li>
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                        Planes de Acción
+                      </li>
+                    </ul>
                   </div>
-                </div>
 
-                {/* Tipos de archivos */}
-                <div className="bg-white rounded-2xl border p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-4">Distribución por Tipo</h3>
-                  <div className="space-y-3">
-                    {fileTypes.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className={`w-3 h-3 rounded-full mr-3 ${file.color.split(' ')[0]}`}></div>
-                          <span className="text-sm font-medium text-gray-700">{file.type}</span>
-                        </div>
-                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${file.color}`}>
-                          {file.count}
-                        </span>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h3 className="font-semibold text-primary-text mb-3">Información</h3>
+                    <div className="space-y-3 text-sm text-secondary-text">
+                      <div className="flex items-start">
+                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <span>Conexión activa con Google Drive</span>
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Info de seguridad */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-6">
-                  <div className="flex items-start mb-4">
-                    <Shield className="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Seguridad Empresarial</h4>
-                      <p className="text-sm text-gray-600 mt-1">
-                        Todos los documentos están protegidos con encriptación de nivel empresarial.
-                      </p>
+                      <div className="flex items-start">
+                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M19 4h-4.18C14.4 2.84 13.3 2 12 2c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
+                        </svg>
+                        <span>Documentos actualizados automáticamente</span>
+                      </div>
+                      <div className="flex items-start">
+                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        <span>Acceso seguro y controlado</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 space-y-2">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span>Acceso verificado en tiempo real</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span>Registro de auditoría completo</span>
-                    </div>
-                  </div>
-                </div>
 
+                  <button 
+                    onClick={handleOpenInNewTab}
+                    className="w-full p-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center font-medium"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"/>
+                    </svg>
+                    Abrir en Google Drive
+                  </button>
+                </div>
               </div>
 
-              {/* Contenido principal - Google Drive */}
+              {/* Columna derecha - Vista de Drive */}
               <div className="lg:col-span-3">
-                
-                {/* Header del viewer */}
-                <div className="bg-white rounded-2xl border shadow-sm mb-6">
-                  <div className="p-6 border-b">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="card-elevated overflow-hidden h-full border border-gray-200">
+                  {/* Encabezado simplificado */}
+                  <div className="p-4 sm:p-6 border-b border-gray-200 bg-gray-50">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900">
-                          Biblioteca de Documentos
-                        </h2>
-                        <p className="text-gray-600 mt-1">
-                          Carpeta: <span className="font-semibold text-blue-600">Avances Ambientales</span>
-                          <span className="mx-2">•</span>
-                          <span className="text-green-600 font-medium">Conectado</span>
+                        <h3 className="text-lg sm:text-xl font-semibold text-primary-text">
+                          Carpeta Compartida: Avances Ambientales
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Contenido actualizado en tiempo real desde Google Drive
                         </p>
                       </div>
-                      
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                          <button 
-                            onClick={() => setActiveView('grid')}
-                            className={`p-2 rounded ${activeView === 'grid' ? 'bg-white shadow' : ''}`}
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                          </button>
-                          <button 
-                            onClick={() => setActiveView('list')}
-                            className={`p-2 rounded ${activeView === 'list' ? 'bg-white shadow' : ''}`}
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                          </button>
-                        </div>
-                        
-                        <div className="relative">
-                          <input
-                            type="text"
-                            placeholder="Buscar documentos..."
-                            className="pl-10 pr-4 py-2 border rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          <svg className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Google Drive Viewer */}
-                  <div className="relative">
-                    <div className="absolute top-4 right-4 z-10">
-                      <div className="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-sm border">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                          Sincronizado en tiempo real
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Vista de Google Drive */}
-                    <div className="relative h-[600px] overflow-hidden bg-gray-900">
-                      <iframe
-                        src={driveFolderUrl}
-                        className="w-full h-full"
-                        frameBorder="0"
-                        title="Google Drive - Biblioteca de Documentos"
-                        allow="autoplay; fullscreen"
-                        allowFullScreen
-                        key={isRefreshing ? "refreshing" : "normal"}
-                      />
-                      
-                      {/* Overlay profesional */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                        <div className="flex items-center justify-between">
-                          <div className="text-white">
-                            <p className="text-sm font-medium">Carpeta: Avances Ambientales</p>
-                            <p className="text-xs text-gray-300">ID: 1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG</p>
-                          </div>
-                          <button 
-                            onClick={handleOpenInNewTab}
-                            className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-colors"
-                          >
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            Abrir en Drive
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Información adicional */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white rounded-xl border p-6">
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                        <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6Z" />
+                      <button 
+                        onClick={handleRefreshView}
+                        disabled={isRefreshing}
+                        className="px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center justify-center sm:w-auto w-full"
+                      >
+                        <svg 
+                          className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">Integración Nativa</h4>
-                        <p className="text-sm text-gray-600">Sincronización directa con Google Drive</p>
+                        {isRefreshing ? 'Actualizando...' : 'Actualizar Vista'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Vista principal de Google Drive */}
+                  <div className="relative">
+                    <iframe
+                      src={driveFolderUrl}
+                      className="w-full h-[500px] sm:h-[600px] md:h-[700px]"
+                      frameBorder="0"
+                      title="Google Drive - Avances Ambientales"
+                      allow="autoplay; fullscreen"
+                      allowFullScreen
+                      key={isRefreshing ? "refreshing" : "normal"}
+                    />
+                    
+                    {/* Indicador de conexión */}
+                    <div className="absolute bottom-4 right-4">
+                      <div className="flex items-center px-3 py-2 bg-black/80 text-white text-xs rounded-lg backdrop-blur-sm">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                        Conexión activa
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl border p-6">
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                        <RefreshCw className="w-6 h-6 text-green-600" />
+                  {/* Estadísticas simples */}
+                  <div className="p-4 bg-gray-50 border-t border-gray-200">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-primary-text">Tiempo Real</div>
+                        <div className="text-sm text-gray-600">Actualización</div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">Actualización Automática</h4>
-                        <p className="text-sm text-gray-600">Cambios reflejados instantáneamente</p>
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-primary-text">Solo Lectura</div>
+                        <div className="text-sm text-gray-600">Modo de Vista</div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white rounded-xl border p-6">
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
-                        <Users className="w-6 h-6 text-purple-600" />
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-primary-text">Google Drive</div>
+                        <div className="text-sm text-gray-600">Plataforma</div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">Colaboración en Tiempo Real</h4>
-                        <p className="text-sm text-gray-600">Múltiples usuarios simultáneos</p>
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-primary-text">Seguro</div>
+                        <div className="text-sm text-gray-600">Conexión</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer de la sección */}
-        <section className="py-8 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <div>
-                <h3 className="text-xl font-bold mb-2">Sistema de Gestión Documental</h3>
-                <p className="text-gray-300 text-sm">
-                  Plataforma empresarial para la gestión centralizada de documentos ambientales
-                </p>
-              </div>
-              <div className="mt-4 md:mt-0 flex items-center space-x-4">
-                <div className="flex items-center text-sm">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                  Sistema Operativo
-                </div>
-                <div className="text-xs text-gray-400">
-                  Última verificación: {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                {/* Nota informativa simple */}
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium text-primary-text">Nota:</span> Esta vista muestra el contenido de la carpeta compartida en Google Drive. Para editar o subir archivos, haz clic en "Abrir en Google Drive".
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   )
