@@ -77,22 +77,6 @@ export default function AvancesPage() {
                     </ul>
                   </div>
 
-                  {/* Instrucciones para desplegar carpetas */}
-                  <div className="mb-8 p-4 bg-yellow-50 border border-yellow-100 rounded-lg">
-                    <h4 className="font-semibold text-yellow-800 mb-2 flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd"/>
-                      </svg>
-                      Cómo ver carpetas
-                    </h4>
-                    <ul className="text-sm text-yellow-700 space-y-1">
-                      <li>• Haz clic en las <span className="font-medium">flechas ▼</span> junto a las carpetas</li>
-                      <li>• Se despliegan los archivos dentro de cada carpeta</li>
-                      <li>• Haz clic nuevamente para contraer</li>
-                      <li>• Funciona con las carpetas reales de Google Drive</li>
-                    </ul>
-                  </div>
-
                   <a
                     href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG"
                     target="_blank"
@@ -140,24 +124,6 @@ export default function AvancesPage() {
                       allow="autoplay; fullscreen"
                       loading="lazy"
                     />
-                  </div>
-                </div>
-
-                {/* Información sobre funcionalidad de Google Drive */}
-                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                  <div className="flex items-start">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                      <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-1">Funcionalidad de carpetas</h4>
-                      <p className="text-sm text-gray-600">
-                        Las carpetas en Google Drive tienen flechas de despliegue (▼) para mostrar su contenido. 
-                        Esta funcionalidad es nativa de Google Drive y se mantiene en la vista embebida.
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
