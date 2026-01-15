@@ -4,13 +4,14 @@ import { Footer } from "@/components/footer";
 import GoogleDriveViewer from "@/components/google-drive-viewer";
 import { FileText, TrendingUp, BarChart, RefreshCw } from 'lucide-react';
 
+// Este componente debe SER SIEMPRE SERVER COMPONENT
 export default function AvancesPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
       <Header />
       
       <main className="flex-grow w-full">
-        {/* Hero Section */}
+        {/* Hero Section - Sin interactividad */}
         <section className="gradient-eco text-white py-12 sm:py-16 md:py-20 lg:py-28 relative overflow-hidden">
           <div className="absolute inset-0 bg-black/5"></div>
           <div className="absolute top-10 right-10 opacity-10">
@@ -29,7 +30,7 @@ export default function AvancesPage() {
               Toda la información se actualiza automáticamente.
             </p>
             
-            {/* Estadísticas rápidas */}
+            {/* Estadísticas rápidas - Solo elementos estáticos */}
             <div className="flex flex-wrap gap-4 mt-8">
               <div className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
                 <TrendingUp className="w-5 h-5" />
@@ -46,7 +47,7 @@ export default function AvancesPage() {
         {/* Sección principal con Google Drive */}
         <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-background">
           <div className="container-safe">
-            {/* Tarjetas informativas superiores */}
+            {/* Tarjetas informativas superiores - Solo estáticas */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
               <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
@@ -85,7 +86,7 @@ export default function AvancesPage() {
               </div>
             </div>
 
-            {/* Componente de Google Drive */}
+            {/* Componente de Google Drive - Client Component */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
               <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -120,7 +121,7 @@ export default function AvancesPage() {
               </div>
             </div>
 
-            {/* Información adicional */}
+            {/* Información adicional - Solo enlaces estáticos */}
             <div className="mt-10 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8">
               <div className="max-w-3xl mx-auto text-center">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
@@ -139,12 +140,12 @@ export default function AvancesPage() {
                   >
                     Agregar archivos a Drive
                   </a>
-                  <button
-                    onClick={() => window.location.reload()}
+                  <a
+                    href="/avances"
                     className="px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                   >
-                    Actualizar página
-                  </button>
+                    Recargar página
+                  </a>
                 </div>
               </div>
             </div>
