@@ -4,6 +4,15 @@ import { Footer } from "@/components/footer"
 export default function AvancesPage() {
   const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list"
 
+  const handleRefresh = () => {
+    // Obtener el iframe
+    const iframe = document.querySelector('iframe[title="Google Drive - Avances Ambientales"]') as HTMLIFrameElement
+    if (iframe) {
+      // Recargar el iframe
+      iframe.src = iframe.src
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
       <Header />
@@ -66,22 +75,13 @@ export default function AvancesPage() {
                     href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg mb-6"
+                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"/>
                     </svg>
                     <span className="font-semibold">Abrir en Google Drive</span>
                   </a>
-
-                  <div className="border-t border-gray-200 pt-6">
-                    <button className="w-full flex items-center justify-center px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                      </svg>
-                      Actualizar vista
-                    </button>
-                  </div>
                 </div>
               </div>
 
@@ -100,6 +100,12 @@ export default function AvancesPage() {
                           Google Drive - Avances Ambientales
                         </h3>
                       </div>
+                      <button 
+                        onClick={handleRefresh}
+                        className="text-gray-600 hover:text-gray-900 font-medium text-sm"
+                      >
+                        Actualizar
+                      </button>
                     </div>
                   </div>
 
