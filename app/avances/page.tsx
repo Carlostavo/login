@@ -6,7 +6,7 @@ import { useState } from "react"
 
 export default function AvancesPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list";
+  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list&view=list&sort=name&order=a&embedded=true&hl=es";
 
   const handleOpenInNewTab = () => {
     window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank');
@@ -35,7 +35,7 @@ export default function AvancesPage() {
               Avances
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl text-balance leading-relaxed">
-              Visualización en tiempo real de documentos y reportes ambientales almacenados en Google Drive.
+              Visualización en tiempo real de documentos y reportes ambientales.
             </p>
           </div>
         </section>
@@ -44,52 +44,25 @@ export default function AvancesPage() {
         <section className="py-12 sm:py-16 md:py-20 lg:py-28 bg-background">
           <div className="container-safe">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
-              {/* Columna izquierda - Información */}
+              {/* Columna izquierda - Información mínima */}
               <div className="lg:col-span-1">
                 <span className="inline-block px-3 py-1 rounded-full bg-accent-lighter text-accent font-medium text-xs mb-6">
                   VISTA DIRECTA
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-bold text-primary-text mb-6">
-                  Documentos en Google Drive
-                </h2>
                 
                 <div className="space-y-6">
                   <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
-                    <h3 className="font-semibold text-primary-text mb-2 flex items-center">
+                    <h3 className="font-semibold text-primary-text mb-3 flex items-center">
                       <svg className="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
                       </svg>
-                      Carpetas Disponibles
+                      Carpetas Compartidas
                     </h3>
-                    <ul className="text-sm text-secondary-text space-y-2 mt-3">
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                        Reportes Mensuales
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                        Datos de Indicadores
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                        Documentos Técnicos
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-                        Planes de Acción
-                      </li>
-                    </ul>
                   </div>
 
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <h3 className="font-semibold text-primary-text mb-3">Información</h3>
                     <div className="space-y-3 text-sm text-secondary-text">
-                      <div className="flex items-start">
-                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                        <span>Conexión activa con Google Drive</span>
-                      </div>
                       <div className="flex items-start">
                         <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M19 4h-4.18C14.4 2.84 13.3 2 12 2c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
@@ -125,10 +98,10 @@ export default function AvancesPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <h3 className="text-lg sm:text-xl font-semibold text-primary-text">
-                          Carpeta Compartida: Avances Ambientales
+                          Google Drive - Avances Ambientales
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
-                          Contenido actualizado en tiempo real desde Google Drive
+                          Contenido actualizado automáticamente
                         </p>
                       </div>
                       <button 
@@ -144,13 +117,13 @@ export default function AvancesPage() {
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
-                        {isRefreshing ? 'Actualizando...' : 'Actualizar Vista'}
+                        {isRefreshing ? 'Actualizando...' : 'Actualizar'}
                       </button>
                     </div>
                   </div>
 
-                  {/* Vista principal de Google Drive */}
-                  <div className="relative">
+                  {/* Vista principal de Google Drive SIN scroll */}
+                  <div className="relative overflow-hidden">
                     <iframe
                       src={driveFolderUrl}
                       className="w-full h-[500px] sm:h-[600px] md:h-[700px]"
@@ -159,35 +132,39 @@ export default function AvancesPage() {
                       allow="autoplay; fullscreen"
                       allowFullScreen
                       key={isRefreshing ? "refreshing" : "normal"}
+                      scrolling="no" {/* Esto desactiva el scroll */}
+                      style={{ overflow: "hidden" }}
                     />
                     
-                    {/* Indicador de conexión */}
-                    <div className="absolute bottom-4 right-4">
-                      <div className="flex items-center px-3 py-2 bg-black/80 text-white text-xs rounded-lg backdrop-blur-sm">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                        Conexión activa
-                      </div>
-                    </div>
+                    {/* CSS inline para desactivar scroll interno */}
+                    <style jsx>{`
+                      iframe {
+                        overflow: hidden !important;
+                      }
+                      iframe body {
+                        overflow: hidden !important;
+                      }
+                    `}</style>
                   </div>
 
-                  {/* Estadísticas simples */}
+                  {/* Estadísticas simplificadas */}
                   <div className="p-4 bg-gray-50 border-t border-gray-200">
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Tiempo Real</div>
+                        <div className="text-lg font-semibold text-primary-text">Directo</div>
+                        <div className="text-sm text-gray-600">Vista</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-primary-text">Automático</div>
                         <div className="text-sm text-gray-600">Actualización</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Solo Lectura</div>
-                        <div className="text-sm text-gray-600">Modo de Vista</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Google Drive</div>
+                        <div className="text-lg font-semibold text-primary-text">Google</div>
                         <div className="text-sm text-gray-600">Plataforma</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Seguro</div>
-                        <div className="text-sm text-gray-600">Conexión</div>
+                        <div className="text-lg font-semibold text-primary-text">Sincronizado</div>
+                        <div className="text-sm text-gray-600">Estado</div>
                       </div>
                     </div>
                   </div>
@@ -196,7 +173,7 @@ export default function AvancesPage() {
                 {/* Nota informativa simple */}
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
                   <p className="text-sm text-gray-700">
-                    <span className="font-medium text-primary-text">Nota:</span> Esta vista muestra el contenido de la carpeta compartida en Google Drive. Para editar o subir archivos, haz clic en "Abrir en Google Drive".
+                    Esta vista muestra el contenido de la carpeta compartida. Para editar archivos, haz clic en "Abrir en Google Drive".
                   </p>
                 </div>
               </div>
