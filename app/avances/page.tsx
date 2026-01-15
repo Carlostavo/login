@@ -75,72 +75,11 @@ export default function AvancesPage() {
                   </a>
 
                   <div className="border-t border-gray-200 pt-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                      Google Drive - Avances Ambientales
-                    </h3>
-                    <p className="text-gray-600 mb-6">
-                      Visualización completa de documentos
-                    </p>
-
-                    <div className="overflow-hidden rounded-lg border border-gray-200">
-                      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                        <div className="grid grid-cols-3 gap-4">
-                          <div className="font-medium text-gray-700">TÍTULO</div>
-                          <div className="font-medium text-gray-700">ÚLTIMA MODIFICACIÓN</div>
-                          <div className="font-medium text-gray-700 text-right"></div>
-                        </div>
-                      </div>
-                      
-                      <div className="divide-y divide-gray-100">
-                        {/* Ejemplo de archivo 1 */}
-                        <div className="px-4 py-3 hover:bg-gray-50 transition-colors">
-                          <div className="grid grid-cols-3 gap-4 items-center">
-                            <div className="flex items-center">
-                              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center mr-3">
-                                <span className="text-blue-600 font-medium">A</span>
-                              </div>
-                              <span className="text-gray-800 font-medium truncate">análisis</span>
-                            </div>
-                            <div className="text-gray-600">
-                              <div>1:39 p.m.</div>
-                              <div className="text-sm text-gray-500">Indicadores Daule</div>
-                            </div>
-                            <div className="text-right">
-                              <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Ver →
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Ejemplo de archivo 2 */}
-                        <div className="px-4 py-3 hover:bg-gray-50 transition-colors">
-                          <div className="grid grid-cols-3 gap-4 items-center">
-                            <div className="flex items-center">
-                              <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center mr-3">
-                                <span className="text-purple-600 font-medium">P</span>
-                              </div>
-                              <span className="text-gray-800 font-medium truncate">How to Use a Dictionary by Slidesgo.pptx</span>
-                            </div>
-                            <div className="text-gray-600">
-                              <div>13 ene</div>
-                              <div className="text-sm text-gray-500">Indicadores Daule</div>
-                            </div>
-                            <div className="text-right">
-                              <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Ver →
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <button className="mt-6 w-full flex items-center justify-center px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
+                    <button className="w-full flex items-center justify-center px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors mb-6">
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                       </svg>
-                      Actualizar
+                      Actualizar vista
                     </button>
                   </div>
                 </div>
@@ -160,11 +99,6 @@ export default function AvancesPage() {
                         <h3 className="text-lg font-semibold text-gray-800">
                           Google Drive - Avances Ambientales
                         </h3>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">
-                          ID: 1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG
-                        </span>
                       </div>
                     </div>
                   </div>
