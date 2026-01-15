@@ -6,7 +6,8 @@ import { useState } from "react"
 
 export default function AvancesPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list&view=list&sort=name&order=a&embedded=true&hl=es";
+  // URL modificada para eliminar scroll bars
+  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG&embedded=true&hl=es&view=list&sort=name&order=a&rm=minimal";
 
   const handleOpenInNewTab = () => {
     window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank');
@@ -122,19 +123,67 @@ export default function AvancesPage() {
                     </div>
                   </div>
 
-                  {/* Vista principal de Google Drive SIN scroll */}
-                  <div className="relative overflow-hidden">
-                    <iframe
-                      src={driveFolderUrl}
-                      className="w-full h-[500px] sm:h-[600px] md:h-[700px]"
-                      frameBorder="0"
-                      title="Google Drive - Avances Ambientales"
-                      allow="autoplay; fullscreen"
-                      allowFullScreen
-                      key={isRefreshing ? "refreshing" : "normal"}
-                      scrolling="no"
-                      style={{ overflow: "hidden" }}
-                    />
+                  {/* Vista principal de Google Drive SIN scroll - contenedor especial */}
+                  <div className="relative overflow-hidden w-full" style={{ height: '700px' }}>
+                    {/* Contenedor para eliminar completamente el scroll */}
+                    <div 
+                      className="w-full h-full overflow-hidden"
+                      style={{ 
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      <iframe
+                        src={driveFolderUrl}
+                        className="absolute top-0 left-0 w-full h-full border-0"
+                        title="Google Drive - Avances Ambientales"
+                        allow="autoplay; fullscreen"
+                        allowFullScreen
+                        key={isRefreshing ? "refreshing" : "normal"}
+                        // Eliminar todos los scrolls
+                        scrolling="no"
+                        style={{
+                          overflow: 'hidden',
+                          position: 'absolute',
+                          border: 'none'
+                        }}
+                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                      />
+                      
+                      {/* Overlay para prevenir interacción con scroll */}
+                      <div 
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          zIndex: 1,
+                          overflow: 'hidden'
+                        }}
+                      />
+                    </div>
+                    
+                    {/* CSS inline para desactivar completamente el scroll */}
+                    <style jsx>{`
+                      .overflow-hidden iframe {
+                        overflow: hidden !important;
+                        scrollbar-width: none !important;
+                        -ms-overflow-style: none !important;
+                      }
+                      .overflow-hidden iframe::-webkit-scrollbar {
+                        display: none !important;
+                        width: 0 !important;
+                        height: 0 !important;
+                      }
+                      .overflow-hidden iframe body {
+                        overflow: hidden !important;
+                        position: relative !important;
+                        height: 100% !important;
+                        width: 100% !important;
+                      }
+                      .overflow-hidden iframe html {
+                        overflow: hidden !important;
+                        height: 100% !important;
+                        width: 100% !important;
+                      }
+                    `}</style>
                   </div>
 
                   {/* Estadísticas simplificadas */}
