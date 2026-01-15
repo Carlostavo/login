@@ -66,7 +66,7 @@ export default function AvancesPage() {
                     href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg mb-6"
+                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg mb-6"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"/>
@@ -75,7 +75,7 @@ export default function AvancesPage() {
                   </a>
 
                   <div className="border-t border-gray-200 pt-6">
-                    <button className="w-full flex items-center justify-center px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors mb-6">
+                    <button className="w-full flex items-center justify-center px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                       </svg>
@@ -148,50 +148,6 @@ export default function AvancesPage() {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Sección de información adicional */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <div className="text-center">
-                <h3 className="text-xl font-bold text-primary-text mb-4">Documentación relacionada</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                  <a href="#" className="group">
-                    <div className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200">
-                        <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"/>
-                        </svg>
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Descargar archivos</h4>
-                      <p className="text-sm text-gray-600">Guía para descargar documentos</p>
-                    </div>
-                  </a>
-
-                  <a href="#" className="group">
-                    <div className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200">
-                        <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
-                        </svg>
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Organización</h4>
-                      <p className="text-sm text-gray-600">Estructura de carpetas</p>
-                    </div>
-                  </a>
-
-                  <a href="#" className="group">
-                    <div className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                      <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200">
-                        <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
-                        </svg>
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Ayuda y soporte</h4>
-                      <p className="text-sm text-gray-600">Problemas de acceso</p>
-                    </div>
-                  </a>
                 </div>
               </div>
             </div>
