@@ -6,8 +6,8 @@ import { useState } from "react"
 
 export default function AvancesPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  // URL modificada para eliminar scroll bars
-  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG&embedded=true&hl=es&view=list&sort=name&order=a&rm=minimal";
+  // URL optimizada para vista completa sin scroll
+  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG&view=list&sort=name&order=a&embedded=true&hl=es&mode=full";
 
   const handleOpenInNewTab = () => {
     window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank');
@@ -52,15 +52,6 @@ export default function AvancesPage() {
                 </span>
                 
                 <div className="space-y-6">
-                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
-                    <h3 className="font-semibold text-primary-text mb-3 flex items-center">
-                      <svg className="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
-                      </svg>
-                      Carpetas Compartidas
-                    </h3>
-                  </div>
-
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <h3 className="font-semibold text-primary-text mb-3">Información</h3>
                     <div className="space-y-3 text-sm text-secondary-text">
@@ -75,6 +66,12 @@ export default function AvancesPage() {
                           <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
                         </svg>
                         <span>Acceso seguro y controlado</span>
+                      </div>
+                      <div className="flex items-start">
+                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                        </svg>
+                        <span>Vista completa sin scroll</span>
                       </div>
                     </div>
                   </div>
@@ -102,7 +99,7 @@ export default function AvancesPage() {
                           Google Drive - Avances Ambientales
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
-                          Contenido actualizado automáticamente
+                          Visualización completa de documentos
                         </p>
                       </div>
                       <button 
@@ -123,97 +120,62 @@ export default function AvancesPage() {
                     </div>
                   </div>
 
-                  {/* Vista principal de Google Drive SIN scroll - contenedor especial */}
-                  <div className="relative overflow-hidden w-full" style={{ height: '700px' }}>
-                    {/* Contenedor para eliminar completamente el scroll */}
-                    <div 
-                      className="w-full h-full overflow-hidden"
-                      style={{ 
-                        position: 'relative',
-                        overflow: 'hidden'
-                      }}
-                    >
+                  {/* Vista principal de Google Drive SIN scroll - Contenedor optimizado */}
+                  <div className="relative overflow-hidden">
+                    <div className="w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
                       <iframe
                         src={driveFolderUrl}
-                        className="absolute top-0 left-0 w-full h-full border-0"
+                        className="w-full h-full border-0"
                         title="Google Drive - Avances Ambientales"
                         allow="autoplay; fullscreen"
                         allowFullScreen
                         key={isRefreshing ? "refreshing" : "normal"}
-                        // Eliminar todos los scrolls
-                        scrolling="no"
                         style={{
-                          overflow: 'hidden',
-                          position: 'absolute',
-                          border: 'none'
-                        }}
-                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                      />
-                      
-                      {/* Overlay para prevenir interacción con scroll */}
-                      <div 
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          zIndex: 1,
-                          overflow: 'hidden'
+                          overflow: "hidden",
+                          pointerEvents: "auto"
                         }}
                       />
                     </div>
                     
-                    {/* CSS inline para desactivar completamente el scroll */}
-                    <style jsx>{`
-                      .overflow-hidden iframe {
+                    {/* CSS inline para eliminar completamente el scroll */}
+                    <style jsx global>{`
+                      iframe[title="Google Drive - Avances Ambientales"] {
                         overflow: hidden !important;
-                        scrollbar-width: none !important;
-                        -ms-overflow-style: none !important;
                       }
-                      .overflow-hidden iframe::-webkit-scrollbar {
-                        display: none !important;
-                        width: 0 !important;
-                        height: 0 !important;
-                      }
-                      .overflow-hidden iframe body {
-                        overflow: hidden !important;
-                        position: relative !important;
-                        height: 100% !important;
-                        width: 100% !important;
-                      }
-                      .overflow-hidden iframe html {
+                      iframe[title="Google Drive - Avances Ambientales"] body {
                         overflow: hidden !important;
                         height: 100% !important;
                         width: 100% !important;
+                      }
+                      iframe[title="Google Drive - Avances Ambientales"] .a-n-m-sf-T,
+                      iframe[title="Google Drive - Avances Ambientales"] .a-n-m-sf-G,
+                      iframe[title="Google Drive - Avances Ambientales"] .a-n-m-sf {
+                        overflow: hidden !important;
                       }
                     `}</style>
                   </div>
 
-                  {/* Estadísticas simplificadas */}
+                  {/* Información de estado */}
                   <div className="p-4 bg-gray-50 border-t border-gray-200">
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Directo</div>
-                        <div className="text-sm text-gray-600">Vista</div>
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <div className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        <span>Vista activa</span>
                       </div>
-                      <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Automático</div>
-                        <div className="text-sm text-gray-600">Actualización</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Google</div>
-                        <div className="text-sm text-gray-600">Plataforma</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-semibold text-primary-text">Sincronizado</div>
-                        <div className="text-sm text-gray-600">Estado</div>
+                      <div className="text-gray-500">
+                        {new Date().toLocaleDateString('es-ES', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        })}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Nota informativa simple */}
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                  <p className="text-sm text-gray-700">
-                    Esta vista muestra el contenido de la carpeta compartida. Para editar archivos, haz clic en "Abrir en Google Drive".
-                  </p>
+                {/* Nota informativa */}
+                <div className="mt-4 text-xs text-gray-500 text-center">
+                  Vista optimizada para visualización completa de Google Drive
                 </div>
               </div>
             </div>
