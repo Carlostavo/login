@@ -2,57 +2,21 @@
 
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { useState } from "react"
 
 export default function AvancesPage() {
   const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list"
-  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({})
 
   const handleRefresh = () => {
+    // Obtener el iframe
     const iframe = document.querySelector('iframe[title="Google Drive - Avances Ambientales"]') as HTMLIFrameElement
     if (iframe) {
+      // Recargar el iframe forzando una nueva carga
       const currentSrc = iframe.src
       iframe.src = ''
       setTimeout(() => {
         iframe.src = currentSrc
       }, 100)
     }
-  }
-
-  // Datos de ejemplo de carpetas y archivos
-  const folders = [
-    {
-      id: "folder1",
-      name: "📁 Reportes Mensuales",
-      files: [
-        { name: "Reporte Enero 2024.pdf", date: "15 ene 2024" },
-        { name: "Reporte Febrero 2024.pdf", date: "15 feb 2024" },
-        { name: "Reporte Marzo 2024.pdf", date: "15 mar 2024" }
-      ]
-    },
-    {
-      id: "folder2",
-      name: "📁 Estudios Técnicos",
-      files: [
-        { name: "Análisis de Calidad de Agua.docx", date: "10 mar 2024" },
-        { name: "Impacto Ambiental.pdf", date: "5 feb 2024" }
-      ]
-    },
-    {
-      id: "folder3",
-      name: "📁 Presentaciones",
-      files: [
-        { name: "Presentación Consejo Municipal.pptx", date: "20 mar 2024" },
-        { name: "Avances Proyecto Verde.pdf", date: "18 mar 2024" }
-      ]
-    }
-  ]
-
-  const toggleFolder = (folderId: string) => {
-    setExpandedFolders(prev => ({
-      ...prev,
-      [folderId]: !prev[folderId]
-    }))
   }
 
   return (
@@ -78,7 +42,7 @@ export default function AvancesPage() {
         <section className="py-12 sm:py-16 bg-background">
           <div className="container-safe">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Panel izquierdo - Información y Carpetas */}
+              {/* Panel izquierdo - Información */}
               <div className="lg:col-span-1">
                 <div className="card-elevated p-6 h-fit">
                   <h2 className="text-2xl font-bold text-primary-text mb-6">VISTA DIRECTA</h2>
@@ -113,68 +77,33 @@ export default function AvancesPage() {
                     </ul>
                   </div>
 
+                  {/* Instrucciones para desplegar carpetas */}
+                  <div className="mb-8 p-4 bg-yellow-50 border border-yellow-100 rounded-lg">
+                    <h4 className="font-semibold text-yellow-800 mb-2 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd"/>
+                      </svg>
+                      Cómo ver carpetas
+                    </h4>
+                    <ul className="text-sm text-yellow-700 space-y-1">
+                      <li>• Haz clic en las <span className="font-medium">flechas ▼</span> junto a las carpetas</li>
+                      <li>• Se despliegan los archivos dentro de cada carpeta</li>
+                      <li>• Haz clic nuevamente para contraer</li>
+                      <li>• Funciona con las carpetas reales de Google Drive</li>
+                    </ul>
+                  </div>
+
                   <a
                     href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg mb-6"
+                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"/>
                     </svg>
                     <span className="font-semibold">Abrir en Google Drive</span>
                   </a>
-
-                  {/* Sección de Carpetas con flechas desplegables */}
-                  <div className="border-t border-gray-200 pt-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4">📂 Carpetas Disponibles</h3>
-                    <div className="space-y-3">
-                      {folders.map(folder => (
-                        <div key={folder.id} className="border border-gray-200 rounded-lg overflow-hidden">
-                          <button
-                            onClick={() => toggleFolder(folder.id)}
-                            className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 flex items-center justify-between transition-colors"
-                          >
-                            <span className="font-medium text-gray-800">{folder.name}</span>
-                            <svg
-                              className={`w-5 h-5 text-gray-500 transition-transform ${expandedFolders[folder.id] ? 'rotate-180' : ''}`}
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </button>
-                          
-                          {expandedFolders[folder.id] && (
-                            <div className="border-t border-gray-200 bg-white">
-                              {folder.files.map((file, index) => (
-                                <div 
-                                  key={index} 
-                                  className="px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 flex justify-between items-center"
-                                >
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-800 truncate">
-                                      {file.name}
-                                    </p>
-                                    <p className="text-xs text-gray-500 mt-1">
-                                      {file.date}
-                                    </p>
-                                  </div>
-                                  <a
-                                    href="#"
-                                    className="ml-2 text-blue-600 hover:text-blue-800 text-xs font-medium whitespace-nowrap"
-                                  >
-                                    Ver
-                                  </a>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -195,7 +124,7 @@ export default function AvancesPage() {
                       </div>
                       <button 
                         onClick={handleRefresh}
-                        className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-sm font-medium rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all shadow hover:shadow-md"
+                        className="px-3 py-1.5 bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white text-sm font-medium rounded hover:from-[#1B5E20] hover:to-[#2E7D32] transition-all shadow-sm hover:shadow"
                       >
                         Actualizar
                       </button>
@@ -211,6 +140,24 @@ export default function AvancesPage() {
                       allow="autoplay; fullscreen"
                       loading="lazy"
                     />
+                  </div>
+                </div>
+
+                {/* Información sobre funcionalidad de Google Drive */}
+                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="flex items-start">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-1">Funcionalidad de carpetas</h4>
+                      <p className="text-sm text-gray-600">
+                        Las carpetas en Google Drive tienen flechas de despliegue (▼) para mostrar su contenido. 
+                        Esta funcionalidad es nativa de Google Drive y se mantiene en la vista embebida.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
