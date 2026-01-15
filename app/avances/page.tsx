@@ -10,8 +10,12 @@ export default function AvancesPage() {
     // Obtener el iframe
     const iframe = document.querySelector('iframe[title="Google Drive - Avances Ambientales"]') as HTMLIFrameElement
     if (iframe) {
-      // Recargar el iframe
-      iframe.src = iframe.src
+      // Recargar el iframe forzando una nueva carga
+      const currentSrc = iframe.src
+      iframe.src = ''
+      setTimeout(() => {
+        iframe.src = currentSrc
+      }, 100)
     }
   }
 
@@ -104,7 +108,7 @@ export default function AvancesPage() {
                       </div>
                       <button 
                         onClick={handleRefresh}
-                        className="text-gray-600 hover:text-gray-900 font-medium text-sm"
+                        className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition-colors"
                       >
                         Actualizar
                       </button>
@@ -120,41 +124,6 @@ export default function AvancesPage() {
                       allow="autoplay; fullscreen"
                       loading="lazy"
                     />
-                  </div>
-                </div>
-
-                {/* Notas informativas */}
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                    <div className="flex items-start">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                        <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-blue-800 mb-1">Vista optimizada</h4>
-                        <p className="text-sm text-blue-700">
-                          La vista embebida se actualiza automáticamente con los cambios en Google Drive.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-green-50 border border-green-100 rounded-lg p-4">
-                    <div className="flex items-start">
-                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-green-800 mb-1">Acceso instantáneo</h4>
-                        <p className="text-sm text-green-700">
-                          Todos los documentos están disponibles para visualización inmediata.
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
