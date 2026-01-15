@@ -24,13 +24,6 @@ export default function GoogleDriveViewer() {
   const FOLDER_ID = process.env.NEXT_PUBLIC_DRIVE_FOLDER_ID || '1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG';
   const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY || 'AIzaSyBOjhZA12tdkDmPVTXjsFBpMqkIN68oKPU';
 
-  useEffect(() => {
-    fetchDriveFiles();
-    // Actualizar cada 5 minutos
-    const interval = setInterval(fetchDriveFiles, 300000);
-    return () => clearInterval(interval);
-  }, []);
-
   const fetchDriveFiles = async () => {
     try {
       setLoading(true);
@@ -51,6 +44,13 @@ export default function GoogleDriveViewer() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDriveFiles();
+    // Actualizar cada 5 minutos
+    const interval = setInterval(fetchDriveFiles, 300000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getFileIcon = (mimeType: string, name: string) => {
     if (mimeType.includes('folder')) return <Folder className="w-6 h-6 text-blue-500" />;
@@ -89,7 +89,7 @@ export default function GoogleDriveViewer() {
 
   return (
     <div className="space-y-6">
-      {/* Header con estadísticas */}
+      {/* Header con estadísticas - REMOVIDO EL BOTÓN DE ACTUALIZAR */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <h3 className="text-2xl font-bold text-gray-900">Archivos Compartidos</h3>
@@ -102,12 +102,7 @@ export default function GoogleDriveViewer() {
             <Calendar className="w-4 h-4" />
             <span>Actualizado: {lastUpdated}</span>
           </div>
-          <button
-            onClick={fetchDriveFiles}
-            className="px-4 py-2 text-sm bg-accent/10 text-accent rounded-lg hover:bg-accent/20 transition-colors"
-          >
-            Actualizar
-          </button>
+          {/* Botón removido temporalmente */}
         </div>
       </div>
 
