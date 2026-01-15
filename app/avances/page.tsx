@@ -132,19 +132,9 @@ export default function AvancesPage() {
                       allow="autoplay; fullscreen"
                       allowFullScreen
                       key={isRefreshing ? "refreshing" : "normal"}
-                      scrolling="no" {/* Esto desactiva el scroll */}
+                      scrolling="no"
                       style={{ overflow: "hidden" }}
                     />
-                    
-                    {/* CSS inline para desactivar scroll interno */}
-                    <style jsx>{`
-                      iframe {
-                        overflow: hidden !important;
-                      }
-                      iframe body {
-                        overflow: hidden !important;
-                      }
-                    `}</style>
                   </div>
 
                   {/* Estadísticas simplificadas */}
