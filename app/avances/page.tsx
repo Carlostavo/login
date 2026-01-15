@@ -1,26 +1,8 @@
-"use client";
-
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { useState } from "react"
 
 export default function AvancesPage() {
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  // URL optimizada para vista completa sin scroll
-  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG&view=list&sort=name&order=a&embedded=true&hl=es&mode=full";
-
-  const handleOpenInNewTab = () => {
-    window.open("https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG", '_blank');
-  };
-
-  const handleRefreshView = () => {
-    setIsRefreshing(true);
-    const iframe = document.querySelector('iframe[title="Google Drive - Avances Ambientales"]') as HTMLIFrameElement;
-    if (iframe) {
-      iframe.src = iframe.src;
-    }
-    setTimeout(() => setIsRefreshing(false), 1000);
-  };
+  const driveFolderUrl = "https://drive.google.com/embeddedfolderview?id=1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG#list"
 
   return (
     <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
@@ -36,152 +18,253 @@ export default function AvancesPage() {
               Avances
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl text-balance leading-relaxed">
-              Visualización en tiempo real de documentos y reportes ambientales.
+              Seguimiento del progreso en la implementación de programas ambientales y cumplimiento de metas del cantón.
             </p>
           </div>
         </section>
 
-        {/* Visualización de Google Drive */}
-        <section className="py-12 sm:py-16 md:py-20 lg:py-28 bg-background">
+        {/* Sección principal de Google Drive */}
+        <section className="py-12 sm:py-16 bg-background">
           <div className="container-safe">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
-              {/* Columna izquierda - Información mínima */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Panel izquierdo - Información */}
               <div className="lg:col-span-1">
-                <span className="inline-block px-3 py-1 rounded-full bg-accent-lighter text-accent font-medium text-xs mb-6">
-                  VISTA DIRECTA
-                </span>
-                
-                <div className="space-y-6">
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <h3 className="font-semibold text-primary-text mb-3">Información</h3>
-                    <div className="space-y-3 text-sm text-secondary-text">
-                      <div className="flex items-start">
-                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M19 4h-4.18C14.4 2.84 13.3 2 12 2c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
-                        </svg>
-                        <span>Documentos actualizados automáticamente</span>
-                      </div>
-                      <div className="flex items-start">
-                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                        </svg>
-                        <span>Acceso seguro y controlado</span>
-                      </div>
-                      <div className="flex items-start">
-                        <svg className="w-4 h-4 mt-0.5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
-                        </svg>
-                        <span>Vista completa sin scroll</span>
-                      </div>
-                    </div>
+                <div className="card-elevated p-6 h-fit">
+                  <h2 className="text-2xl font-bold text-primary-text mb-6">VISTA DIRECTA</h2>
+                  
+                  <div className="mb-8">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Información</h3>
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                          <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                          </svg>
+                        </div>
+                        <span className="text-gray-700">Documentos actualizados automáticamente</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                          <svg className="w-3 h-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                          </svg>
+                        </div>
+                        <span className="text-gray-700">Acceso seguro y controlado</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-0.5">
+                          <svg className="w-3 h-3 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd"/>
+                          </svg>
+                        </div>
+                        <span className="text-gray-700">Vista completa sin scroll</span>
+                      </li>
+                    </ul>
                   </div>
 
-                  <button 
-                    onClick={handleOpenInNewTab}
-                    className="w-full p-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center font-medium"
+                  <a
+                    href="https://drive.google.com/drive/folders/1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg mb-6"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z"/>
                     </svg>
-                    Abrir en Google Drive
-                  </button>
+                    <span className="font-semibold">Abrir en Google Drive</span>
+                  </a>
+
+                  <div className="border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                      Google Drive - Avances Ambientales
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Visualización completa de documentos
+                    </p>
+
+                    <div className="overflow-hidden rounded-lg border border-gray-200">
+                      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="font-medium text-gray-700">TÍTULO</div>
+                          <div className="font-medium text-gray-700">ÚLTIMA MODIFICACIÓN</div>
+                          <div className="font-medium text-gray-700 text-right"></div>
+                        </div>
+                      </div>
+                      
+                      <div className="divide-y divide-gray-100">
+                        {/* Ejemplo de archivo 1 */}
+                        <div className="px-4 py-3 hover:bg-gray-50 transition-colors">
+                          <div className="grid grid-cols-3 gap-4 items-center">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center mr-3">
+                                <span className="text-blue-600 font-medium">A</span>
+                              </div>
+                              <span className="text-gray-800 font-medium truncate">análisis</span>
+                            </div>
+                            <div className="text-gray-600">
+                              <div>1:39 p.m.</div>
+                              <div className="text-sm text-gray-500">Indicadores Daule</div>
+                            </div>
+                            <div className="text-right">
+                              <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Ver →
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Ejemplo de archivo 2 */}
+                        <div className="px-4 py-3 hover:bg-gray-50 transition-colors">
+                          <div className="grid grid-cols-3 gap-4 items-center">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center mr-3">
+                                <span className="text-purple-600 font-medium">P</span>
+                              </div>
+                              <span className="text-gray-800 font-medium truncate">How to Use a Dictionary by Slidesgo.pptx</span>
+                            </div>
+                            <div className="text-gray-600">
+                              <div>13 ene</div>
+                              <div className="text-sm text-gray-500">Indicadores Daule</div>
+                            </div>
+                            <div className="text-right">
+                              <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Ver →
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button className="mt-6 w-full flex items-center justify-center px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                      </svg>
+                      Actualizar
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Columna derecha - Vista de Drive */}
-              <div className="lg:col-span-3">
-                <div className="card-elevated overflow-hidden h-full border border-gray-200">
-                  {/* Encabezado simplificado */}
-                  <div className="p-4 sm:p-6 border-b border-gray-200 bg-gray-50">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-semibold text-primary-text">
+              {/* Panel derecho - Vista de Google Drive */}
+              <div className="lg:col-span-2">
+                <div className="card-elevated p-0 overflow-hidden h-[700px]">
+                  <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex space-x-1">
+                          <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                          <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                          <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800">
                           Google Drive - Avances Ambientales
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Visualización completa de documentos
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-500">
+                          ID: 1OuiRdKB0fTZ6IufXDE2mkzwDhAsqMjaG
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Vista embebida de Google Drive - Sin scroll */}
+                  <div className="h-[calc(700px-73px)] overflow-hidden">
+                    <iframe
+                      src={driveFolderUrl}
+                      className="w-full h-full border-0"
+                      title="Google Drive - Avances Ambientales"
+                      allow="autoplay; fullscreen"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+
+                {/* Notas informativas */}
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                    <div className="flex items-start">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-800 mb-1">Vista optimizada</h4>
+                        <p className="text-sm text-blue-700">
+                          La vista embebida se actualiza automáticamente con los cambios en Google Drive.
                         </p>
                       </div>
-                      <button 
-                        onClick={handleRefreshView}
-                        disabled={isRefreshing}
-                        className="px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center justify-center sm:w-auto w-full"
-                      >
-                        <svg 
-                          className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} 
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+                    <div className="flex items-start">
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                         </svg>
-                        {isRefreshing ? 'Actualizando...' : 'Actualizar'}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Vista principal de Google Drive SIN scroll - Contenedor optimizado */}
-                  <div className="relative overflow-hidden">
-                    <div className="w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
-                      <iframe
-                        src={driveFolderUrl}
-                        className="w-full h-full border-0"
-                        title="Google Drive - Avances Ambientales"
-                        allow="autoplay; fullscreen"
-                        allowFullScreen
-                        key={isRefreshing ? "refreshing" : "normal"}
-                        style={{
-                          overflow: "hidden",
-                          pointerEvents: "auto"
-                        }}
-                      />
-                    </div>
-                    
-                    {/* CSS inline para eliminar completamente el scroll */}
-                    <style jsx global>{`
-                      iframe[title="Google Drive - Avances Ambientales"] {
-                        overflow: hidden !important;
-                      }
-                      iframe[title="Google Drive - Avances Ambientales"] body {
-                        overflow: hidden !important;
-                        height: 100% !important;
-                        width: 100% !important;
-                      }
-                      iframe[title="Google Drive - Avances Ambientales"] .a-n-m-sf-T,
-                      iframe[title="Google Drive - Avances Ambientales"] .a-n-m-sf-G,
-                      iframe[title="Google Drive - Avances Ambientales"] .a-n-m-sf {
-                        overflow: hidden !important;
-                      }
-                    `}</style>
-                  </div>
-
-                  {/* Información de estado */}
-                  <div className="p-4 bg-gray-50 border-t border-gray-200">
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                        <span>Vista activa</span>
                       </div>
-                      <div className="text-gray-500">
-                        {new Date().toLocaleDateString('es-ES', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric'
-                        })}
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">Acceso instantáneo</h4>
+                        <p className="text-sm text-green-700">
+                          Todos los documentos están disponibles para visualización inmediata.
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                {/* Nota informativa */}
-                <div className="mt-4 text-xs text-gray-500 text-center">
-                  Vista optimizada para visualización completa de Google Drive
+            {/* Sección de información adicional */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-primary-text mb-4">Documentación relacionada</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                  <a href="#" className="group">
+                    <div className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200">
+                        <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Descargar archivos</h4>
+                      <p className="text-sm text-gray-600">Guía para descargar documentos</p>
+                    </div>
+                  </a>
+
+                  <a href="#" className="group">
+                    <div className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200">
+                        <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Organización</h4>
+                      <p className="text-sm text-gray-600">Estructura de carpetas</p>
+                    </div>
+                  </a>
+
+                  <a href="#" className="group">
+                    <div className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                      <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200">
+                        <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Ayuda y soporte</h4>
+                      <p className="text-sm text-gray-600">Problemas de acceso</p>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </main>
+
       <Footer />
     </div>
   )
