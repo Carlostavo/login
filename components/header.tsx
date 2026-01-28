@@ -183,8 +183,8 @@ export function Header() {
           />
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-bold text-primary tracking-tight">DAULE</span>
-          <span className="text-xs text-secondary-text font-medium">Residuos Sólidos</span>
+          <span className="text-sm font-bold text-primary tracking-tight">Seguimiento e indicadores</span>
+          <span className="text-xs text-secondary-text font-medium">de gestión ambiental</span>
         </div>
       </Link>
     )

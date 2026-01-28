@@ -10,10 +10,10 @@ export function Footer() {
             <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest mb-2 inline-block">
               Plataforma
             </span>
-            <h3 className="text-base sm:text-lg font-bold text-primary-text mb-2 sm:mb-3">Residuos Sólidos</h3>
+            <h3 className="text-base sm:text-lg font-bold text-primary-text mb-2 sm:mb-3">Sistema de Seguimiento e Indicadores</h3>
             <p className="text-xs sm:text-sm text-secondary-text leading-relaxed">
-              Sistema integral de monitoreo, análisis y reporte de residuos sólidos del Cantón Daule. Información
-              transparente para ciudadanos y autoridades.
+              Plataforma integral de monitoreo y evaluación para la gestión sostenible de residuos.
+              Consulte métricas, indicadores de desempeño y objetivos ambientales.
             </p>
           </div>
 
@@ -52,9 +52,6 @@ export function Footer() {
               Contacto
             </p>
             <div className="text-xs sm:text-sm text-secondary-text space-y-2">
-              <p>
-                <strong className="text-primary-text">Cantón Daule</strong>
-              </p>
               <p>Email: indicadoresdaule@gmail.com</p>
               <p>Teléfono: +593-4-2000-000</p>
             </div>
@@ -64,7 +61,7 @@ export function Footer() {
         {/* Divisor */}
         <div className="border-t border-border pt-6 sm:pt-8">
           <p className="text-center text-xs sm:text-sm text-tertiary-text">
-            &copy; {currentYear} Gestión de Residuos Sólidos - Cantón Daule. Todos los derechos reservados.
+            &copy; {currentYear} Sistema de Seguimiento e Indicadores. Todos los derechos reservados.
           </p>
         </div>
       </div>
