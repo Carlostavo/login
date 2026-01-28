@@ -16,14 +16,14 @@ export default function Home() {
           <div className="container-safe relative z-10">
             <div className="max-w-3xl">
               <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-white text-xs font-medium mb-4">
-                Plataforma de Gestión Ambiental
+                Sistema de Seguimiento e Indicadores
               </span>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-balance leading-tight">
-                Sostenibilidad y Manejo de Desechos
+                Seguimiento e Indicadores para la Gestión de Residuos Domiciliarios
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-white/90 mb-4 text-balance leading-relaxed">
-                Información transparente y actualizada sobre la gestión de residuos. 
-                Consulta métricas y objetivos ambientales.
+                Plataforma integral de monitoreo y evaluación para la gestión sostenible de residuos. 
+                Consulte métricas, indicadores de desempeño y objetivos ambientales
               </p>
             </div>
           </div>

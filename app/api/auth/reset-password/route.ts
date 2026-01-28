@@ -11,7 +11,8 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://login2-three-iota.vercel.app"}/auth/reset-password`
+    // El redirectTo debe apuntar al callback que intercambiara el codigo
+    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://proyectoeconomiacircular.vercel.app"}/auth/callback?type=recovery`
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl,

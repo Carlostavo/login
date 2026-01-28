@@ -1,8 +1,56 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
+export async function GET(request: Request) {
+  try {
+    const { searchParams, origin } = new URL(request.url)
+    const code = searchParams.get("code")
+    const type = searchParams.get("type") // 'recovery', 'signup', etc.
+    const next = searchParams.get("next") ?? "/"
+
+    if (!code) {
+      return NextResponse.redirect(`${origin}/auth/error?error=missing_code`)
+    }
+
+    const supabase = await createClient()
+
+    // Para flujos de recuperación de contraseña, necesitas un manejo especial
+    if (type === "recovery") {
+      // Verifica el token de recuperación
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: code,
+        type: "recovery",
+      })
+
+      if (error) {
+        console.error("[Auth] Recovery token error:", error)
+        return NextResponse.redirect(`${origin}/auth/reset-password?error=invalid_token`)
+      }
+
+      // Redirige a la página de restablecimiento
+      return NextResponse.redirect(`${origin}/auth/reset-password`)
+    } else {
+      // Para otros flujos (inicio de sesión, registro)
+      const { error } = await supabase.auth.exchangeCodeForSession(code)
+
+      if (error) {
+        console.error("[Auth] Exchange error:", error)
+        return NextResponse.redirect(`${origin}/auth/error?error=auth_failed`)
+      }
+
+      return NextResponse.redirect(`${origin}${next}`)
+    }
+  } catch (error: any) {
+    console.error("[Auth] Callback error:", error)
+    return NextResponse.redirect(`${origin}/auth/error?error=internal_error`)
+  }
+}
+
 export async function POST(request: Request) {
   try {
+    const { searchParams } = new URL(request.url)
+    const type = searchParams.get("type")
+    
     const { code } = await request.json()
 
     if (!code) {
@@ -10,43 +58,33 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (error) {
-      console.error("[v0] Error exchanging code:", error)
-      return NextResponse.json({ error: error.message }, { status: 400 })
+    if (type === "recovery") {
+      // Para PKCE flow de recuperación
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: code,
+        type: "recovery",
+      })
+
+      if (error) {
+        console.error("[Auth] Recovery verification error:", error)
+        return NextResponse.json({ error: error.message }, { status: 400 })
+      }
+
+      return NextResponse.json({ success: true })
+    } else {
+      // Para otros flujos
+      const { error } = await supabase.auth.exchangeCodeForSession(code)
+
+      if (error) {
+        console.error("[Auth] Exchange error:", error)
+        return NextResponse.json({ error: error.message }, { status: 400 })
+      }
+
+      return NextResponse.json({ success: true })
     }
-
-    return NextResponse.json({ success: true })
   } catch (error: any) {
-    console.error("[v0] Callback POST error:", error)
+    console.error("[Auth] Callback POST error:", error)
     return NextResponse.json({ error: error.message || "Internal error" }, { status: 500 })
   }
-}
-
-export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get("code")
-  const next = searchParams.get("next") ?? "/"
-
-  if (code) {
-    const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-
-    if (!error) {
-      const forwardedHost = request.headers.get("x-forwarded-host")
-      const isLocalEnv = process.env.NODE_ENV === "development"
-
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
-      }
-    }
-  }
-
-  // Si hay error, redirigir al login con mensaje de error
-  return NextResponse.redirect(`${origin}/login?error=auth_error`)
 }

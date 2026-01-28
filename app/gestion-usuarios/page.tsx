@@ -301,10 +301,10 @@ export default function GestionUsuariosPage() {
 
   const getRoleBadge = (role: UserRole) => {
     const colors = {
-      admin: "bg-red-500/10 text-red-500 border-red-500/20",
-      docente: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-      tecnico: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-      estudiante: "bg-gray-500/10 text-gray-500 border-gray-500/20",
+      admin: "bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/30 hover:scale-105 transition-transform duration-200",
+      docente: "bg-purple-500/10 text-purple-500 border-purple-500/20 hover:bg-purple-500/30 hover:scale-105 transition-transform duration-200",
+      tecnico: "bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500/30 hover:scale-105 transition-transform duration-200",
+      estudiante: "bg-gray-500/10 text-gray-500 border-gray-500/20 hover:bg-gray-500/30 hover:scale-105 transition-transform duration-200",
     }
 
     const labels = {
@@ -328,21 +328,21 @@ export default function GestionUsuariosPage() {
     switch (status) {
       case "inactive":
         return (
-          <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
+          <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/30 hover:scale-105 transition-transform duration-200">
             <UserX className="w-3 h-3 mr-1" />
             Suspendido
           </Badge>
         )
       case "pending":
         return (
-          <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
+          <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20 hover:bg-yellow-500/30 hover:scale-105 transition-transform duration-200">
             <Clock className="w-3 h-3 mr-1" />
             Pendiente
           </Badge>
         )
       default:
         return (
-          <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+          <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 hover:bg-green-500/30 hover:scale-105 transition-transform duration-200">
             <UserCheck className="w-3 h-3 mr-1" />
             Activo
           </Badge>
@@ -356,7 +356,7 @@ export default function GestionUsuariosPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-secondary-bg">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     )
@@ -368,7 +368,13 @@ export default function GestionUsuariosPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" onClick={() => router.push("/perfil")} title="Volver al perfil">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={() => router.push("/perfil")} 
+              title="Volver al perfil"
+              className="hover:bg-red-100 hover:text-red-600 hover:scale-110 transition-all duration-300"
+            >
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <div>
@@ -379,15 +385,17 @@ export default function GestionUsuariosPage() {
 
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>
-              <Button className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto hover:scale-105 transition-transform duration-300">
                 <UserPlus className="w-4 h-4 mr-2" />
                 Crear Usuario
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-white animate-in zoom-in-95 duration-300">
               <DialogHeader>
                 <DialogTitle>Crear Nuevo Usuario</DialogTitle>
-                <DialogDescription>Crea una nueva cuenta de usuario con acceso inmediato al sistema</DialogDescription>
+                <DialogDescription className="text-secondary-text">
+                  Crea una nueva cuenta de usuario con acceso inmediato al sistema
+                </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
@@ -395,9 +403,10 @@ export default function GestionUsuariosPage() {
                   <Input
                     id="fullName"
                     type="text"
-                    placeholder="Juan Pérez"
+                    placeholder=""
                     value={createFullName}
                     onChange={(e) => setCreateFullName(e.target.value)}
+                    className="bg-gray-100 hover:bg-gray-200 focus:bg-white focus:border-blue-500 transition-colors duration-300"
                   />
                 </div>
                 <div className="space-y-2">
@@ -405,9 +414,10 @@ export default function GestionUsuariosPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="usuario@ejemplo.com"
+                    placeholder=""
                     value={createEmail}
                     onChange={(e) => setCreateEmail(e.target.value)}
+                    className="bg-gray-100 hover:bg-gray-200 focus:bg-white focus:border-blue-500 transition-colors duration-300"
                   />
                 </div>
                 <div className="space-y-2">
@@ -418,28 +428,45 @@ export default function GestionUsuariosPage() {
                     placeholder="Mínimo 6 caracteres"
                     value={createPassword}
                     onChange={(e) => setCreatePassword(e.target.value)}
+                    className="bg-gray-100 hover:bg-gray-200 focus:bg-white focus:border-blue-500 transition-colors duration-300"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Rol</Label>
                   <Select value={createRole} onValueChange={(value) => setCreateRole(value as UserRole)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-gray-100 hover:bg-gray-200 transition-colors duration-300">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="estudiante">Estudiante</SelectItem>
-                      <SelectItem value="docente">Docente</SelectItem>
-                      <SelectItem value="tecnico">Técnico</SelectItem>
-                      <SelectItem value="admin">Administrador</SelectItem>
+                    <SelectContent className="bg-gray-100 border-border">
+                      <SelectItem value="estudiante" className="hover:bg-gray-200 transition-colors duration-200">
+                        Estudiante
+                      </SelectItem>
+                      <SelectItem value="docente" className="hover:bg-gray-200 transition-colors duration-200">
+                        Docente
+                      </SelectItem>
+                      <SelectItem value="tecnico" className="hover:bg-gray-200 transition-colors duration-200">
+                        Técnico
+                      </SelectItem>
+                      <SelectItem value="admin" className="hover:bg-gray-200 transition-colors duration-200">
+                        Administrador
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setCreateOpen(false)}>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCreateOpen(false)}
+                  className="bg-gray-100 text-gray-700 hover:bg-red-100 hover:text-red-600 hover:scale-105 transition-all duration-300"
+                >
                   Cancelar
                 </Button>
-                <Button onClick={handleCreate} disabled={creating || !createEmail || !createPassword}>
+                <Button 
+                  onClick={handleCreate} 
+                  disabled={creating || !createEmail || !createPassword}
+                  className="hover:scale-105 transition-transform duration-300"
+                >
                   {creating ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -462,8 +489,8 @@ export default function GestionUsuariosPage() {
           <div
             className={`mb-6 p-4 rounded-lg border ${
               message.type === "success"
-                ? "bg-green-500/10 border-green-500/20 text-green-600"
-                : "bg-red-500/10 border-red-500/20 text-red-600"
+                ? "bg-green-500/10 border-green-500/20 text-green-600 hover:bg-green-500/20 hover:scale-[1.02] transition-all duration-300"
+                : "bg-red-500/10 border-red-500/20 text-red-600 hover:bg-red-500/20 hover:scale-[1.02] transition-all duration-300"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -474,7 +501,7 @@ export default function GestionUsuariosPage() {
         )}
 
         {/* Filters */}
-        <div className="bg-card rounded-xl border border-border shadow-lg p-4 mb-6">
+        <div className="bg-white rounded-xl border border-border shadow-lg p-4 mb-6 hover:shadow-xl transition-all duration-300">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -483,36 +510,54 @@ export default function GestionUsuariosPage() {
                   placeholder="Buscar por nombre, email o ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white hover:bg-gray-50 focus:bg-white transition-colors duration-300"
                 />
               </div>
             </div>
             <div className="w-full sm:w-48">
               <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white hover:bg-gray-50 transition-colors duration-300">
                   <Filter className="w-4 h-4 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos los roles</SelectItem>
-                  <SelectItem value="admin">Administradores</SelectItem>
-                  <SelectItem value="docente">Docentes</SelectItem>
-                  <SelectItem value="tecnico">Técnicos</SelectItem>
-                  <SelectItem value="estudiante">Estudiantes</SelectItem>
+                <SelectContent className="bg-white border-border">
+                  <SelectItem value="all" className="hover:bg-gray-100 transition-colors duration-200">
+                    Todos los roles
+                  </SelectItem>
+                  <SelectItem value="admin" className="hover:bg-gray-100 transition-colors duration-200">
+                    Administradores
+                  </SelectItem>
+                  <SelectItem value="docente" className="hover:bg-gray-100 transition-colors duration-200">
+                    Docentes
+                  </SelectItem>
+                  <SelectItem value="tecnico" className="hover:bg-gray-100 transition-colors duration-200">
+                    Técnicos
+                  </SelectItem>
+                  <SelectItem value="estudiante" className="hover:bg-gray-100 transition-colors duration-200">
+                    Estudiantes
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="w-full sm:w-48">
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white hover:bg-gray-50 transition-colors duration-300">
                   <UserCheck className="w-4 h-4 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos los estados</SelectItem>
-                  <SelectItem value="active">Activos</SelectItem>
-                  <SelectItem value="inactive">Suspendidos</SelectItem>
-                  <SelectItem value="pending">Pendientes</SelectItem>
+                <SelectContent className="bg-white border-border">
+                  <SelectItem value="all" className="hover:bg-gray-100 transition-colors duration-200">
+                    Todos los estados
+                  </SelectItem>
+                  <SelectItem value="active" className="hover:bg-gray-100 transition-colors duration-200">
+                    Activos
+                  </SelectItem>
+                  <SelectItem value="inactive" className="hover:bg-gray-100 transition-colors duration-200">
+                    Suspendidos
+                  </SelectItem>
+                  <SelectItem value="pending" className="hover:bg-gray-100 transition-colors duration-200">
+                    Pendientes
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -523,10 +568,10 @@ export default function GestionUsuariosPage() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-card rounded-xl border border-border shadow-lg overflow-hidden">
+        <div className="bg-white rounded-xl border border-border shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-muted/50">
+              <thead className="bg-muted/30">
                 <tr>
                   <th className="text-left px-6 py-4 text-sm font-semibold text-foreground">Usuario</th>
                   <th className="text-left px-6 py-4 text-sm font-semibold text-foreground">Rol</th>
@@ -540,28 +585,31 @@ export default function GestionUsuariosPage() {
                 {filteredUsers.map((user) => {
                   const inactive = isInactive(user)
                   return (
-                    <tr key={user.id} className={`hover:bg-muted/30 transition-colors ${inactive ? "opacity-60" : ""}`}>
+                    <tr 
+                      key={user.id} 
+                      className={`hover:bg-muted/20 transition-all duration-300 ${inactive ? "opacity-60" : ""}`}
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center ${inactive ? "bg-red-500/10" : "bg-primary/10"}`}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center ${inactive ? "bg-red-500/10 hover:bg-red-500/20" : "bg-primary/10 hover:bg-primary/20"} transition-colors duration-300`}
                           >
                             <User className={`w-5 h-5 ${inactive ? "text-red-500" : "text-primary"}`} />
                           </div>
                           <div>
-                            <p className="font-medium text-foreground">{user.profile?.full_name || user.email}</p>
+                            <p className="font-medium text-foreground hover:text-blue-600 transition-colors duration-300">{user.profile?.full_name || user.email}</p>
                             <p className="text-xs text-secondary-text">{user.email}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        {user.profile ? getRoleBadge(user.profile.role) : <Badge>Sin perfil</Badge>}
+                        {user.profile ? getRoleBadge(user.profile.role) : <Badge className="hover:scale-105 transition-transform duration-200">Sin perfil</Badge>}
                       </td>
                       <td className="px-6 py-4">{getStatusBadge(user)}</td>
-                      <td className="px-6 py-4 text-sm text-secondary-text">
+                      <td className="px-6 py-4 text-sm text-secondary-text hover:text-foreground transition-colors duration-300">
                         {new Date(user.created_at).toLocaleDateString("es-ES")}
                       </td>
-                      <td className="px-6 py-4 text-sm text-secondary-text">
+                      <td className="px-6 py-4 text-sm text-secondary-text hover:text-foreground transition-colors duration-300">
                         {user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleDateString("es-ES") : "Nunca"}
                       </td>
                       <td className="px-6 py-4">
@@ -577,6 +625,7 @@ export default function GestionUsuariosPage() {
                               setEditOpen(true)
                             }}
                             title="Editar usuario"
+                            className="bg-secondary-bg hover:bg-blue-100 hover:text-blue-600 hover:scale-110 transition-all duration-300"
                           >
                             <Edit2 className="w-4 h-4" />
                           </Button>
@@ -592,7 +641,7 @@ export default function GestionUsuariosPage() {
                               }}
                               disabled={user.id === currentUser?.user?.id}
                               title="Reanudar usuario"
-                              className="border-green-500/20 text-green-600 hover:bg-green-500/10"
+                              className="border-green-500/20 text-green-600 hover:bg-green-500/30 hover:text-green-700 hover:scale-110 transition-all duration-300 bg-secondary-bg"
                             >
                               <UserCheck className="w-4 h-4 mr-1" />
                               <span className="hidden lg:inline">Reanudar</span>
@@ -609,7 +658,7 @@ export default function GestionUsuariosPage() {
                               }}
                               disabled={user.id === currentUser?.user?.id}
                               title="Suspender usuario"
-                              className="border-orange-500/20 text-orange-600 hover:bg-orange-500/10"
+                              className="border-orange-500/20 text-orange-600 hover:bg-orange-500/30 hover:text-orange-700 hover:scale-110 transition-all duration-300 bg-secondary-bg"
                             >
                               <UserX className="w-4 h-4 mr-1" />
                               <span className="hidden lg:inline">Suspender</span>
@@ -624,7 +673,7 @@ export default function GestionUsuariosPage() {
                             }}
                             disabled={user.id === currentUser?.user?.id}
                             title="Eliminar usuario"
-                            className="border-red-500/20 text-red-600 hover:bg-red-500/10"
+                            className="border-red-500/20 text-red-600 hover:bg-red-500/30 hover:text-red-700 hover:scale-110 transition-all duration-300 bg-secondary-bg"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -641,10 +690,12 @@ export default function GestionUsuariosPage() {
 
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent>
+        <DialogContent className="bg-white animate-in zoom-in-95 duration-300">
           <DialogHeader>
             <DialogTitle>Editar Usuario</DialogTitle>
-            <DialogDescription>Modifica la información del usuario</DialogDescription>
+            <DialogDescription className="text-secondary-text">
+              Modifica la información del usuario
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -654,62 +705,89 @@ export default function GestionUsuariosPage() {
                 onChange={(e) => setEditFullName(e.target.value)}
                 type="text"
                 placeholder="Juan Pérez"
+                className="bg-gray-100 hover:bg-gray-200 focus:bg-white focus:border-blue-500 transition-colors duration-300"
               />
             </div>
             <div className="space-y-2">
               <Label>Correo Electrónico</Label>
-              <Input value={editEmail} onChange={(e) => setEditEmail(e.target.value)} type="email" />
+              <Input
+                value={editEmail}
+                onChange={(e) => setEditEmail(e.target.value)}
+                type="email"
+                className="bg-gray-100 hover:bg-gray-200 focus:bg-white focus:border-blue-500 transition-colors duration-300"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit-role">Rol</Label>
               <Select value={editRole} onValueChange={(value) => setEditRole(value as UserRole)}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-gray-100 hover:bg-gray-200 transition-colors duration-300">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="estudiante">Estudiante</SelectItem>
-                  <SelectItem value="docente">Docente</SelectItem>
-                  <SelectItem value="tecnico">Técnico</SelectItem>
-                  <SelectItem value="admin">Administrador</SelectItem>
+                <SelectContent className="bg-gray-100 border-border">
+                  <SelectItem value="estudiante" className="hover:bg-gray-200 transition-colors duration-200">
+                    Estudiante
+                  </SelectItem>
+                  <SelectItem value="docente" className="hover:bg-gray-200 transition-colors duration-200">
+                    Docente
+                  </SelectItem>
+                  <SelectItem value="tecnico" className="hover:bg-gray-200 transition-colors duration-200">
+                    Técnico
+                  </SelectItem>
+                  <SelectItem value="admin" className="hover:bg-gray-200 transition-colors duration-200">
+                    Administrador
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditOpen(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => setEditOpen(false)}
+              className="bg-gray-100 text-gray-700 hover:bg-red-100 hover:text-red-600 hover:scale-105 transition-all duration-300"
+            >
               Cancelar
             </Button>
-            <Button onClick={handleEdit}>Guardar Cambios</Button>
+            <Button 
+              onClick={handleEdit}
+              className="hover:scale-105 transition-transform duration-300"
+            >
+              Guardar Cambios
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <AlertDialog open={suspendOpen} onOpenChange={setSuspendOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white border-border animate-in zoom-in-95 duration-300">
           <AlertDialogHeader>
             <AlertDialogTitle>
               {suspendAction === "suspend" ? "¿Suspender usuario?" : "¿Reanudar usuario?"}
             </AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-secondary-text">
               {suspendAction === "suspend" ? (
                 <>
-                  El usuario <strong>{suspendUser?.email}</strong> no podrá acceder al sistema mientras esté suspendido.
-                  Podrás reactivar su cuenta en cualquier momento.
+                  El usuario <strong className="text-foreground">{suspendUser?.email}</strong> no podrá acceder al
+                  sistema mientras esté suspendido. Podrás reactivar su cuenta en cualquier momento.
                 </>
               ) : (
                 <>
-                  El usuario <strong>{suspendUser?.email}</strong> volverá a tener acceso al sistema con sus permisos
-                  anteriores.
+                  El usuario <strong className="text-foreground">{suspendUser?.email}</strong> volverá a tener acceso al
+                  sistema con sus permisos anteriores.
                 </>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className="bg-white hover:bg-red-100 hover:text-red-600 hover:scale-105 transition-all duration-300">
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleSuspendConfirm}
               className={
-                suspendAction === "suspend" ? "bg-orange-600 hover:bg-orange-700" : "bg-green-600 hover:bg-green-700"
+                suspendAction === "suspend"
+                  ? "bg-orange-600 hover:bg-orange-700 text-white hover:scale-105 transition-all duration-300"
+                  : "bg-green-600 hover:bg-green-700 text-white hover:scale-105 transition-all duration-300"
               }
             >
               {suspendAction === "suspend" ? (
@@ -730,17 +808,22 @@ export default function GestionUsuariosPage() {
 
       {/* Delete Dialog */}
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white border-border animate-in zoom-in-95 duration-300">
           <AlertDialogHeader>
             <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-secondary-text">
               Esta acción no se puede deshacer. Se eliminará permanentemente la cuenta de{" "}
-              <strong>{deleteUser?.email}</strong> y todos sus datos asociados.
+              <strong className="text-foreground">{deleteUser?.email}</strong> y todos sus datos asociados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+            <AlertDialogCancel className="bg-white hover:bg-red-100 hover:text-red-600 hover:scale-105 transition-all duration-300">
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDelete} 
+              className="bg-red-600 text-white hover:bg-red-700 hover:scale-105 transition-all duration-300"
+            >
               Eliminar Usuario
             </AlertDialogAction>
           </AlertDialogFooter>
