@@ -30,23 +30,19 @@ export default function ReportesPage() {
               Visualiza, filtra y exporta datos de caracterizacion de desechos solidos y autosustentabilidad en multiples formatos.
             </p>
             
-            {/* Feature highlights */}
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl">
-              <div className="flex items-center gap-2 text-white/90 text-sm">
-                <BarChart3 className="w-5 h-5" />
-                <span>Graficos interactivos</span>
+            {/* Feature highlights - Responsive */}
+            <div className="mt-8 flex flex-wrap gap-3 sm:gap-4 max-w-3xl">
+              <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="truncate">Graficos interactivos</span>
               </div>
-              <div className="flex items-center gap-2 text-white/90 text-sm">
-                <FileText className="w-5 h-5" />
-                <span>Formato APA 7</span>
+              <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                <Download className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="truncate">CSV, Excel, JSON</span>
               </div>
-              <div className="flex items-center gap-2 text-white/90 text-sm">
-                <Download className="w-5 h-5" />
-                <span>CSV, Excel, JSON</span>
-              </div>
-              <div className="flex items-center gap-2 text-white/90 text-sm">
-                <FileText className="w-5 h-5" />
-                <span>PDF y Word</span>
+              <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="truncate">PDF y Word</span>
               </div>
             </div>
           </div>
@@ -56,30 +52,43 @@ export default function ReportesPage() {
         <section className="py-8 sm:py-12 md:py-16 bg-background">
           <div className="container-safe">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-8 h-auto p-1">
+              {/* Tabs responsivos con texto ajustado */}
+              <TabsList className="flex w-full mb-8 h-auto p-1 overflow-x-auto">
                 <TabsTrigger 
                   value="caracterizacion" 
-                  className="text-sm sm:text-base py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-white flex items-center justify-center gap-2"
+                  className="flex-1 min-w-0 text-xs sm:text-sm md:text-base py-3 px-2 sm:px-4 data-[state=active]:bg-primary data-[state=active]:text-white flex items-center justify-center gap-1 sm:gap-2 truncate"
                 >
-                  <Recycle className="w-4 h-4 hidden sm:block" />
-                  <span>Caracterizacion de Desechos</span>
+                  <Recycle className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                  <span className="truncate px-1">
+                    <span className="hidden xs:inline">Caracterizacion</span>
+                    <span className="xs:hidden">Caracterización</span>
+                  </span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="autosustentabilidad" 
-                  className="text-sm sm:text-base py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-white flex items-center justify-center gap-2"
+                  className="flex-1 min-w-0 text-xs sm:text-sm md:text-base py-3 px-2 sm:px-4 data-[state=active]:bg-primary data-[state=active]:text-white flex items-center justify-center gap-1 sm:gap-2 truncate"
                 >
-                  <Users className="w-4 h-4 hidden sm:block" />
-                  <span>Autosustentabilidad</span>
+                  <Users className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                  <span className="truncate px-1">
+                    <span className="hidden sm:inline">Autosustentabilidad</span>
+                    <span className="sm:hidden">Autosust.</span>
+                  </span>
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="caracterizacion" className="mt-0">
                 <div className="mb-6">
-                  <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
-                    Caracterizacion de Desechos Solidos
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
+                    <span className="hidden sm:inline">Caracterizacion de Desechos Solidos</span>
+                    <span className="sm:hidden">Caracterización Desechos</span>
                   </h2>
-                  <p className="text-muted-foreground">
-                    Genera reportes de la caracterizacion de desechos solidos domiciliarios con graficos, tablas y exportacion en multiples formatos.
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    <span className="hidden sm:inline">
+                      Genera reportes de la caracterizacion de desechos solidos domiciliarios con graficos, tablas y exportacion en multiples formatos.
+                    </span>
+                    <span className="sm:hidden">
+                      Reportes de desechos solidos con graficos, tablas y exportacion.
+                    </span>
                   </p>
                 </div>
                 <CaracterizacionReportes />
@@ -87,11 +96,20 @@ export default function ReportesPage() {
 
               <TabsContent value="autosustentabilidad" className="mt-0">
                 <div className="mb-6">
-                  <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
-                    Autosustentabilidad y Comportamiento Proambiental
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
+                    <span className="hidden sm:inline">Autosustentabilidad y Comportamiento Proambiental</span>
+                    <span className="sm:hidden">Autosustentabilidad</span>
                   </h2>
-                  <p className="text-muted-foreground">
-                    Genera reportes del cuestionario de comportamiento proambiental con analisis por secciones: Distribucion Demografica, Determinantes Socioculturales, Afectivos, Cognitivos, Sustentabilidad Ambiental, Economica y Desarrollo Comunitario.
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    <span className="hidden md:inline">
+                      Genera reportes del cuestionario de comportamiento proambiental con analisis por secciones: Distribucion Demografica, Determinantes Socioculturales, Afectivos, Cognitivos, Sustentabilidad Ambiental, Economica y Desarrollo Comunitario.
+                    </span>
+                    <span className="hidden sm:inline md:hidden">
+                      Reportes de comportamiento proambiental con analisis por secciones: Sociocultural, Afectivo, Cognitivo, Sustentabilidad.
+                    </span>
+                    <span className="sm:hidden">
+                      Reportes de comportamiento proambiental con analisis completo.
+                    </span>
                   </p>
                 </div>
                 <AutosustentabilidadReportes />
